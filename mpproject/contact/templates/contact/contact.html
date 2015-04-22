@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+	<head>
+		<title>Contact - Massage Panda</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+<link rel="stylesheet" type="text/css" href="http://cdn2.editmysite.com/css/sites.css?buildTime=1234" />
+<link rel="stylesheet" type="text/css" href="http://cdn1.editmysite.com/editor/libraries/fancybox/fancybox.css?1234" />
+<link rel="stylesheet" type="text/css" href="{% static "files/main_style.css" %}" title="wsite-theme-css" />
+<link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Lustria&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+
+<link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,200,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+<style type='text/css'>
+.wsite-elements.wsite-not-footer div.paragraph, .wsite-elements.wsite-not-footer p, .wsite-elements.wsite-not-footer .product-block .product-title, .wsite-elements.wsite-not-footer .product-description, .wsite-elements.wsite-not-footer .wsite-form-field label, .wsite-elements.wsite-not-footer .wsite-form-field label, #wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+#wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+.wsite-elements.wsite-footer div.paragraph, .wsite-elements.wsite-footer p, .wsite-elements.wsite-footer .product-block .product-title, .wsite-elements.wsite-footer .product-description, .wsite-elements.wsite-footer .wsite-form-field label, .wsite-elements.wsite-footer .wsite-form-field label{}
+.wsite-elements.wsite-not-footer h2, .wsite-elements.wsite-not-footer .product-long .product-title, .wsite-elements.wsite-not-footer .product-large .product-title, .wsite-elements.wsite-not-footer .product-small .product-title, #wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {font-family:"Oxygen" !important;font-size:27px !important;font-weight:300 !important;}
+#wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {color:#3f3f3f !important;}
+.wsite-elements.wsite-footer h2, .wsite-elements.wsite-footer .product-long .product-title, .wsite-elements.wsite-footer .product-large .product-title, .wsite-elements.wsite-footer .product-small .product-title{}
+#wsite-title {}
+.wsite-menu-default a {}
+.wsite-menu a {}
+.wsite-image div, .wsite-caption {}
+.galleryCaptionInnerText {}
+.fancybox-title {}
+.wslide-caption-text {}
+.wsite-phone {}
+.wsite-headline {font-family:"Raleway" !important;font-size:33px !important;font-weight:300 !important;color:#e05c5c !important;line-height:40px !important;}
+.wsite-headline-paragraph {}
+.wsite-button-inner {}
+.wsite-not-footer blockquote {}
+.wsite-footer blockquote {}
+.blog-header h2 a {}
+#wsite-content h2.wsite-product-title {font-size:30px !important;}
+.wsite-product .wsite-product-price a {}
+</style>
+<style>
+.wsite-background {background-image: url('//cdn1.editmysite.com/uploads/4/4/9/9/44993235/background-images/2083278530.jpg') !important;background-repeat: no-repeat !important;background-position: 50% 50% !important;background-size: cover !important;background-color: transparent !important;background: inherit;}
+body.wsite-background {background-attachment: fixed !important;}
+</style><link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700" />
+
+<style>
+	/* @license
+	 * MyFonts Webfont Build ID 2520135, 2013-04-02T23:23:33-0400
+	 * 
+	 * The fonts listed in this notice are subject to the End User License
+	 * Agreement(s) entered into by the website owner. All other parties are 
+	 * explicitly restricted from using the Licensed Webfonts(s).
+	 * 
+	 * You may obtain a valid license at the URLs below.
+	 * 
+	 * Webfont: Proxima Nova S Semibold by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/s-semibold/
+	 * 
+	 * Webfont: Proxima Nova A Light by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/a-light/
+	 * 
+	 * Webfont: Proxima Nova A Semibold by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/a-semibold/
+	 * 
+	 * Webfont: Proxima Nova S Light by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/s-light/
+	 * 
+	 * Webfont: Proxima Nova Light by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/light/
+	 * 
+	 * Webfont: Proxima Nova Semibold by Mark Simonson
+	 * URL: http://www.myfonts.com/fonts/marksimonson/proxima-nova/semibold/
+	 * 
+	 * 
+	 * License: http://www.myfonts.com/viewlicense?type=web&buildid=2520135
+	 * Webfonts copyright: Copyright (c) Mark Simonson, 2005. All rights reserved.
+	 * 
+	 * © 2013 MyFonts Inc
+	*/
+
+	@font-face {
+		font-family: 'ProximaNova';
+		src: url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.eot');
+		src: url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.eot?#iefix') format('embedded-opentype'),
+		     url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.woff') format('woff'),
+		     url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.ttf') format('truetype');
+	}
+
+	@font-face {
+		font-family: 'ProximaNova';
+		font-weight: bold;
+		src: url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.eot');
+		src: url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.eot?#iefix') format('embedded-opentype'),
+		     url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.woff') format('woff'),
+		     url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.ttf') format('truetype');
+	}
+
+	@font-face {
+		font-family: 'thirsty_script_lightregular';
+		src: url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.eot);
+		src: url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.eot?#iefix) format('embedded-opentype'),
+				 url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.woff) format('woff'),
+				 url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.ttf) format('truetype'),
+				 url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.svg#thirsty_script_lightregular) format('svg');
+		font-weight: normal;
+		font-style: normal;
+	}
+
+	@font-face {
+		font-family: 'wicons';
+		src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.eot?buildTime=1234);
+		src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.eot?buildTime=1234#iefix) format('embedded-opentype'),
+				 url(//cdn2.editmysite.com/fonts/wIcons/wicons.woff?buildTime=1234) format('woff'),
+				 url(//cdn2.editmysite.com/fonts/wIcons/wicons.ttf?buildTime=1234) format('truetype'),
+				 url(//cdn2.editmysite.com/fonts/wIcons/wicons.svg?buildTime=1234#wicons) format('svg');
+		font-weight: normal; 
+		font-style: normal;
+	}
+	/* Hack to smooth out font rendering on Chrome for Windows */
+	@media screen and (-webkit-min-device-pixel-ratio: 0) {
+		@font-face {
+			font-family: 'wicons';
+			src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.svg?buildTime=1234#wicons) format('svg');
+		}
+	}
+
+	@font-face {
+		font-family: 'wsocial';
+		src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.eot?buildTime=1234);
+		src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.eot?buildTime=1234#iefix) format('embedded-opentype'),
+				 url(//cdn2.editmysite.com/fonts/wSocial/wsocial.woff?buildTime=1234) format('woff'),
+				 url(//cdn2.editmysite.com/fonts/wSocial/wsocial.ttf?buildTime=1234) format('truetype'),
+				 url(//cdn2.editmysite.com/fonts/wSocial/wsocial.svg?buildTime=1234#wsocial) format('svg');
+		font-weight: normal; 
+		font-style: normal;
+	}
+	/* Hack to smooth out font rendering on Chrome for Windows */
+	@media screen and (-webkit-min-device-pixel-ratio: 0) {
+		@font-face {
+			font-family: 'wsocial';
+			src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.svg?buildTime=1234#wsocial) format('svg');
+		}
+	}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://cdn2.editmysite.com/css/site_membership.css?buildTime=1234">
+
+		<script><!--
+var STATIC_BASE = '//cdn1.editmysite.com/';
+var STYLE_PREFIX = 'wsite';
+//-->
+</script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+
+	</head>
+	<body class="no-header-page  wsite-theme-light  wsite-page-contact">
+ {% include "index/header.html" %}
+
+    <div id="main-wrap">
+        <div class="container">
+   			<div id='wsite-content' class='wsite-elements wsite-not-footer'>
+<div>
+<form enctype="multipart/form-data" action="http://www.weebly.com/weebly/apps/formSubmit.php" method="POST" id="form-800438671775746309">
+<div id="800438671775746309-form-parent" class="wsite-form-container" style="margin-top:10px;">
+  <ul class="formlist" id="800438671775746309-form-list">
+    <h2 class="wsite-content-title" style="text-align:left;"></h2>
+
+<div><div class="wsite-form-field wsite-name-field" style="margin:5px 0px 5px 0px;">
+				<label class="wsite-form-label" for="input-222854111230816196">Name <span class="form-required">*</span></label>
+				<div style="clear:both;"></div>
+				<div class="wsite-form-input-container wsite-form-left wsite-form-input-first-name">
+					<input id="input-222854111230816196" class="wsite-form-input wsite-input" type="text" name="_u222854111230816196[first]" />
+					<label class="wsite-form-sublabel" for="input-222854111230816196">First</label>
+				</div>
+				<div class="wsite-form-input-container wsite-form-right wsite-form-input-last-name">
+					<input id="input-222854111230816196-1" class="wsite-form-input wsite-input" type="text" name="_u222854111230816196[last]" />
+					<label class="wsite-form-sublabel" for="input-222854111230816196-1">Last</label>
+				</div>
+				<div id="instructions-222854111230816196" class="wsite-form-instructions" style="display:none;"></div>
+			</div>
+			<div style="clear:both;"></div></div>
+
+<div><div class="wsite-form-field" style="margin:5px 0px 5px 0px;">
+				<label class="wsite-form-label" for="input-201031805148324464">Email <span class="form-required">*</span></label>
+				<div class="wsite-form-input-container">
+					<input id="input-201031805148324464" class="wsite-form-input wsite-input wsite-input-width-370px" type="text" name="_u201031805148324464" />
+				</div>
+				<div id="instructions-201031805148324464" class="wsite-form-instructions" style="display:none;"></div>
+			</div></div>
+
+<div><div class="wsite-form-field" style="margin:5px 0px 5px 0px;">
+				<label class="wsite-form-label" for="input-662879737446400556">Comment <span class="form-required">*</span></label>
+				<div class="wsite-form-input-container">
+					<textarea id="input-662879737446400556" class="wsite-form-input wsite-input wsite-input-width-370px" name="_u662879737446400556" style="height: 200px"></textarea>
+				</div>
+				<div id="instructions-662879737446400556" class="wsite-form-instructions" style="display:none;"></div>
+			</div></div>
+  </ul>
+</div>
+<div style="display:none; visibility:hidden;">
+  <input type="text" name="wsite_subject" />
+</div>
+<div style="text-align:left; margin-top:10px; margin-bottom:10px;">
+  <input type="hidden" name="form_version" value="2" />
+  <input type="hidden" name="wsite_approved" id="wsite-approved" value="approved" />
+  <input type="hidden" name="ucfid" value="800438671775746309" />
+  <input type='submit' style='position:absolute;top:0;left:-9999px;width:1px;height:1px' /><a class='wsite-button' onclick="document.getElementById('form-800438671775746309').submit()"><span class='wsite-button-inner'>Submit</span></a>
+</div>
+</form>
+
+
+</div></div>
+
+        </div><!-- end container -->
+    </div><!-- end main-wrap -->
+
+    <div id="footer-wrap">
+        <div class="container">
+       		<div class='wsite-elements wsite-footer'>
+<div><div class="wsite-multicol"><div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+	<table class="wsite-multicol-table">
+		<tbody class="wsite-multicol-tbody">
+			<tr class="wsite-multicol-tr">
+				<td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:left;"><span style="">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &copy;2015 Massage Panda</span><br /></div>
+
+
+					
+				</td>				<td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:left;">Newark, CA 94560</div>
+
+
+					
+				</td>				<td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+					
+						
+
+<div class="paragraph" style="text-align:left;">hello@massagepanda.com&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;605-659-6655</div>
+
+
+					
+				</td>			</tr>
+		</tbody>
+	</table>
+</div></div></div></div>
+        </div><!-- end container -->
+    </div><!-- end footer-wrap -->
+	
+	<!-- JavaScript -->
+	<script type="text/javascript" src="{% static "files/theme/jquery.jqtransform.js" %}" ></script>
+	<script language="javascript">
+		jQuery(function() {
+			var $ = jQuery;
+			$('#main-wrap .wsite-form-radio-container, .wsite-com-product-option-dropdown, .wsite-com-product-option-radio').jqTransform();
+		});
+	</script>
+<div id="dialog-region"></div>
+	</body>
+</html>

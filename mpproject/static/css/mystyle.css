@@ -1,0 +1,88 @@
+.wsite-elements.wsite-not-footer div.paragraph, .wsite-elements.wsite-not-footer p, .wsite-elements.wsite-not-footer .product-block .product-title, .wsite-elements.wsite-not-footer .product-description, .wsite-elements.wsite-not-footer .wsite-form-field label, .wsite-elements.wsite-not-footer .wsite-form-field label, #wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+#wsite-content div.paragraph, #wsite-content p, #wsite-content .product-block .product-title, #wsite-content .product-description, #wsite-content .wsite-form-field label, #wsite-content .wsite-form-field label, .blog-sidebar div.paragraph, .blog-sidebar p, .blog-sidebar .wsite-form-field label, .blog-sidebar .wsite-form-field label {}
+.wsite-elements.wsite-footer div.paragraph, .wsite-elements.wsite-footer p, .wsite-elements.wsite-footer .product-block .product-title, .wsite-elements.wsite-footer .product-description, .wsite-elements.wsite-footer .wsite-form-field label, .wsite-elements.wsite-footer .wsite-form-field label{}
+.wsite-elements.wsite-not-footer h2, .wsite-elements.wsite-not-footer .product-long .product-title, .wsite-elements.wsite-not-footer .product-large .product-title, .wsite-elements.wsite-not-footer .product-small .product-title, #wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {font-family:"Oxygen" !important;font-size:27px !important;font-weight:300 !important;}
+#wsite-content h2, #wsite-content .product-long .product-title, #wsite-content .product-large .product-title, #wsite-content .product-small .product-title, .blog-sidebar h2 {color:#3f3f3f !important;}
+.wsite-elements.wsite-footer h2, .wsite-elements.wsite-footer .product-long .product-title, .wsite-elements.wsite-footer .product-large .product-title, .wsite-elements.wsite-footer .product-small .product-title{}
+#wsite-title {}
+.wsite-menu-default a {}
+.wsite-menu a {}
+.wsite-image div, .wsite-caption {}
+.galleryCaptionInnerText {}
+.fancybox-title {}
+.wslide-caption-text {}
+.wsite-phone {}
+.wsite-headline {font-family:"Raleway" !important;font-size:33px !important;font-weight:300 !important;color:#e05c5c !important;line-height:40px !important;}
+.wsite-headline-paragraph {}
+.wsite-button-inner {}
+.wsite-not-footer blockquote {}
+.wsite-footer blockquote {}
+.blog-header h2 a {}
+#wsite-content h2.wsite-product-title {font-size:30px !important;}
+.wsite-product .wsite-product-price a {}
+.wsite-background {background-image: url('//cdn1.editmysite.com/uploads/4/4/9/9/44993235/background-images/2083278530.jpg') !important;background-repeat: no-repeat !important;background-position: 50% 50% !important;background-size: cover !important;background-color: transparent !important;background: inherit;}
+body.wsite-background {background-attachment: fixed !important;}
+@font-face {
+    font-family: 'ProximaNova';
+src: url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.eot');
+src: url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.eot?#iefix') format('embedded-opentype'),
+         url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.woff') format('woff'),
+         url('//cdn2.editmysite.com/fonts/Proxima-Light/267447_4_0.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'ProximaNova';
+    font-weight: bold;
+src: url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.eot');
+src: url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.eot?#iefix') format('embedded-opentype'),
+         url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.woff') format('woff'),
+         url('//cdn2.editmysite.com/fonts/Proxima-Semibold/267447_5_0.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'thirsty_script_lightregular';
+src: url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.eot);
+src: url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.eot?#iefix) format('embedded-opentype'),
+         url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.woff) format('woff'),
+         url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.ttf) format('truetype'),
+         url(//cdn2.editmysite.com/fonts/ThirstyScriptLight/ThirstyScriptLight-webfont.svg#thirsty_script_lightregular) format('svg');
+     font-weight: normal;
+     font-style: normal;
+}
+
+@font-face {
+    font-family: 'wicons';
+src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.eot?buildTime=1428598732);
+src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.eot?buildTime=1428598732#iefix) format('embedded-opentype'),
+         url(//cdn2.editmysite.com/fonts/wIcons/wicons.woff?buildTime=1428598732) format('woff'),
+         url(//cdn2.editmysite.com/fonts/wIcons/wicons.ttf?buildTime=1428598732) format('truetype'),
+         url(//cdn2.editmysite.com/fonts/wIcons/wicons.svg?buildTime=1428598732#wicons) format('svg');
+     font-weight: normal; 
+     font-style: normal;
+}
+/* Hack to smooth out font rendering on Chrome for Windows */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    @font-face {
+        font-family: 'wicons';
+src: url(//cdn2.editmysite.com/fonts/wIcons/wicons.svg?buildTime=1428598732#wicons) format('svg');
+    }
+}
+
+@font-face {
+    font-family: 'wsocial';
+src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.eot?buildTime=1428598732);
+src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.eot?buildTime=1428598732#iefix) format('embedded-opentype'),
+         url(//cdn2.editmysite.com/fonts/wSocial/wsocial.woff?buildTime=1428598732) format('woff'),
+         url(//cdn2.editmysite.com/fonts/wSocial/wsocial.ttf?buildTime=1428598732) format('truetype'),
+         url(//cdn2.editmysite.com/fonts/wSocial/wsocial.svg?buildTime=1428598732#wsocial) format('svg');
+     font-weight: normal; 
+     font-style: normal;
+}
+/* Hack to smooth out font rendering on Chrome for Windows */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    @font-face {
+        font-family: 'wsocial';
+src: url(//cdn2.editmysite.com/fonts/wSocial/wsocial.svg?buildTime=1428598732#wsocial) format('svg');
+    }
+}
+#wsite-com-product-images .wsite-imageaspectratio-image-height, .wsite-com-category-product-image-height.wsite-imageaspectratio-image-height, .wsite-product .wsite-imageaspectratio-image-height, .wsite-com-category-product-featured-image-height.wsite-imageaspectratio-image-height { margin-bottom: 75% !important } .wsite-com-category-subcategory-image-height.wsite-imageaspectratio-image-height { margin-bottom: 100% !important } .wsite-com-category-product-group .wsite-com-column { width: 50.00% !important } .wsite-com-category-product-featured-group .wsite-com-column { width: 25.00% !important } .wsite-com-category-subcategory-group .wsite-com-column { width: 33.33% !important } 

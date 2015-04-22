@@ -1,0 +1,37 @@
+<!doctype html>
+{% load staticfiles %}
+<div id="header-wrap">
+<table id="header">
+<tr>
+<td id="logo"><span class="wsite-logo">
+
+<a href="/">
+<img src="{% static "res/logo.png" %}" style="margin-top:5px;margin-left:27px;" />
+</a>
+
+</span></td>
+<td class="nav"><ul class="wsite-menu-default"><li id="active" class="wsite-menu-item-wrap">
+<a href="/" class="wsite-menu-item">
+Home
+</a>
+
+</li>
+<li id="pg529439748935202429" class="wsite-menu-item-wrap">
+<a href="{% url 'service'%}" data-membership-required="0" class="wsite-menu-item">
+Service
+</a>
+
+</li>
+<li id="pg901726414775030239" class="wsite-menu-item-wrap">
+<a href="{% url 'contact'%}" data-membership-required="0" class="wsite-menu-item">
+Contact
+</a>
+
+</li>
+
+</ul>
+</td>
+<td class="search"></td>
+</tr>
+</table>
+</div>

@@ -2,39 +2,101 @@
 {% load staticfiles %}
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="http://cdn2.editmysite.com/css/sites.css?buildTime=1234" />
-<link rel="stylesheet" type="text/css" href="http://cdn1.editmysite.com/editor/libraries/fancybox/fancybox.css?1234" />
-<link rel="stylesheet" type="text/css" href="{% static "files/main_style.css" %}" title="wsite-theme-css" />
 
+<link rel="stylesheet" type="text/css" href="{% static "service_files/sites.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "service_files/fancybox.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "files/main_style.css" %}" title="wsite-theme-css">
+<link href="{% static "service_files/css_004.css" %}" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<!-- jQuery is used only for this example; it isn't required to use Stripe -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{% static "js/my-stripe.js" %}"></script>
 </head>
-<body>
- {% include "index/header.html" %}
+<body class="no-header-page  wsite-theme-light  wsite-page-contact">
+{% include "index/header.html" %}
+
+<div id="main-wrap">
+<div class="container">
+<div id='wsite-content'>
+
+
+{% with service=service_list|get_service:id %}
+
+<div id="wsite-com-product-area">
+<div id="wsite-com-product-images">
+<a href="/uploads/4/4/9/9/44993235/s603969475668282444_p11_i1_w2074.jpeg" class="cloud-zoom" id="zoom1" data-position="inside">
+<img src="{% static "images/" %}{{service.images.all.0.image}}" class="wsite-com-product-images-main-image" />
+</a>
+
+</div>
+
+<div id="wsite-com-product-info">
+<div id="wsite-com-product-info-inner">
+<h2 id="wsite-com-product-title">
+{{ service.service_type }} for {{ service.service_time }} hour
+</h2>   
+<div id="wsite-com-product-sku" class="wsite-com-product-sku-none">
+<b class="wsite-com-product-title">SKU:</b>
+<span id="wsite-com-product-sku-value"></span>
+</div>
+
+<div id="wsite-com-product-price-area" class="wsite-com-product-show-price-range-on-sale">
+<div id="wsite-com-product-price" class="wsite-com-product-price-container">
+<span class="wsite-com-product-price-currency-prefix">$</span><!--
+--><span class="wsite-com-product-price-amount">{{ service.service_fee }}</span><!--
+--><span class="wsite-com-product-price-currency-suffix"></span>
+</div>
+
+<div id="wsite-com-product-price-range" class="wsite-com-product-price-container">
+<span class="wsite-com-product-price-amount">${{ service.service_fee }}</span>
+</div>
+<div id="wsite-com-product-price-sale" class="wsite-com-product-price-container">
+<span class="wsite-com-product-price-currency-prefix">$</span><!--
+--><span class="wsite-com-product-price-amount">{{ service.service_fee }}</span><!--
+--><span class="wsite-com-product-price-currency-suffix"></span>
+</div>
+<div id="wsite-com-product-price-unavailable" class="wsite-com-product-price-container">
+Unavailable
+</div>
+</div>
+
+<div id="wsite-com-product-short-description">
+<div class="paragraph"><span style="">{{ service.service_detail }}</span></div>
+</div>
+
+<ul id="wsite-com-product-social-sharing">
+<li class="wsite-com-product-social">
+<a class="wsite-com-product-social-facebook" title="Share on Facebook" data-network="facebook" href="https://facebook.com/sharer.php?s=100&amp;p[url]=http%3A%2F%2Fwww.massagepanda.com%2Fstore%2Fp11%2FSwedish_Massage_for_1_hour.html&amp;p[title]=Swedish+Massage+for+1+hour&amp;p[images][0]=http%3A%2F%2Fwww.massagepanda.com%2Fuploads%2F4%2F4%2F9%2F9%2F44993235%2Fs603969475668282444_p11_i1_w320.jpeg&amp;p[summary]=Swedish+massage+therapy+is+the+modality+that+comes+to+mind+when+most+people+think+about+massage.+One+of+the+primary+goals+of+the+Swedish+massage+technique+is+to+relax+the+entire+body.+" target="_blank">Facebook</a>
+</li>
+
+<li class="wsite-com-product-social">
+<a class="wsite-com-product-social-twitter" title="Share on Twitter" data-network="twitter" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.massagepanda.com%2Fstore%2Fp11%2FSwedish_Massage_for_1_hour.html&amp;text=Swedish+Massage+for+1+hour" target="_blank">Twitter</a>
+</li>
+
+<li class="wsite-com-product-social">
+<a class="wsite-com-product-social-pinterest" title="Share on Pinterest" data-network="pinterest" href="https://pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.massagepanda.com%2Fstore%2Fp11%2FSwedish_Massage_for_1_hour.html&amp;description=Swedish+massage+therapy+is+the+modality+that+comes+to+mind+when+most+people+think+about+massage.+One+of+the+primary+goals+of+the+Swedish+massage+technique+is+to+relax+the+entire+body.+&amp;media=http%3A%2F%2Fwww.massagepanda.com%2Fuploads%2F4%2F4%2F9%2F9%2F44993235%2Fs603969475668282444_p11_i1_w320.jpeg" target="_blank">Pinterest</a>
+</li>
+</ul>
+<div id="wsite-com-product-options"> 
 <form action="{% url 'charge'%}" method="POST" id="payment-form">
-  <span class="payment-errors"></span>
-
-  <div class="form-row">
-    <label>
-      <span>Card Number</span>
-      <input type="text" size="20" data-stripe="number"/>
-    </label>
-  </div>
-
-  <div class="form-row">
-    <label>
-      <span>CVC</span>
-      <input type="text" size="4" data-stripe="cvc"/>
-    </label>
-  </div>
-
-  <div class="form-row">
-    <label>
-      <span>Expiration (MM/YYYY)</span>
-      <input type="text" size="2" data-stripe="exp-month"/>
-    </label>
-    <span> / </span>
-    <input type="text" size="4" data-stripe="exp-year"/>
-  </div>
-
-  <button type="submit">Submit Payment</button>
- {% include "index/footer.html" %}
+{% include "payment/payment-form.html" %}
+<input type="hidden" name="fee" value="{{ service.service_fee }}"/>
+{% csrf_token %}
 </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endwith %}
+
+
+
+</div>  <!--wsite-content -->
+</div>
+</div>
+{% include "index/footer.html" %}
+</body>
+</html>

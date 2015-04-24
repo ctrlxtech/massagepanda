@@ -8,7 +8,7 @@ urlpatterns = [
 
     url(r'^$', include('index.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^service/', include('service.urls')),
+    url(r'^store/', include('services.urls')),
     url(r'^contact/', include('contact.urls')),
     url(r'^payment/', include('payment.urls')),
 ]

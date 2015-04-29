@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html><head>
+<title>SMS</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+
+$(document).ready(function() {
+    $('#selecctall').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.checkbox1').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"              
+            });
+        }else{
+            $('.checkbox1').each(function() { //loop through each checkbox
+                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+            });        
+        }
+    });
+   
+});
+</script>
+</head>
+<body>
+{% load staticfiles %}
+
+{% if staff_list %}
+<form action="{% url 'sendSMS'%}" method="post">
+{% csrf_token %}
+<ul class="chk-container">
+<li><input type="checkbox" id="selecctall"/> Selecct All</li>
+{% for staff in staff_list %}
+<li><input class="checkbox1" type="checkbox" name="needToSend" value="{{staff.id}}">
+<img src="{% static "images/" %}{{staff.profile_photo}}" style="width:200px;height:200px">
+{{staff.id}}: {{staff.name}}, {{staff.phone_number}}
+</li>
+{% endfor %}
+</ul>
+<input type="text" name="message"><br>
+<input type="submit" id="cal" value="Send">
+</form>
+{% else %}
+<p>No staff are available.</p>
+{% endif %}
+</body>
+</html>

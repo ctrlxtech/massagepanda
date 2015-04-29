@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'services',
     'contact',
     'payment',
+    'manager',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,3 +109,4 @@ USE_TZ = True
 MEDIA_ROOT = '/home/ubuntu/massagepanda/images/'
 MEDIA_URL = '/static/images/'
 STATIC_URL = '/static/'
+LOGIN_URL = 'admin:login'

@@ -1,0 +1,53 @@
+{% load staticfiles %}
+
+<div class="title">
+<h1>Finalize Order</h1>
+</div>
+<div class="modify">
+<i class="fa fa-plus-circle"></i>
+</div>
+<div class="content" id="final_products">
+<div class="left" id="ordered">
+<div class="products">
+<div class="product_image">
+<img src="{% static "res/img/lady.jpg" %}"/>
+</div>
+<div class="product_details">
+<span class="product_name">Cherry Bikini</span>
+<span class="quantity">1</span>
+<span class="price">$45.00</span>
+</div>
+</div>
+<div class="totals">
+<span class="subtitle">Subtotal <span id="sub_price">$45.00</span></span>
+<span class="subtitle">Tax <span id="sub_tax">$2.00</span></span>
+<span class="subtitle">Shipping <span id="sub_ship">$4.00</span></span>
+</div>
+<div class="final">
+<span class="title">Total <span id="calculated_total">$51.00</span></span>
+</div>
+</div>
+<div class="right" id="reviewed">
+<div class="billing">
+<span class="title">Billing:</span>
+<div class="address_reviewed">
+<span class="name">John Smith</span>
+<span class="address">123 Main Street</span>
+<span class="location">Everytown, USA, 12345</span>
+<span class="phone">(123)867-5309</span>
+</div>
+</div>
+<div class="shipping">
+<span class="title">Shipping:</span>
+<div class="address_reviewed">
+<span class="name">John Smith</span>
+<span class="address">123 Main Street</span>
+<span class="location">Everytown, USA, 12345</span>
+<span class="phone">(123)867-5309</span>
+<div id="complete">
+<a class="big_button" id="complete" href="#">Complete Order</a>
+<span class="sub">By selecting this button you agree to the purchase and subsequent payment for this order.</span> 
+</div>
+</div>
+</div>
+</div>

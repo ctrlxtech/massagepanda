@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^store/', include('services.urls')),
     url(r'^contact/', include('contact.urls')),
     url(r'^payment/', include('payment.urls')),
+    url(r'^manager/', include('manager.urls')),
 ]

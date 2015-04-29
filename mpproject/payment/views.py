@@ -14,6 +14,9 @@ def index(request):
     context = {"id": request.GET.get("id"), "service_list": service_list}
     return render(request, 'payment/index.html', context)
 
+def test(request):
+    return render(request, 'payment/test.html')
+
 def charge(request):
     fee = int(float(request.POST.get("fee")) * 100)
     stripe.api_key = "sk_test_aibfico1Lcf9qydk9snpXVrI"

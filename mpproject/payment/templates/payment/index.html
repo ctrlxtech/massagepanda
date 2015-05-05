@@ -12,6 +12,7 @@
 <!-- jQuery is used only for this example; it isn't required to use Stripe -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="{% static "js/my-stripe.js" %}"></script>
+<script type="text/javascript" src="{% static "js/myjs.js" %}"></script>
 </head>
 <body class="no-header-page  wsite-theme-light  wsite-page-contact">
 {% include "index/header.html" %}
@@ -79,9 +80,12 @@ Unavailable
 </li>
 </ul>
 <div id="wsite-com-product-options"> 
-<form action="{% url 'charge'%}" method="POST" id="payment-form">
-{% include "payment/payment-form.html" %}
-<input type="hidden" name="fee" value="{{ service.service_fee }}"/>
+<form action="{% url 'buy'%}" method="POST" id="product-option">
+{% include "payment/product-option.html" %}
+<input type="hidden" name="serviceId" value="{{ id }}"/>
+<a class="wsite-button wsite-button-large wsite-button-highlight wsite-buy-button" role="button" tabindex="-1">
+<button class="wsite-button-inner" type="submit">Buy Now</button>
+</a>
 {% csrf_token %}
 </form>
 </div>
@@ -93,6 +97,8 @@ Unavailable
 {% endwith %}
 
 
+<div id="wsite-com-product-tab">
+</div>
 
 </div>  <!--wsite-content -->
 </div>

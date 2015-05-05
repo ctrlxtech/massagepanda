@@ -5,7 +5,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#selecctall').click(function(event) {  //on click
+    $('#selecctall1').click(function(event) {  //on click
         if(this.checked) { // check select status
             $('.checkbox1').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"              
@@ -16,30 +16,162 @@ $(document).ready(function() {
             });        
         }
     });
-   
+    $('#selecctall2').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.checkbox2').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"              
+            });
+        }else{
+            $('.checkbox2').each(function() { //loop through each checkbox
+                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+            });        
+        }
+    }); 
+    $('#selecctall3').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.checkbox3').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"              
+            });
+        }else{
+            $('.checkbox3').each(function() { //loop through each checkbox
+                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+            });        
+        }
+    }); 
 });
+
+function addToAdminList(id, first_name, last_name, phone_number, src) {
+    var adminList = document.getElementById('adminList');
+    var entry = document.createElement('li');
+    addCheckBox(id, entry, 1);
+    entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
+//    addImage(id, adminList, src);
+    adminList.appendChild(entry);
+}
+
+function addToMaleList(id, first_name, last_name, phone_number, src) {
+    var mList = document.getElementById('mList');
+    var entry = document.createElement('li');
+    addCheckBox(id, entry, 2);
+    entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
+//    addImage(id, mList, src);
+    mList.appendChild(entry);
+}
+
+
+function addToFemaleList(id, first_name, last_name, phone_number, src) {
+    var fList = document.getElementById('fList');
+    var entry = document.createElement('li');
+    addCheckBox(id, entry, 3);
+    entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
+    fList.appendChild(entry);
+//    addImage(id, fList, src);
+}
+
+function addCheckBox(id, list, index) {
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = "needToSend";
+    input.value = id;
+    input.className = "checkbox" + index; // set the CSS class
+    list.appendChild(input); // put it into the DOM
+}
+
+function addImage(id, list, src) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.style.width = '200px';
+    img.style.height = '200px';
+    list.appendChild(img); // put it into the DOM
+}
+
+
 </script>
+ <style>
+  .column {
+        width:20%;
+        float:left;  
+    padding-bottom: 100px;
+    padding-left: 100px;
+  }
+
+  .row {
+    height: 100px;
+  }
+  
+  .textBody {
+    float:left;
+    height: 100px;
+   }
+</style>
 </head>
 <body>
 {% load staticfiles %}
 
+<div>
 {% if staff_list %}
 <form action="{% url 'sendSMS'%}" method="post">
 {% csrf_token %}
-<ul class="chk-container">
-<li><input type="checkbox" id="selecctall"/> Selecct All</li>
-{% for staff in staff_list %}
-<li><input class="checkbox1" type="checkbox" name="needToSend" value="{{staff.id}}">
-<img src="{% static "images/" %}{{staff.profile_photo}}" style="width:200px;height:200px">
-{{staff.id}}: {{staff.name}}, {{staff.phone_number}}
-</li>
-{% endfor %}
+<table>
+<tr>
+<td>
+<ul id="adminList" class="chk-container">
+<h3><input type="checkbox" id="selecctall1"/> Selecct All Admin</h3>
 </ul>
-<input type="text" name="message"><br>
+</td>
+<td>
+<ul id="mList" class="chk-container">
+<h3><input type="checkbox" id="selecctall2"/> Selecct All Male</h3>
+</ul>
+</td>
+<td>
+<ul id="fList" class="chk-container">
+<h3><input type="checkbox" id="selecctall3"/> Selecct All Female</h3>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<label for="message">Message:</label><br>
+<textarea rows="4" cols="50" name="message">
+</textarea><br>
 <input type="submit" id="cal" value="Send">
+</td>
+</tr>
+</table>
 </form>
 {% else %}
 <p>No staff are available.</p>
 {% endif %}
+</div>
+
+<div style="padding-top:100px">
+<form action="{% url 'sendWithNum'%}" method="post">
+{% csrf_token %}
+number:<input type="number" name="num" /><br/>
+<label for="messageWithNum">Message:</label><br>
+<textarea rows="4" cols="50" name="messageWithNum">
+</textarea><br>
+<input type="submit" id="calNum" value="SendWithNum">
+</form>
+</div>
+
+{% for staff in staff_list %}
+{% if staff.title == 1 %}
+<script>
+addToAdminList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "{% static "images/" %}{{staff.profile_photo}}")
+</script>
+{% elif staff.gender == 'M' %}
+<script>
+addToMaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
+</script>
+{% else %}
+<script>
+addToFemaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
+</script>
+{% endif %}
+{% endfor %}
+
 </body>
 </html>

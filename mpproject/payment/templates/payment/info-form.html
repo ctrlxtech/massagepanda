@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<form class="go-right">
+<div>
+<input type="name" name="first_name" value="" id="first_name" placeholder="First Name" data-trigger="change" data-validation-minlength="1" data-type="name" data-required="true" data-error-message="Enter Your First Name"/><label for="first_name">First Name</label>
+</div>
+
+<div>
+<input type="name" name="last_name" value="" id="last_name" placeholder="Last Name" data-trigger="change" data-validation-minlength="1" data-type="name" data-required="true" data-error-message="Enter Your Last Name"/><label for="last_name">Last Name</label>
+</div>
+<div>
+<input type="phone" name="telephone" value="" id="telephone" placeholder="Phone(555)-555-5555" data-trigger="change" data-validation-minlength="1" data-type="number" data-required="true" data-error-message="Enter Your Telephone Number"/><label for="telephone">Telephone</label>
+</div>
+<div>
+</div>
+<div>
+<input type="text" name="address" value="" id="address" placeholder="Address" data-trigger="change" data-validation-minlength="1" data-type="text" data-required="true" data-error-message="Enter Your Billing Address"/><label for="Address">Address</label>
+</div>
+<div>
+<input type="text" name="city" value="" id="city" placeholder="City" data-trigger="change" data-validation-minlength="1" data-type="text" data-required="true" data-error-message="Enter Your Billing City"/><label for="city">City</label>
+</div>
+<div>
+<div class="state_options">
+<div class="select">
+{% include "payment/state_list.html" %}
+</div>
+<label class="state" for="state">State</label>
+</div>
+</div>
+<div>
+<input type="text" name="zip" value="" id="zip" placeholder="Zip Code" data-trigger="change" data-validation-minlength="1" data-type="text" data-required="true" data-error-message="Enter Your Billing Zip Code"/><label for="zip">Zip Code</label>
+</div>
+<div>
+<div class="country_options">
+<div class="select">
+<select id="country">
+<option value = "1">United States</option>
+<option value = "2">United Kingdom</option>
+<option value = "3">Uganda</option>
+<option value = "4">Etc.</option>
+</select>
+</div>
+<label class="country" for="country">Country</label>
+</div>
+</div>
+
+<div>
+</div>
+</form>

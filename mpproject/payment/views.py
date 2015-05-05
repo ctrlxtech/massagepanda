@@ -8,17 +8,27 @@ import stripe
 # Set your secret key: remember to change this to your live secret key in production
 # See your keys here https://dashboard.stripe.com/account/apikeys
 
+def test(request):
+    return render(request, 'payment/test.html')
+
 
 def index(request):
     service_list = Service.objects.order_by('service_type')
     context = {"id": request.GET.get("id"), "service_list": service_list}
     return render(request, 'payment/index.html', context)
 
-def test(request):
-    return render(request, 'payment/test.html')
+def buy(request):
+
+    serviceId = request.POST.get("serviceId")
+    context = {"Date": request.POST.get("Date"), "Time": request.POST.get("Time"),
+        "Gender": request.POST.get("Gender"), "Quantity": request.POST.get("Quantity"),
+        "serviceId": serviceId}
+    return render(request, 'payment/charge.html', context)
 
 def charge(request):
-    fee = int(float(request.POST.get("fee")) * 100)
+    serviceId = request.POST.get("serviceId")
+    service = Service.objects.get(pk=serviceId)
+    fee = int(float(service.service_fee) * 100)
     stripe.api_key = "sk_test_aibfico1Lcf9qydk9snpXVrI"
     # Get the credit card details submitted by the form
     token = request.POST.get('stripeToken', False)

@@ -18,11 +18,14 @@ def index(request):
     return render(request, 'payment/index.html', context)
 
 def buy(request):
-
     serviceId = request.POST.get("serviceId")
-    context = {"Date": request.POST.get("Date"), "Time": request.POST.get("Time"),
-        "Gender": request.POST.get("Gender"), "Quantity": request.POST.get("Quantity"),
-        "serviceId": serviceId}
+    ser = Service.objects.get(pk=serviceId)
+    service_fee = ser.service_fee
+    tax = service_fee * 0.09
+    total = service_fee + tax
+    context = {"date": request.POST.get("Date"), "time": request.POST.get("Time"),
+        "gender": request.POST.get("Gender"), "quantity": request.POST.get("Quantity"),
+        "service": ser.service_type, "serviceFee": service_fee, "tax": tax, "total": total}
     return render(request, 'payment/charge.html', context)
 
 def charge(request):

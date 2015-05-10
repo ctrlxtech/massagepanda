@@ -14,10 +14,15 @@ class Staff(models.Model):
         ('F', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    profile_photo = models.ImageField(null=True);
+    profile_photo = models.ImageField(null=True, blank=True);
 
 class InSMS(models.Model):
     sender = models.CharField(max_length = 200)
     messageId = models.CharField(max_length = 200, null=True)
     messageBody = models.CharField(max_length = 1000)
     timestamp = models.CharField(max_length = 200, null=True)
+
+class OutSMS(models.Model):
+    receiver = models.CharField(max_length = 200)
+    messageBody = models.CharField(max_length = 1000)
+    timestamp = models.CharField(max_length = 200)

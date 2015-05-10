@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html><head>
+<title>Configurations</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+
+$(document).ready(function() {
+    $('#selecctall1').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.checkbox1').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"              
+            });
+        }else{
+            $('.checkbox1').each(function() { //loop through each checkbox
+                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+            });        
+        }
+    });
+});
+
+</script>
+<script type="text/javascript" src="{% static "js/myjs.js" %}"></script>
+
+</head>
+<body>
+
+<div>
+{% if staff_list %}
+<form action="{% url 'applyConfig'%}" method="post">
+{% csrf_token %}
+<ul id="adminList" class="chk-container">
+<h3><input type="checkbox" id="selecctall1"/> Selecct All Admin</h3>
+{% for staff in staff_list %}
+{% if staff.title == 1 %}
+<li>
+<input class="checkbox1" value="{{staff.phone_number}}" name="needToForward" type="checkbox">
+{{staff.first_name}} {{staff.last_name}}: {{staff.phone_number}}
+<br>
+</li>
+{% endif %}
+{% endfor %}
+
+
+</ul>
+<input type="submit" id="cal" value="Submit">
+</form>
+{% else %}
+<p>No staff are available.</p>
+{% endif %}
+</div>
+
+</body>
+</html>

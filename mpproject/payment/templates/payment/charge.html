@@ -51,8 +51,6 @@
 <div class="content" id="address">
 {% include "payment/info-form.html" %}
 </div>
-</div>
-<div class="column column2">
 <div class="step" id="step3">
 <div class="number">
 </div>
@@ -69,8 +67,6 @@
 </div>
 
 </div>
-</div>
-<div class="column column3">
 <div class="step" id="step4">
 <div class="number">
 </div>
@@ -147,14 +143,17 @@
 <span><img src="{% static "res/img/ewMjaHv.png" %}"></span>
 <span><img src="{% static "res/img/3LmmFFV.png" %}"></span>
 </div>
-<div class="secured">
-<img class="lock" src="{% static "res/img/lock.png" %}">
-<p class="security info">What, well you mean like a date? Doc? Am I to understand you're still hanging around with Doctor Emmett Brown, McFly? Tardy slip for you, Miss Parker. And one for you McFly I believe that makes four in a row.</p>
 </div>
 </div>
-<a class="continue" href="#">Continue</a>
 </div>
+
+
+
+<div class="column column2">
+
+{% include "payment/order-summary.html" %}
 </div>
+
 </div>
 </div>
 </div>

@@ -1,0 +1,93 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+var curInIndex = {{inSMS_list.count}};
+var curOutIndex = {{outSMS_list.count}};
+(function inWorker() {
+  $.ajax({
+    url: '{% url 'getInLogs' %}', 
+    data: {index: curInIndex},
+    success: function(data) {
+        appendInSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(inWorker, 5000);
+    }
+  });
+})();
+
+(function outWorker() {
+  $.ajax({
+    url: '{% url 'getOutLogs' %}', 
+    data: {index: curOutIndex},
+    success: function(data) {
+        appendOutSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(outWorker, 5000);
+    }
+  });
+})();
+
+function appendOutSMS(data) {
+    var results = JSON.parse(data);
+    var mList = document.getElementById('outList');
+    for (i = 0; i < results.length; i++) {
+      addToList(mList, results[i].fields.sender, results[i].fields.timestamp, results[i].fields.messageBody);
+      curOutIndex += 1;
+    }
+}
+
+function appendInSMS(data) {
+    var results = JSON.parse(data);
+    var mList = document.getElementById('inList');
+    for (i = 0; i < results.length; i++) {
+      addToList(mList, results[i].fields.sender, results[i].fields.timestamp, results[i].fields.messageBody);
+      curInIndex += 1;
+    }
+}
+
+function addToList(list, sender, timestamp, message_body) {
+    var entry = document.createElement('li');
+    var p = document.createElement('p');
+    entry.appendChild(document.createTextNode(sender + " [" + timestamp + "]:"));
+    var br = document.createElement("br");
+    entry.appendChild(br);
+    entry.appendChild(p);
+    p.appendChild(document.createTextNode(message_body));
+    list.appendChild(entry);
+}
+
+</script>
+
+<table style="width:100%">
+  <tr>
+    <th>Inbound Messages</th>
+    <th>Outbound Messages</th>
+  </tr>
+  <tr>
+    <td>
+{% if inSMS_list %}
+    <ul id="inList">
+        {% for inSMS in inSMS_list %}
+                <li>{{inSMS.sender}} [{{inSMS.timestamp}}]: <br/><p>{{inSMS.messageBody}} </p></li>
+        {% endfor %}
+     </ul>
+ {% else %}
+ <p>No inbound SMS are available.</p>
+ {% endif %}
+</td>
+<td>
+{% if outSMS_list %}
+    <ul id="outList">
+        {% for outSMS in outSMS_list %}
+                <li>{{outSMS.receiver}} [{{outSMS.timestamp}}]: <br/><p>{{outSMS.messageBody}} </p></li>
+        {% endfor %}
+     </ul>
+ {% else %}
+ <p>No outbound SMS are available.</p>
+ {% endif %}
+</td>
+  </tr>
+</table>

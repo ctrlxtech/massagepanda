@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html><head>
+<title>Done</title>
+</head>
+<body>
+<a href="{% url 'manager' %}">Home</a>
+
+<div>
+{% if message %}
+{{ message }}
+{% else %}
+<p>No message are available.</p>
+{% endif %}
+</div>
+
+</body>
+</html>

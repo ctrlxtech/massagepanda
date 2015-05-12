@@ -9,12 +9,12 @@ $(document).ready(function() {
     $('#selecctall1').click(function(event) {  //on click
         if(this.checked) { // check select status
             $('.checkbox1').each(function() { //loop through each checkbox
-                this.checked = true;  //select all checkboxes with class "checkbox1"              
+                this.checked = true;  //select all checkboxes with class "checkbox1"
             });
         }else{
             $('.checkbox1').each(function() { //loop through each checkbox
-                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
-            });        
+                this.checked = false; //deselect all checkboxes with class "checkbox1"
+            });
         }
     });
 });
@@ -25,6 +25,10 @@ $(document).ready(function() {
 </head>
 <body>
 
+<label><h3>Forward number list: </h3></label>
+{% for staff in for_staff %}
+{{ staff.first_name }} {{ staff.last_name}}: {{ staff.phone_number}}<br> 
+{% endfor %}
 <div>
 {% if staff_list %}
 <form action="{% url 'applyConfig'%}" method="post">
@@ -34,7 +38,7 @@ $(document).ready(function() {
 {% for staff in staff_list %}
 {% if staff.title == 1 %}
 <li>
-<input class="checkbox1" value="{{staff.phone_number}}" name="needToForward" type="checkbox">
+<input class="checkbox1" value="{{staff.id}}" name="needToForward" type="checkbox">
 {{staff.first_name}} {{staff.last_name}}: {{staff.phone_number}}
 <br>
 </li>

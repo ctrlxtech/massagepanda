@@ -2,25 +2,10 @@
 <script>
 var curInIndex = {{inSMS_list|length}};
 var curOutIndex = {{outSMS_list|length}};
-
-(function outWorker() {
-  $.ajax({
-    url: '{% url 'getOutLogs' %}', 
-    data: {index: curOutIndex},
-    success: function(data) {
-        appendOutSMS(data);
-    },
-    complete: function() {
-      // Schedule the next request when the current one's complete
-      setTimeout(outWorker, 5000);
-    }
-  });
-})();
-
 (function inWorker() {
   $.ajax({
-    url: '{% url 'getInLogs' %}', 
-    data: {index: curInIndex},
+    url: '{% url 'getUserInLogs' %}', 
+    data: {index: curInIndex, num: {{num}}},
     success: function(data) {
         appendInSMS(data);
     },
@@ -31,11 +16,25 @@ var curOutIndex = {{outSMS_list|length}};
   });
 })();
 
+(function outWorker() {
+  $.ajax({
+    url: '{% url 'getUserOutLogs' %}', 
+    data: {index: curOutIndex, num: {{num}}},
+    success: function(data) {
+        appendOutSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(outWorker, 5000);
+    }
+  });
+})();
+
 function appendOutSMS(data) {
     var results = JSON.parse(data);
     var mList = document.getElementById('outList');
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].fields.sender, results[i].fields.first_name, results[i].fields.last_name, results[i].fields.timestamp, results[i].fields.messageBody);
+      addToList(mList, results[i].fields.sender, results[i].fields.timestamp, results[i].fields.messageBody);
       curOutIndex += 1;
     }
 }
@@ -44,15 +43,15 @@ function appendInSMS(data) {
     var results = JSON.parse(data);
     var mList = document.getElementById('inList');
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].fields.sender, results[i].fields.first_name, results[i].fields.last_name, results[i].fields.timestamp, results[i].fields.messageBody);
+      addToList(mList, results[i].fields.sender, results[i].fields.timestamp, results[i].fields.messageBody);
       curInIndex += 1;
     }
 }
 
-function addToList(list, sender, first_name, last_name, timestamp, message_body) {
+function addToList(list, sender, timestamp, message_body) {
     var entry = document.createElement('li');
     var p = document.createElement('p');
-    entry.appendChild(document.createTextNode(sender + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
+    entry.appendChild(document.createTextNode(sender + " [" + timestamp + "]:"));
     var br = document.createElement("br");
     entry.appendChild(br);
     entry.appendChild(p);
@@ -62,7 +61,7 @@ function addToList(list, sender, first_name, last_name, timestamp, message_body)
 }
 
 </script>
-
+<h2 align="center">{{num}}</h2>
 <table style="width:100%">
   <tr>
     <th>Inbound Messages</th>
@@ -73,7 +72,7 @@ function addToList(list, sender, first_name, last_name, timestamp, message_body)
 {% if inSMS_list %}
     <ul id="inList">
         {% for inSMS in inSMS_list %}
-                <li>{{inSMS.sender}}({{inSMS.first_name}} {{inSMS.last_name}}) [{{inSMS.timestamp}}]: <br/><p>{{inSMS.messageBody}} </p></li>
+                <li>{{inSMS.sender}} [{{inSMS.timestamp}}]: <br/><p>{{inSMS.messageBody}} </p></li>
         {% endfor %}
      </ul>
  {% else %}
@@ -84,7 +83,7 @@ function addToList(list, sender, first_name, last_name, timestamp, message_body)
 {% if outSMS_list %}
     <ul id="outList">
         {% for outSMS in outSMS_list %}
-                <li>{{outSMS.receiver}}({{outSMS.first_name}} {{outSMS.last_name}}) [{{outSMS.timestamp}}]: <br/><p>{{outSMS.messageBody}} </p></li>
+                <li>{{outSMS.receiver}} [{{outSMS.timestamp}}]: <br/><p>{{outSMS.messageBody}} </p></li>
         {% endfor %}
      </ul>
  {% else %}

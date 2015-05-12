@@ -7,7 +7,7 @@ class Staff(models.Model):
     last_name = models.CharField(max_length = 200)
     title = models.PositiveIntegerField(max_length = 5) 
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone_number = models.CharField(max_length = 16, validators=[phone_regex], blank=True) # validators should be a list
+    phone_number = models.CharField(max_length = 16, validators=[phone_regex], unique=True) # validators should be a list
     
     GENDER_CHOICES = (
         ('M', 'Male'),
@@ -26,3 +26,6 @@ class OutSMS(models.Model):
     receiver = models.CharField(max_length = 200)
     messageBody = models.CharField(max_length = 1000)
     timestamp = models.CharField(max_length = 200)
+
+class ForwardNumber(models.Model):
+    number = models.ForeignKey(Staff)

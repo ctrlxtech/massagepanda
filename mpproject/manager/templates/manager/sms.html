@@ -68,6 +68,14 @@ $(document).ready(function() {
 <a href="{% url 'configurations' %}">configurations</a>
 
 <div>
+<form target="_blank" action="{% url 'getUserLogsByNum' %}" method="get">
+{% csrf_token %}
+<label for="number">Phone Number:</label><input type="number" name="number">
+<input type="submit" value="query" >
+</form>
+</div>
+
+<div>
 {% if staff_list %}
 <form action="{% url 'sendSMS'%}" method="post">
 {% csrf_token %}

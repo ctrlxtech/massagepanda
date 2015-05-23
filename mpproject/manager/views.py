@@ -3,17 +3,113 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.db import connection
 
-from django.http import HttpResponse
-from manager.models import Staff, InSMS, OutSMS, ForwardNumber
+from django.template.defaulttags import register
+
+from django.http import HttpResponse, JsonResponse
+from manager.models import Staff, InSMS, OutSMS, ForwardNumber, SMSTemplate
+from payment.models import Order, Charge
 import requests
 import json
 import time
 import datetime
+import stripe
 # Create your views here.
+@login_required
+def payment(request):
+    return render(request, 'manager/payment.html')
+
+def placeOrder(request):
+    '''
+    serviceId = request.POST.get("serviceId")
+    service = Service.objects.get(pk=serviceId)
+    fee = int(float(service.service_fee) * 100)
+    '''
+    livemode = request.POST.get('livemode')
+    mamount = request.POST.get('amount')
+    if livemode is not None:
+        stripe.api_key = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
+    else:
+        stripe.api_key = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+
+    # Get the credit card details submitted by the form
+    token = request.POST.get('stripeToken', False)
+    b_phone = request.POST.get('b_phone', "unknown_billing_phone")
+    b_email = request.POST.get('b_email', "unknown_billing_email")
+
+    name = request.POST.get('name', "unknown_name")
+    phone = request.POST.get('phone', "unknown_phone")
+    email = request.POST.get('email', "unknown_email")
+    sa = request.POST.get('al1') 
+    o = Order(token=token, amount=mamount, b_phone=b_phone, b_email=b_email, shipping_address=sa, name=name, phone=phone, email=email)
+    o.save()
+    return HttpResponse("Successfully placed order")
+
+@login_required
+def orders(request):
+    order_list = Order.objects.filter(charged=False)
+    charge_list = Charge.objects.all()
+    order_tl = []
+    charge_tl = []
+    stripe.api_key = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
+    #stripe.api_key = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+    for order in order_list:
+        order_tl.append(stripe.Token.retrieve(order.token))
+    for charge in charge_list:
+        charge_tl.append(stripe.Charge.retrieve(charge.token))
+    #return HttpResponse(token_list)
+    context = {'order_list': order_list, 'order_tl': order_tl, 'charge_list': charge_list, 'charge_tl': charge_tl}
+    return render(request, 'manager/orders.html', context)
+
+@login_required
+def getOrders(request):
+    index = request.GET.get('index')
+    data = serializers.serialize("json", Order.objects.filter(charged=False)[index:])
+    return HttpResponse(data)
+
+@register.filter
+def lookup(d, key):
+    return d[key]
+
+def mcharge(request):
+    mtoken = request.POST.get('token')
+    mamount = request.POST.get('amount')
+    b_phone = request.POST.get('b_phone')
+    b_email = request.POST.get('b_email')
+    mname = request.POST.get('name')
+    mphone = request.POST.get('phone')
+    memail = request.POST.get('email')
+    sa = request.POST.get('sa')
+    stripe.api_key = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
+    #stripe.api_key = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+    try:
+        chargeObj = stripe.Charge.create(
+        amount=mamount, # amount in cents, again
+        currency="usd",
+        source=mtoken,
+        description="Example charge",
+        receipt_email=b_email,
+    )
+    except stripe.CardError, e:
+    # The card has been declined
+      return HttpResponse(str(e))
+
+    o = Order.objects.get(token=mtoken)
+    o.charged = True;
+    o.save();
+
+    c = Charge(token=mtoken, shipping_address=sa, name=mname, phone=mphone, email=memail)
+    c.save()
+    return JsonResponse(chargeObj)
+    '''
+    r = token + "<br>" + al1 + "<br>" + al2
+    return HttpResponse(r)
+    '''
+
 @login_required
 def index(request):
     staff_list = Staff.objects.order_by('first_name')
-    context = {'staff_list': staff_list}
+    template_list = SMSTemplate.objects.all()
+    context = {'staff_list': staff_list, 'template_list': template_list}
     return render(request, 'manager/sms.html', context)
 
 @login_required
@@ -44,26 +140,26 @@ def dictfetchall(cursor):
 
 @login_required
 def send(request):
-    ppl = request.POST.getlist('needToSend')
+    nums = request.POST.getlist('needToSend')
+    number = request.POST.get('num')
+    if number is not None and number != '':
+        nums.append(number)
     message_body = request.POST.get('message')
     number = ""
     api_key = "412847f0"
     api_secret = "55f41401"
-    r = ""
-    for p in ppl:
-        number = str(Staff.objects.get(pk=p).phone_number)
-        payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': number, 'type': 'unicode', 'text': message_body} 
-        r += requests.get("https://rest.nexmo.com/sms/json", params=payload).text
-        r += "<br>"
-        o = OutSMS(receiver=number, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    r = []
+    for n in nums:
+        payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': n, 'type': 'unicode', 'text': message_body} 
+        r.append(requests.get("https://rest.nexmo.com/sms/json", params=payload).text)
+        o = OutSMS(receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         o.save()
         time.sleep(1)
-    return redirect('manager')
+    return HttpResponse(r)
 
-@login_required
 def sendWithNum(request):
     number = request.POST.get('num')
-    message_body = request.POST.get('messageWithNum')
+    message_body = request.POST.get('message')
     api_key = "412847f0"
     api_secret = "55f41401"
     payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': number, 'type': 'unicode', 'text': message_body} 

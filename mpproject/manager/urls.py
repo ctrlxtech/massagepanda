@@ -13,4 +13,10 @@ urlpatterns = [
     url(r'^applyConfig$', views.applyConfig, name='applyConfig'),
     url(r'^sendWithNum', views.sendWithNum, name='sendWithNum'),
     url(r'^receiveSMS', views.receiveSMS, name='receiveSMS'),
+    
+    url(r'^payment', views.payment, name='mpayment'),
+    url(r'^charge', views.mcharge, name='mcharge'),
+    url(r'^orders$', views.orders, name='orders'),
+    url(r'^getOrders$', views.getOrders, name='getOrders'),
+    url(r'^placeOrder$', views.placeOrder, name='placeOrder'),
 ]

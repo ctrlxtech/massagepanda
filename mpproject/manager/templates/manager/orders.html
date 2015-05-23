@@ -1,0 +1,135 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+var curIndex = {{order_list|length}};
+
+(function worker() {
+  $.ajax({
+    url: '{% url 'getOrders' %}', 
+    data: {index: curIndex},
+    success: function(data) {
+        appendOrder(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker, 5000);
+    }
+  });
+})();
+
+function appendOrder(data) {
+    var results = JSON.parse(data);
+    var list = document.getElementById('orderList');
+    for (i = 0; i < results.length; i++) {
+      addToList(list, results[i].fields.token, results[i].fields['b_phone'],
+          results[i].fields['b_email'], results[i].fields['name'],
+          results[i].fields['phone'], results[i].fields['email'],
+          results[i].fields['shipping_address']);
+      curIndex += 1;
+    }
+}
+
+function addToList(list, token, amount, b_phone, b_email, name, phone, email, sa) {
+    var entry = document.createElement('li');
+    var f = document.createElement('form');
+    f.setAttribute('method',"post");
+    f.setAttribute('action',"{% url 'mcharge'%}");
+    
+    f.appendChild(createInput("token", token));
+    f.appendChild(createInput("amount", amount));
+    f.appendChild(createInput("b_phone", b_phone));
+    f.appendChild(createInput("b_email", b_email));
+    f.appendChild(createInput("name", name));
+    f.appendChild(createInput("phone", phone));
+    f.appendChild(createInput("email", email));
+    f.appendChild(createInput("sa", sa));
+    
+    var s = document.createElement("input"); //input element, Submit button
+    s.setAttribute('type',"submit");
+    s.setAttribute('value',"Submit");
+
+    f.appendChild(s);
+   
+    list.appendChild(f);
+}
+
+function createInput(name, value) {
+    var i = document.createElement("input"); //input element, text
+    i.setAttribute('type',"text");
+    i.setAttribute('value',value);
+    i.setAttribute('name',name);
+    i.setAttribute('readonly',"true");
+    return i;
+}
+
+</script>
+
+<table style="width:100%">
+  <tr>
+    <th>Orders</th>
+  </tr>
+  <tr>
+    <td valign="top">
+    <ul id="orderList">
+{% if order_list %}
+        {% for order in order_list %}
+            {% with index=forloop.counter0 %}
+                <li>
+                <form action="{% url 'mcharge'%}" method="post">
+                {% csrf_token %}
+                <input type="text" value="{{order.token}}" name="token" readonly>
+                <input type="text" value="{{order.amount}}" name="amount" readonly>
+                <input type="text" value="{{order.b_phone}}" name="b_phone" readonly>
+                <input type="text" value="{{order.b_email}}" name="b_email" readonly> 
+                <input type="text" value="{{order.name}}" name="name" readonly> 
+                <input type="text" value="{{order.phone}}" name="phone" readonly> 
+                <input type="text" value="{{order.email}}" name="email" readonly> 
+                <input type="text" value="{{order.shipping_address}}" name="sa" readonly> 
+                <br><p>
+                {{order_tl|lookup:index}}
+                </p>
+                <input type="submit" value="charge">
+                </form>
+                </li>
+            {% endwith %}
+        {% endfor %}
+ {% else %}
+ <p>No orders are available.</p>
+ {% endif %}
+     </ul>
+</td>
+  </tr>
+</table>
+
+
+<table style="width:100%">
+  <tr>
+    <th>Charges</th>
+  </tr>
+  <tr>
+    <td valign="top">
+    <ul id="chargeList">
+{% if charge_list %}
+        {% for charge in charge_list %}
+            {% with index=forloop.counter0 %}
+                <li>
+                <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" value="{{charge.token}}" name="token" readonly>
+                | {{charge.name}} | {{charge.phone}} | {{ charge.email }}
+                <br><p>
+                {{charge_tl|lookup:index}}
+                </p>
+                <lable>amount to refund:</label>
+                <input type="number">
+                <input type="submit" value="refund">
+                </form>
+                </li>
+            {% endwith %}
+        {% endfor %}
+ {% else %}
+ <p>No charges are available.</p>
+ {% endif %}
+     </ul>
+</td>
+  </tr>
+</table>

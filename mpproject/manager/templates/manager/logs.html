@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html>
+<head>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 var curInIndex = {{inSMS_list|length}};
@@ -51,22 +55,67 @@ function appendInSMS(data) {
 
 function addToList(list, sender, first_name, last_name, timestamp, message_body) {
     var entry = document.createElement('li');
-    var p = document.createElement('p');
     entry.appendChild(document.createTextNode(sender + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
     var br = document.createElement("br");
     entry.appendChild(br);
-    entry.appendChild(p);
+    var p = document.createElement('p');
     p.appendChild(document.createTextNode(message_body));
+    entry.appendChild(p);
     var theFirstChild = list.firstChild;
     list.insertBefore(entry, theFirstChild);
 }
+$(window).load(function(){
+$('#searchInList').keyup(function() {
+    filterInList(this); 
+});
 
+function filterInList(element) {
+    var value = $(element).val();
+    $("#inList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+$('#searchOutList').keyup(function() {
+    filterOutList(this);
+});
+
+function filterOutList(element) {
+    var value = $(element).val();
+    $("#outList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+});
 </script>
 
+</head>
+<body>
 <table style="width:100%">
+
+  <col width="50%">
+  <col width="50%">
   <tr>
     <th>Inbound Messages</th>
     <th>Outbound Messages</th>
+  </tr>
+  <tr>
+    <td align="middle">
+Search:<input id="searchInList" type="text" size="45"/>
+    </td>
+    <td align="middle">
+Search:<input id="searchOutList" type="text" size="45"/>
+    </td>
+
   </tr>
   <tr>
     <td valign="top">
@@ -93,3 +142,6 @@ function addToList(list, sender, first_name, last_name, timestamp, message_body)
 </td>
   </tr>
 </table>
+
+</body>
+</html>

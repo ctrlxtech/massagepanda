@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Stripe Getting Started Form</title>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <!-- jQuery is used only for this example; it isn't required to use Stripe -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/my-stripe.js" %}"></script>
+</head>
+<body>
+{% include "manager/payment-form.html" %}
+</body>
+</html> 

@@ -28,7 +28,7 @@ function checkOptions() {
 function addToAdminList(id, first_name, last_name, phone_number, src) {
     var adminList = document.getElementById('adminList');
     var entry = document.createElement('li');
-    addCheckBox(id, entry, 1);
+    addCheckBox(phone_number, entry, 1);
     entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
 //    addImage(id, adminList, src);
     adminList.appendChild(entry);
@@ -37,7 +37,7 @@ function addToAdminList(id, first_name, last_name, phone_number, src) {
 function addToMaleList(id, first_name, last_name, phone_number, src) {
     var mList = document.getElementById('mList');
     var entry = document.createElement('li');
-    addCheckBox(id, entry, 2);
+    addCheckBox(phone_number, entry, 2);
     entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
 //    addImage(id, mList, src);
     mList.appendChild(entry);
@@ -47,17 +47,17 @@ function addToMaleList(id, first_name, last_name, phone_number, src) {
 function addToFemaleList(id, first_name, last_name, phone_number, src) {
     var fList = document.getElementById('fList');
     var entry = document.createElement('li');
-    addCheckBox(id, entry, 3);
+    addCheckBox(phone_number, entry, 3);
     entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
     fList.appendChild(entry);
 //    addImage(id, fList, src);
 }
 
-function addCheckBox(id, list, index) {
+function addCheckBox(phone_number, list, index) {
     var input = document.createElement("input");
     input.type = "checkbox";
     input.name = "needToSend";
-    input.value = id;
+    input.value = phone_number;
     input.className = "checkbox" + index; // set the CSS class
     list.appendChild(input); // put it into the DOM
 }

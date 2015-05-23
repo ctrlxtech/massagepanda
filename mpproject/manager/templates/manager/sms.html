@@ -41,8 +41,71 @@ $(document).ready(function() {
                 this.checked = false; //deselect all checkboxes with class "checkbox1"                      
             });        
         }
-    }); 
+    });
+
+
+ // process the form
+    $('#SMSForm').submit(function(event) {
+        document.getElementById("myDiv").innerHTML = "";
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var nums = new Array();
+        $('input[name=needToSend]:checked').each(function() { nums.push($(this).val()) });
+        var formData = {
+            'needToSend'              : nums,
+            'num'               : $('input[name=num]').val(),
+            'message'          : $('textarea[name=message]').val(),
+        };
+        var csrftoken = getCookie('csrftoken'); 
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            traditional: true,
+            beforeSend: function (request)
+            {
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            url         : "{% url 'sendSMS'%}", // the url where we want to POST
+            dataType    : 'json', // what type of data do we expect back from the server
+            data: formData,
+            encode          : true,
+            // using the done promise callback
+            success: function(data) {
+                var count = data['message-count'];
+                for (i = 0; i < count; i++) {
+                    if (data.messages[0].status == 0) {
+                        document.getElementById("myDiv").innerHTML+="Succeeded in texting to " + data.messages[i].to + "<br>";
+                    } else {
+                        document.getElementById("myDiv").innerHTML+="Failed in texting to " + data.messages[i].to + "[" + data.messages[i]['error-text'] + "]<br>";
+                    }
+                }
+            },
+            complete: function(data) {
+                //alert("complete");
+                document.getElementById("myDiv").innerHTML+=data.responseText + "<br>";
+            }
+        });
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
+    });
+
 });
+
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 </script>
  <style>
@@ -67,6 +130,7 @@ $(document).ready(function() {
 <a href="{% url 'logs' %}">logs</a>
 <a href="{% url 'configurations' %}">configurations</a>
 
+
 <div>
 <form target="_blank" action="{% url 'getUserLogsByNum' %}" method="get">
 {% csrf_token %}
@@ -77,7 +141,7 @@ $(document).ready(function() {
 
 <div>
 {% if staff_list %}
-<form action="{% url 'sendSMS'%}" method="post">
+<form id="SMSForm" action="" method="post">
 {% csrf_token %}
 <table>
 <tr>
@@ -100,6 +164,12 @@ $(document).ready(function() {
 
 <tr>
 <td>
+number:<input type="number" name="num" />(note: country code is required!)<br/>
+</td>
+</tr>
+
+<tr>
+<td>
 <label for="message">Message:</label><br>
 <textarea rows="4" cols="50" name="message">
 </textarea><br>
@@ -113,16 +183,27 @@ $(document).ready(function() {
 {% endif %}
 </div>
 
-<div style="padding-top:100px">
-<form action="{% url 'sendWithNum'%}" method="post">
-{% csrf_token %}
-number:<input type="number" name="num" />(note: country code is required!)<br/>
-<label for="messageWithNum">Message:</label><br>
-<textarea rows="4" cols="50" name="messageWithNum">
-</textarea><br>
-<input type="submit" id="calNum" value="SendWithNum">
-</form>
+<font color='red'>
+<div style="padding-top:20px">
+Response message:
+<div id="myDiv">
 </div>
+</div>
+</font>
+
+<div style="padding-top:50px">
+<h3>
+SMS templates:
+</h3>
+<ul>
+{% for template in template_list %}
+<li>
+{{ template.messageBody }}
+</li>
+{% endfor %}
+</ul>
+</div>
+
 
 {% for staff in staff_list %}
 {% if staff.title == 1 %}
@@ -131,11 +212,11 @@ addToAdminList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{
 </script>
 {% elif staff.gender == 'M' %}
 <script>
-addToMaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
+addToMaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "dummy")
 </script>
 {% else %}
 <script>
-addToFemaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
+addToFemaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "dummy")
 </script>
 {% endif %}
 {% endfor %}

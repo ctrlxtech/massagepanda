@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'contact',
     'payment',
     'manager',
+    'customers',
 )
 
 MIDDLEWARE_CLASSES = (

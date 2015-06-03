@@ -19,4 +19,12 @@ urlpatterns = [
     url(r'^orders$', views.orders, name='orders'),
     url(r'^getOrders$', views.getOrders, name='getOrders'),
     url(r'^placeOrder$', views.placeOrder, name='placeOrder'),
+    url(r'^login$', views.login_view, name='loginView'),
+    url(r'^welcome$', views.welcome, name='welcome'),
+    url(r'^logout$', views.logout_view, name='logoutView'),
+    url(r'^register$', views.register_view, name='registerView'),
+    url(r'^tregister$', views.tregister_view, name='tregister'),
+    url(r'^createUser$', views.createUser, name='createUser'),
+    url(r'^createTherapist$', views.createTherapist, name='createTherapist'),
+    url(r'^test$', views.test, name='test'),
 ]

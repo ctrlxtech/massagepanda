@@ -1,0 +1,73 @@
+/**
+ * @media query for phone
+ */
+@media screen and (max-width: 768px) {
+	div#panda_bookMassage {
+      margin-top: 50px;
+    }
+	
+	div#panda_massageDetails {
+     margin-top: 50px;
+    }
+	
+	.mp-massageTypePreview .mp-massageTypePreview-image{
+	  box-shadow: 0px 0px 10px rgb(95, 95, 95);
+	  border-radius:10px; 
+	   overflow: hidden;
+       height:auto;
+       width:100%;
+	}
+	
+	  .mp-massageTypePreview {
+         width: 90%;
+       height: 60vw;
+		margin:30px auto;
+     }
+	
+	 .mp-whyus .mp-whyus-image{
+  	  margin-left:45%;
+    }
+	
+  
+    .mp-massageTypePreview.mp-bookMassagePreview .mp-massageTypePreview-image {
+    width: 100%;
+    height:auto;
+	}
+   
+   .mp-massageTypePreview.mp-bookMassagePreview {
+    width: 100%;
+    margin: 30px auto;
+    height: 65vw;
+  }
+  
+   .mp-massageDetails {
+    height: 50vw;
+    width: 80%;
+    border-radius: 10px;
+    margin: 30px auto;
+}
+
+.mp-massageDetails-form {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.mp-smallScreenHide{
+	display:none;
+}
+
+.mp-massageDetails-image {
+    border-radius: 15px;
+    overflow: hidden;
+    height:auto;
+    width: 100%;
+}
+
+/** checkout page**/
+#payment-form .mp-checkoutSection{
+	width:100%;
+	min-width : 320px;
+	margin: 0 auto; 
+}
+
+}

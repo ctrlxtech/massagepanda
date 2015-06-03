@@ -76,6 +76,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mpproject.wsgi.application'
 
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

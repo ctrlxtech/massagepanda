@@ -1,20 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 # Create your models here.
 class Customer(models.Model):
-    first_name = models.CharField(max_length = 200)
-    last_name = models.CharField(max_length = 200)
+    user = models.OneToOneField(User)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
     )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
     # validators should be a list
-    phone_number = models.CharField(max_length = 16, validators=[phone_regex], unique=True)
-    email = models.EmailField()
+    phone = models.CharField(max_length = 16, validators=[phone_regex], unique=True)
 
 class Address(models.Model):
     address_line1 = models.CharField("Address line 1", max_length = 45)

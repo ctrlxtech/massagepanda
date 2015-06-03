@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 # Create your models here.
@@ -15,6 +16,28 @@ class Staff(models.Model):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profile_photo = models.ImageField(null=True, blank=True);
+
+class Therapist(models.Model):
+    user = models.OneToOneField(User)
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
+    " be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    # validators should be a list
+    phone = models.CharField(max_length = 16, validators=[phone_regex], unique=True)
+    home_address = models.CharField(max_length = 500)
+    availability = models.CharField(max_length = 500)
+    working_area = models.CharField(max_length = 500)
+    experience = models.CharField(max_length = 500)
+    specialty = models.CharField(max_length = 500)
+    massage_license = models.ImageField();
+    driver_license = models.ImageField();
+    emergency_contact_name = models.CharField(max_length = 50)
+    emergency_contact_phone = models.CharField(max_length = 16, validators=[phone_regex])
+    supplementary = models.CharField(max_length = 500, blank=True, null=True)
 
 class InSMS(models.Model):
     sender = models.CharField(max_length = 200)

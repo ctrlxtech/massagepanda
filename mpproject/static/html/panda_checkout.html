@@ -1,0 +1,179 @@
+<!-- massageDetails page-->
+<div id="panda_checkout" class="mp-pageContent container-fluid" style="display:none">
+    <div class="mp-paymentForm ">
+        <form method="POST" id="payment-form" class="form-horizontal">
+        	<input type="hidden" name="stripeToken" data-serverField="true"/>
+            <input type="hidden" name="amount" data-serverField="true"/>
+			<input type="hidden" name="feeType" data-serverField="true"/>
+			<input type="hidden" name="serviceDate" data-serverField="true"/>
+			<input type="hidden" name="serviceTime" data-serverField="true"/>
+			<input type="hidden" name="serviceGenderPreferred" data-serverField="true"/>
+			<input type="hidden" name="serviceQuantity" data-serverField="true"/>
+			<input type="hidden" name="serviceCoupon" data-serverField="true"/>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="mp-checkoutSection mp-checkoutSection-left">
+                    <div class="alert alert-danger mp-checkoutAlertDanger" role="alert" style="display:none">
+                        <span class="payment-errors"></span>
+                    </div>
+                    <h2>Card Information</h2>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Card Number: 
+                        </label>
+                        <input type="text" name="number" size="20" data-stripe="number" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Name on card: 
+                        </label>
+                        <input type="text" class="form-control" name="name" data-stripe="name" data-serverField="true" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>CVC:
+                        </label>
+                        <input type="text" name="cvc" size="4" data-stripe="cvc" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:block">
+                            <span class="mp-asterisk">*</span>Expiration:
+                        </label>
+                        <input type="text" placeholder="MM" class="form-control mp-checkoutMonth" name="exp-month" size="2" data-stripe="exp-month" required/><input type="text" placeholder="YYYY" class="form-control mp-checkoutYear" name="exp-year" size="4" data-stripe="exp-year" required/>
+                    </div><h2 class="mp-billingAddress">Billing Address</h2>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Address line 1: 
+                        </label>
+                        <input type="text" class="form-control" name="address-line1" data-serverField="true" data-stripe="address-line1" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Address line 2(optional): 
+                        </label>
+                        <input type="text" class="form-control" name="address-line2" data-serverField="true" data-stripe="address-line2" />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>City: 
+                        </label>
+                        <input type="text" class="form-control" name="address-city" data-serverField="true" data-stripe="address-city" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>State: 
+                        </label>
+                        <input type="text" class="form-control" name="address-state" data-serverField="true" data-stripe="address-state" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Zip/Post Code:
+                        </label>
+                        <input type="text" class="form-control" name="address-zip" data-serverField="true" data-stripe="address-zip" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Country: 
+                        </label>
+                        <input type="text" value="United States" class="form-control" data-serverField="true" name="address-country" data-stripe="address-country" readonly/>
+                    </div>
+                    <div>
+                        <span class="mp-returnInfo" title="Shipping Info" data-container="body" data-toggle="popover" data-placement="top" data-content="We will not charge your card until a therapist responds and confirms the booking.You can change appointment time within 15 minutes after your booking has been confirmed by our therapist.">Shipping Info</span>
+                        <span class="mp-returnInfo" title="Return Policy" data-container="body" data-toggle="popover" data-placement="top" data-content="Since www.massagepanda.com is offering non-tangible irrevocable services we do not issue refunds once the order is accomplished and the booking is confirmed. As a customer you are responsible for understanding this upon purchasing any item at our site. Please note that our bonuses are offered on behalf of our respected partners and are not an issue for a refund or chargeback. However, we realize that exceptional circumstance can take place with regard to the character of the service we supply. Therefore, we DO honor requests for the refund on the following reasons: Non-delivery of the service: due to some traffic issues of our service provider or other reasons you might not receive the service delivery from us. In this case we recommend contacting us for assistance. Claims for non-delivery must be submitted to our Billing department in writing within 7 days from the order placing date. Otherwise the service will be considered delivered and received; Service not-as-described: such issues should be reported to our Customer Support Department within 7 days from the date of the purchase. Clear evidence must be provided proving that the purchased service is not as it is described on the website. Complaints which are based merely on the customer’s false expectations or wishes are not honored. Our Customer Support Team is always eager to assist you and deliver highly professional support in a timely manner. Thank you for purchasing our services.">Return Policy</span>
+                    </div>
+                    <div class="mp-checkout">
+                        <button type="submit" class="btn btn-success">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="mp-checkoutSection mp-checkoutSection-right">
+                    <div class="mp-checkout-summary">
+                        <h2>Order Summary <span class="mp-summary-amount"></span></h2>
+                        <ul class="list-group">
+                            <li class="list-group-item  mp-summary-title">
+                                Title :
+                            </li>
+                            <li class="list-group-item  mp-summary-title">
+                                Quantity 
+                            </li>
+                            <li class="list-group-item  mp-summary-date">
+                                Date : 
+                            </li>
+                            <li class="list-group-item  mp-summary-time">
+                                Time : 
+                            </li>
+                            <li class="list-group-item  mp-summary-genderPrefer">
+                                Gender Preferred : 
+                            </li>
+                            <li class="list-group-item  mp-summary-coupon">
+                                Coupon : 
+                            </li>
+                        </ul>
+                    </div>
+                    <h2>Shipping Address</h2>
+                    <div class="checkbox mp-useBilling">
+                        <input type="checkbox"/><span class="mp-textDefault">Use billing address</span>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Full Name: 
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="full-name" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Address line 1:
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="al1" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Address line 2(optional):
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="al2" />
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>City: 
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="city" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>State: 
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="state" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Zip/Post Code: 
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="zipcode" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Phone: 
+                        </label>
+                        <input class="form-control" name="phone" data-serverField="true" type="text" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <span class="mp-asterisk">*</span>Email: 
+                        </label>
+                        <input type="text" class="form-control" data-serverField="true" name="email" required/>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Country: 
+                        </label>
+                        <input type="text" value="United States" data-serverField="true" class="form-control" name="country" readonly/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="mp-checkoutSuccess mp-pageHeader" data-mpPageId="panda_success" data-mpPageType="other" data-pageStateType="replace" style="display:none">
+    </div>
+</div>

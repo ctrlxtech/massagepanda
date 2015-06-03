@@ -1,0 +1,90 @@
+<!-- massageDetails page-->
+<div id="panda_massageDetails" class="mp-pageContent container-fluid" style="display:none">
+    <div class="panda_massageDetails-partOne">
+        <div class="col-xs-12 col-sm-6 col-md-6 mp-smallScreenHide">
+            <div class="mp-breadcrumb">
+                <ol class="breadcrumb">
+                    <li>
+                        <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" data-mpPageType="other">Book Massage</a>
+                    </li>
+    
+                    <li class="active mp-currentDetailsPage">
+                       
+                    </li>
+                </ol>
+            </div>
+            <div class="mp-left mp-massageDetails">
+                <img class="mp-massageDetails-image" src="./image/book_SwedishOneHour.png"/>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+        	
+            <div class="mp-massageDetails-panel">            	
+                <div class="mp-massageDetails-title">
+                    Swedish Massage for 1 hour $79
+                </div>
+                <hr class="mp-fullwidth"/>
+                <p class="mp-massageDetails-description" data-massageType="deeptissue">
+                    Deep tissue massage therapy is similar to Swedish massage, but the deeper pressure is beneficial in releasing chronic muscle tension. 
+                </p>
+                <p class="mp-massageDetails-description" data-massageType="swedish">
+                    Swedish massage therapy is the modality that comes to mind when most people think about massage. One of the primary goals of the Swedish massage technique is to relax the entire body. 
+                </p>
+                <p class="mp-massageDetails-description" data-massageType="couples">
+                    A couples massage is a wonderfully relaxing, personal experience. During the session, two people receive massages at the same time and in the same room from two different therapists.
+                </p>
+                <p class="mp-massageDetails-info">
+                    Please book your massage session at least 2 hours in advance.
+                </p>
+                <div class="mp-massageDetails-form">
+                	<input type="hidden" name="detailsFeeType" value=""/>
+                	<div class="mp-detailsAmount" style="display:none"></div>
+                	<div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert" style="display:none">Please select <span class="alertInfo"></span></div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input placeholder="Select Date" name="massageDetailsDate" type="text" id="massageDetails_datepicker" size="30" />
+                    </div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input type="hidden" name="massageDetailsTime" value=""/>
+                        <button type="button" class="btn btn-default dropdown-toggle massageDetailsTime" data-toggle="dropdown" aria-expanded="false">Select Time<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                        </button>
+                        <ul id="massageDetails_timeList" class="dropdown-menu" role="menu">
+                           
+                        </ul>
+                    </div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input type="hidden" name="genderPreferred" value=""/>
+                        <button type="button" class="btn btn-default dropdown-toggle genderPreferred" data-toggle="dropdown" aria-expanded="false">Gender Preferred<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                        </button>
+                        <ul id="massageDetails_genderPreferredList" class="dropdown-menu" role="menu">
+                            <li class="mp-item">
+                                <a>Either</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li class="mp-item">
+                                <a>Male Preferred</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li class="mp-item">
+                                <a>Female Preferred</a>
+                            </li>
+                        </ul>
+                    </div>
+                  <div class="btn-group mp-massageDetails-input">
+                        <input placeholder="Select a Value" id="massageDetails_spinner" name="quantity" />
+						
+                   </div>
+				    <div class="btn-group mp-massageDetails-input">              
+						<input placeholder="Please Enter Coupon"  name="coupon" />
+                   </div>
+				   <div class="mp-checkout mp-pageHeader" data-mpPageId="panda_checkout" data-mpController="checkoutPage" data-mpPageType="other">
+				    <button type="button" class="btn btn-success">
+                            Checkout
+                     </button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

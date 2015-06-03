@@ -1,0 +1,113 @@
+/**
+ * @media query for laptop or tablet
+ */ @media screen and (min-width: 768px) {
+  .mp-left {
+   width : 80%;
+   margin : 30px auto;
+  }
+  
+   .mp-right {
+   width : 80%;
+   margin : 30px auto;
+   }
+  
+  .mp-massageTypePreview:hover {
+  	box-shadow: 0px 0px 10px rgb(95, 95, 95); 	 
+  }
+  
+  .mp-massageTypePreview {
+  width: 80%;
+   border-radius: 10px;
+  transition: box-shadow 0.5s ease 0s;
+  height: 25vw;
+  margin:30px auto;
+  }
+  
+  .mp-massageTypePreview-image {
+    border-radius: 15px;
+    overflow: hidden;
+	 height:auto;
+ /**   height: 20vw;**/
+    width:100%;
+  }
+  
+  .mp-whyus .mp-whyus-image{
+  	margin-left:30%
+  }
+  
+   
+   .mp-whyus.mp-left{
+   	 float : right;
+   }
+   
+    .mp-whyus.mp-center{
+   	 width:60%;
+   }
+   
+    .mp-whyus.mp-right{
+   	 float : left;
+   }
+   
+ 
+	.mp-massageDetails-panel{
+    position : relative;
+	top:80px;
+	left:-5%;	
+   }
+   
+    .mp-massageTypePreview.mp-bookMassagePreview .mp-massageTypePreview-image {
+     width: 100%;
+	 height:auto;
+    /**height: 30vw;**/
+   }
+   
+   .mp-massageTypePreview.mp-bookMassagePreview {
+    width: 95%;
+    margin: 30px auto;
+   height: 33vw;
+  }
+  
+  .mp-massageDetails {
+    height: auto;
+    width: 80%;
+    border-radius: 10px;
+    margin: 30px auto;
+}
+
+.mp-massageDetails-form {
+    width: 70%;
+    min-width: 320px;
+}
+
+.mp-massageDetails-image {
+    border-radius: 15px;
+    overflow: hidden;
+	 height:auto;
+  /**  height: 30vw;**/
+    width: 100%;
+}
+/** checkout page**/
+#payment-form .mp-checkoutSection{
+	width:70%;
+	min-width : 320px;
+	margin: 0 auto; 
+}
+
+.mp-checkoutSection.mp-checkoutSection-right{
+	position:relative;
+	left : -10%;
+}
+
+.mp-checkout-summary .list-group {
+    padding-left: 0px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.mp-billingAddress{
+	margin-bottom:20px
+}
+
+
+}
+

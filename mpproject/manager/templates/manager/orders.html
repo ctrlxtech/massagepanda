@@ -76,6 +76,7 @@ function createInput(name, value) {
                 <li>
                 <form action="{% url 'mcharge'%}" method="post">
                 {% csrf_token %}
+                <input type="hidden" value="{{order.id}}" name="orderId">
                 <input type="text" value="{{order.token}}" name="token" readonly>
                 <input type="text" value="{{order.amount}}" name="amount" readonly>
                 <input type="text" value="{{order.b_phone}}" name="b_phone" readonly>
@@ -114,12 +115,13 @@ function createInput(name, value) {
                 <li>
                 <form action="" method="post">
                 {% csrf_token %}
-                <input type="text" value="{{charge.token}}" name="token" readonly>
-                | {{charge.name}} | {{charge.phone}} | {{ charge.email }}
+                <input type="hidden" value="{{charge.id}}" name="chargeId">
+                <input type="text" value="{{charge.charge_token}}" name="chargeToken" readonly>
+                | {{charge.name}} | {{charge.phone}} | {{ charge.email }} | status: {{ charge.refunded }}
                 <br><p>
                 {{charge_tl|lookup:index}}
                 </p>
-                <lable>amount to refund:</label>
+                <label>amount to refund:</label>
                 <input type="number">
                 <input type="submit" value="refund">
                 </form>

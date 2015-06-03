@@ -1,0 +1,421 @@
+/*
+ *   begin navigation
+ */
+nav#mp-navbar {
+    box-shadow: 0px 3px 5px #D3D3D3;
+}
+
+.jumbotron {
+    background-color: #FAFAFA !important;
+    margin-bottom: 0px !important;
+}
+
+hr {
+    display: block;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-style: inset;
+    border-width: 1px;
+}
+
+.mp-pandaIcon {
+    background: url("../images/pandaIcon.png") no-repeat;
+    display: block;
+    width: 180px;
+    height: 60px;
+    float: left;
+}
+
+.mp-navigation {
+    position: relative;
+    top: 20px;
+}
+
+.mp-navigation ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+
+.mp-navigation ul li {
+    display: inline;
+    background: none;
+}
+
+.mp-navigation ul li a {
+    text-decoration: none;
+    font-family: 'Oxygen', sans-serif;
+    color: #626060;
+    font-size: 1.2em;
+    padding: .2em .8em;
+    text-transform: uppercase;
+}
+
+.mp-navigation ul li a:hover {
+    color: #2ecc71;
+}
+
+.dropdown-menu {
+    box-shadow: 1px 1px 10px #888888;
+}
+
+/*
+ *   end navigation begin home page
+ */
+div.mp-pageContent {
+    overflow: hidden;
+    padding: 0 0 0 0;
+}
+
+.panda-home-partOne {
+    background: url("../images/homePage-backgroundOne.jpg") no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 450px;
+    text-align: center;
+    padding-top: 100px;
+    color: rgb(218, 68, 68);
+    font-family: "Raleway"
+}
+
+.panda-home-partOne > a {
+    top: 30px;
+    font-size: 48px;
+    text-decoration: none;
+    color: #2ecc71;
+    cursor: pointer;
+    position: relative;
+}
+
+.panda-home-partOne > h1 {
+    font-size: 56px;
+    font-weight: 300;
+}
+
+.panda-home-partOne > h2 {
+    font-size: 32px;
+}
+
+.mp-homebookNow {
+    transition: font-size 0.3s ease;
+}
+
+.mp-homebookNow:hover {
+    font-size: 56px;
+}
+
+.massageTypePreview-text {
+    display: inline;
+}
+
+.mp-massageTypePreview-text span.mp-massageTypePreview-name {
+    font-size: 24px;
+    display: inline;
+}
+
+.mp-massageTypePreview-text span.mp-massageTypePreview-price {
+    font-size: 26px;
+    padding-left: 20px;
+    font-weight: bold;
+    display: inline;
+}
+
+.mp-massageTypePreview-text {
+    line-height: 30px;
+    height: 30px;
+    padding: 10px 0px 10px 50px;
+    text-align: center;
+    float: left;
+    color: #2ecc71;
+}
+
+.mp-seeMoreOptions {
+    text-align: center;
+}
+
+.mp-seeMoreOptions button {
+    margin: 30px auto !important;
+    font-size: 18px;
+    width: 30%;
+    padding: 10px 50px !important;
+    min-width: 200px;
+}
+
+.mp-whyus {
+    margin: 30px auto;
+}
+
+.mp-whyus .mp-whyus-text {
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Oxygen', sans-serif;
+}
+
+.mp-whyus-header {
+    text-align: center;
+}
+
+/** end home page**/
+/** begin book massage page **/
+.mp-massageTypePreview-text.mp-bookMassagePreview-text {
+    padding: 10px 0px 10px 10px;
+}
+
+.mp-massageTypePreview-text.mp-bookMassagePreview-text span.mp-massageTypePreview-name {
+    font-size: 20px;
+    font-weight: 100;
+    display: inline;
+}
+
+.mp-massageTypePreview-text.mp-bookMassagePreview-text span.mp-massageTypePreview-price {
+    font-size: 22px;
+    padding-left: 20px;
+    font-weight: bold;
+    display: inline;
+}
+
+/** end book massage page **/
+/** begin massage detail page **/
+.mp-breadcrumb {
+    position: relative;
+    top: 30px;
+    left: 15%;
+}
+
+.breadcrumb {
+    background: none !important;
+    font-size: 1.2em;
+}
+
+.breadcrumb a {
+    color: #2ecc71;
+}
+
+.mp-massageDetails-title {
+    color: rgb(102, 102, 102);
+    font-family: "Oxygen" !important;
+    font-size: 32px !important;
+    font-weight: 300 !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mp-massageDetails-description, .mp-massageDetails-info {
+    font-size: 20px !important;
+    line-height: 32px !important;
+    color: #535353;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Oxygen" !important;
+}
+
+.mp-fullwidth {
+    margin-left: 0%;
+    margin-right: 0%;
+}
+
+.mp-massageDetails-panel {
+    height: 1200px;
+    overflow-y: visible;
+    margin: 30px auto;
+}
+
+.btn-group.mp-massageDetails-input {
+    margin: 20px 0px;
+}
+
+.btn-group.mp-massageDetails-input button.dropdown-toggle .glyphicon-triangle-bottom {
+    position: absolute;
+    left: 90%;
+    top: 20px;
+}
+
+.btn-group.mp-massageDetails-input ul.dropdown-menu {
+    width: 100%;
+}
+
+.btn-group.mp-massageDetails-input ul.dropdown-menu li.mp-item {
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+}
+
+#massageDetails_timeList {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.mp-massageDetails-form > .mp-massageDetails-input {
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    margin: 20px auto;
+}
+
+.mp-massageDetails-form .ui-spinner {
+    width: 100% !important;
+}
+
+.mp-massageDetails-form > .mp-massageDetails-input input {
+    width: 100%;
+    text-align: center;
+    color: #535353;
+    font-family: "Oxygen", sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.mp-massageDetails-form > .mp-massageDetails-input > button.btn {
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    padding: 15px 0px 15px 0px;
+    color: #535353;
+    font-family: "Oxygen", sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.mp-checkout {
+    width: 100%;
+    margin: 20px auto;
+    height: 50px;
+}
+
+.mp-checkout .btn {
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+}
+
+/** checkout page**/
+.mp-paymentForm {
+    position: relative;
+    top: 20px;
+}
+
+input[type = checkbox] {
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    padding: 10px;
+}
+
+.mp-textDefault {
+    color: #1867DA;
+    font-family: "Oxygen", sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.form-control.mp-checkoutMonth {
+    width: 35%;
+    min-width: 80px;
+    display: inline;
+}
+
+.form-control.mp-checkoutYear {
+    width: 60%;
+    min-width: 160px;
+    display: inline;
+}
+
+.mp-checkoutSection-left {
+    height: 870px;
+}
+
+.mp-checkoutSection-right {
+    height: 1100px;
+}
+
+.mp-checkoutSection .mp-useBilling {
+    width: 80%;
+    margin-left: 30px;
+    margin-bottom: 1px;
+}
+
+.mp-returnInfo {
+    font-family: "Oxygen", sans-serif;
+    font-weight: 300;
+    font-size: 24px;
+    color: #5CB85C;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.mp-asterisk {
+    color: red;
+}
+
+.mp-summary-amount {
+    font-size: 24px !important;
+    color: #b12704 !important;
+}
+
+/** end massage detail page **/::-webkit-input-placeholder { /* WebKit browsers */
+    color: #535353;
+}:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #535353;
+    opacity: 1;
+}::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #535353;
+    opacity: 1;
+}:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #535353;
+}
+
+/** helpCenter **/
+.mp-helpCenterTitle {
+    text-align: center;
+}
+
+.mp-aboutTitle {
+    text-align: center;
+}
+
+#panda_about p {
+    font-family: "Oxygen", sans-serif;
+    color: #626060;
+    font-size: 0.8em;
+}
+
+#panda_helpCenter .panel .panel-body p {
+    font-family: "Oxygen", sans-serif;
+    color: #626060;
+    font-size: 1.2em;
+}
+
+.mp-successIcon {
+    width: 50px;
+    height: 50px;
+    margin-right: 3%;
+    float: left;
+}
+
+.mp-successInfo {
+    font-family: "Oxygen", sans-serif;
+    font-size: 2.4em;
+    margin-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+    width: 80%;
+}
+
+.mp-successTitle{
+	padding-left: 20% !important;
+}
+
+#panda_success .panel .panel-body{
+	 font-family: "Oxygen", sans-serif;
+    color: #626060;
+    font-size: 0.6em;
+}
+
+
+
+
+
+

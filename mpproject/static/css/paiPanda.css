@@ -1,0 +1,106 @@
+#mp-footer {
+    background: #F3F3F4 none repeat scroll;
+    padding: 20px 0;
+    color: #6d6d6d;
+    width: 100%;
+    text-align: center;
+}
+
+.mp-LastName {
+    padding: 100px;
+}
+
+#panda_helpCenter {
+    margin: 10px auto;
+    width: 80%;
+}
+
+.mp-submit {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    background-color: #81e69d;
+}
+
+.mp-applySubmit {
+    display: block;
+    margin: 0 auto;
+    width: 30%;
+}
+
+#mp-GiveAGiftLine {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #0b0b0b;
+    width: 20%;
+    color: black;
+}
+
+.GiveAGift {
+    width: 60%;
+}
+
+.mp-confirm {
+    width: 85%;
+    float: left;
+    margin: 50px;
+}
+
+.mp-AboutImage {
+    background: url("../images/AboutImage.jpg") no-repeat 50% 50%;
+    position: relative;
+    top: -50px;
+	width:100%;
+	height:400px
+}
+
+#mp-ApplyAsMassage {
+    padding: 100px;
+    font-size: 200%;
+}
+
+#mp-ContactUs {
+    margin: 80px;
+    float-left: 50px;
+    font-size: 200%;
+}
+
+#panda_about {
+    margin: 0px auto;
+width: 90%;
+font-size: 200%;
+}
+
+.mp-tableContainer{
+	width:70%
+	margin: 20px auto;
+}
+
+.mp-footerTable {
+	 width: 80%;
+	 margin: 0px auto;
+}
+
+.mp-footerTable tr > td {
+    width: 30% !important;
+}
+
+.mp-footerDescription {
+    width: 90%;
+    margin: 0 auto;
+
+}
+
+.mp-supportmassage {
+    right: 130px;
+}
+
+.mp-wordLove {
+    color: red;
+}
+
+.mp-threewords {
+    color: green;
+}
+

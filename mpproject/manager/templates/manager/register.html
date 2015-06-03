@@ -1,0 +1,26 @@
+<script>
+function checkpwd() {
+    var pass1 = document.getElementById("pass1").value;
+    var pass2 = document.getElementById("pass2").value;
+    if (pass1 != pass2) {
+        //alert("Passwords Do not match");
+        document.getElementById("pass1").style.borderColor = "#E34234";
+        document.getElementById("pass2").style.borderColor = "#E34234";
+        alert("Passwords Mismatch!!!");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+</script>
+<form action="{% url 'createUser' %}" method="POST" onsubmit="return checkpwd();">
+{% csrf_token %}
+ <label>First Name: </label><input type="text" name="first_name">
+ <label>Last Name: </label><input type="text" name="last_name"><br>
+ <label>Email: </label><input type="text" name="email"><br>
+ <label>Phone: </label><input type="text" name="phone"><br>
+<label>Password: </label><input type="password" id="pass1" name="password"><br>
+<label>Comfirm Password: </label><input type="password" id="pass2" name="password2"><br>
+<input type="submit" value="Sign Up">
+</form>

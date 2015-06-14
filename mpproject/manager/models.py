@@ -17,6 +17,20 @@ class Staff(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profile_photo = models.ImageField(null=True, blank=True);
 
+class Area(models.Model):
+    AREA_CHOICES = (
+        ('SF', 'San Francisco'),
+        ('P', 'Peninsula'),
+        ('E', 'East Bay'),
+        ('S', 'South Bay'),
+    )
+    areacode = models.CharField(max_length=10, choices=AREA_CHOICES)
+    staff = models.ForeignKey(Staff)
+
+    def __unicode__(self):
+        return u'%s' %(self.get_areacode_display())
+
+    
 class Therapist(models.Model):
     user = models.OneToOneField(User)
     GENDER_CHOICES = (
@@ -40,12 +54,14 @@ class Therapist(models.Model):
     supplementary = models.CharField(max_length = 500, blank=True, null=True)
 
 class InSMS(models.Model):
+    staff = models.ForeignKey(Staff, null=True)
     sender = models.CharField(max_length = 200)
     messageId = models.CharField(max_length = 200, null=True)
     messageBody = models.CharField(max_length = 1000)
     timestamp = models.CharField(max_length = 200, null=True)
 
 class OutSMS(models.Model):
+    staff = models.ForeignKey(Staff, null=True)
     receiver = models.CharField(max_length = 200)
     messageBody = models.CharField(max_length = 1000)
     timestamp = models.CharField(max_length = 200)

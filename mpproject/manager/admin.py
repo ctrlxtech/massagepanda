@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Staff, Therapist, SMSTemplate
+from .models import Staff, Area, Therapist, SMSTemplate
 from django.contrib.auth.models import User
 
 
@@ -11,10 +11,15 @@ class TherapistInline(admin.StackedInline):
 class UserInline(admin.StackedInline):
     model = User
 
+class AreaInline(admin.TabularInline):
+    model = Area
+    extra = 0
+
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'phone_number')
     list_filter = ['gender', 'first_name', 'last_name']
     search_fields = ['first_name', 'last_name']
+    inlines = [AreaInline,]
 
 class TemplateAdmin(admin.ModelAdmin):
     pass

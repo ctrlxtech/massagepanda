@@ -1,17 +1,9 @@
 <script>
-function calLivemode()
-{
-  if(document.getElementById('livemode').checked)
-    Stripe.setPublishableKey('pk_live_tGQyDD0MNxvHVQurRKeixmD0');
-  else
     Stripe.setPublishableKey('pk_test_704p8Gz1ev0sCJJK5sc4b9cF');
-}
 </script>
 
-<form action="{% url 'placeOrder' %}" method="POST" id="payment-form">
+<form action="{% url 'placeOrderFromForm' %}" method="POST" id="payment-form">
 {% csrf_token %}
-<label>livemode</label>
-<input type="checkbox" id="livemode" name="livemode" onchange="calLivemode();"/>
 <br><label>Amount(in cents): $</label>
 <input type="number" min="0" name="amount"/><br>
 
@@ -76,7 +68,7 @@ function calLivemode()
     <br>
     <label>City:  <input type="text" name="city"/></label>
     <br>
-    <label>State:  <input type="text" name="country"/></label>
+    <label>State:  <input type="text" name="state"/></label>
     <br>
     <label>Zip/Post Code:  <input type="text" name="zipcode"/></label>
     <label>Country:  <input type="text" name="country"/></label>

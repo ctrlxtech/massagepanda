@@ -1,3 +1,46 @@
+var pandaBrowser = {
+    mobile: function(){
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) 
+            return true;
+        else 
+            return false;
+    },
+    apple: function(){
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) 
+            return true;
+        else 
+            return false;
+    },
+    android: function(){
+        if (/Android/i.test(navigator.userAgent)) {
+            //check android is on mobile or tablet.
+            var userAgentString = navigator.userAgent.toLowerCase();
+            if ((userAgentString.search("android") > -1) && (userAgentString.search("mobile") > -1)) 
+                return true;
+            else 
+                return false;
+        }
+        else 
+            return false;
+    },
+    phone: function(){
+        if (/iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) 
+            return true;
+        else 
+            if (/Android/i.test(navigator.userAgent)) {
+                //check android is on mobile or tablet.
+                var userAgentString = navigator.userAgent.toLowerCase();
+                if ((userAgentString.search("android") > -1) && (userAgentString.search("mobile") > -1)) 
+                    return true;
+                else 
+                    return false;
+            }
+            else 
+                return false;
+    }
+    
+}
+
 var pandaAjax = {
     fail: function(jqXHR, textStatus, errorThrown){
         console.log("Sorry, Error Occur !");
@@ -16,41 +59,27 @@ var pandaAjax = {
         });
         
     },
-    post: function(url, param, callback, controller, $header, returnDataType, sendDataType){
+    post: function(url, param, callback, $header, returnDataType, sendDataType){
         if (!returnDataType) 
             returnDataType = 'json';
         if (!sendDataType) 
             sendDataType = 'application/json; charset=UTF-8'
-        var csrfToken = $.cookie('csrftoken'); 
+        var csrfToken = $.cookie('csrftoken');
         $.ajax({
             type: 'POST',
             url: url,
             data: JSON.stringify(param),
             contentType: sendDataType,
             dataType: returnDataType,
-            beforeSend: function(request) {
+            beforeSend: function(request){
                 request.setRequestHeader("X-CSRFToken", csrfToken);
-                if (typeof(controller) === 'object' && typeof(controller.beforeSend) === 'function') {
-                    var success = controller.beforeSend();
-                    
-                    if (success === false) {
-                        return false;
-                    }
-                }
             }
         }).done(function(data){
             if (typeof(callback) === 'function') 
                 callback(data);
             
-            if (typeof(controller) === 'object' && typeof(controller.afterResponse) === 'function') {
-                controller.afterResponse(data, $header);
-            }
         }).fail(function(jqXHR, textStatus){
-            if (typeof(controller) === 'object' && typeof(controller.afterFail) === 'function') {
-                controller.afterFail(jqXHR, textStatus);
-            }
-            else 
-                pandaAjax.fail(jqXHR, textStatus);
+            pandaAjax.fail(jqXHR, textStatus);
         });
         ;
     }
@@ -58,7 +87,7 @@ var pandaAjax = {
 
 var pandaHelpCenterPage = (function(){
     var publicObj = {
-        afterResponse: function(data, $header){
+        afterResponse: function(pageId){
             $('#panda_helpCenter').find('a.mp-hrefBlock').click(function(e){
                 e.preventDefault();
             });
@@ -70,20 +99,20 @@ var pandaHelpCenterPage = (function(){
 var checkoutPage = (function(){
     //private function
     function afterSubmit(data){
-		//sever return obj: example : {status : true}
+        //sever return obj: example : {status : true}
         var returnObj = data;
         var $form = $('#payment-form');
         $form.find('button').prop('disabled', false);
         if (returnObj.status) {
-			//request success !
+            //request success !
             $form.find('input').val('');
             var $summary = $('#payment-form').find('div.mp-checkout-summary');
             $summary.find('li').text('');
-            $summary.find('span.mp-summary-amount').text('');          
+            $summary.find('span.mp-summary-amount').text('');
             $('#panda_checkout').find('.mp-checkoutSuccess').click();
         }
         else {
-			//request fail!
+            //request fail!
             var errorMsg = returnObj.errorMsg;
             var $pamentError = $form.find('.payment-errors');
             $form.find('.mp-checkoutAlertDanger').css('display', 'block');
@@ -105,8 +134,7 @@ var checkoutPage = (function(){
         }
         //TODO need use server side path !!!
         var url = '/manager/placeOrder';
-        //$form.get(0).submit();
-        pandaAjax.post(url,serverObj,afterSubmit);
+        pandaAjax.post(url, serverObj, afterSubmit);
     }
     
     //private function
@@ -174,6 +202,7 @@ var checkoutPage = (function(){
             $pamentForm.find('input[name="serviceQuantity"]').val(quantity);
             $pamentForm.find('input[name="serviceCoupon"]').val(coupon);
             $pamentForm.find('button').prop('disabled', false);
+            $pamentForm.find('button').removeClass('disabled');
             $pamentForm.find('div.alert-danger').css('display', 'none');
             $pamentForm.find('span.checkoutAlertDanger').text('');
             //setup summary
@@ -189,7 +218,7 @@ var checkoutPage = (function(){
             $liList.eq(index++).text('Coupon : ' + coupon);
             
         },
-        afterResponse: function(data, $header){
+        afterResponse: function(pageId){
             $('#payment-form').validator().on('submit', function(e){
                 var $form = $(this);
                 $form.find('.mp-checkoutAlertDanger').css('display', 'none');
@@ -210,12 +239,37 @@ var checkoutPage = (function(){
             });
             
             $('.mp-returnInfo').popover();
-            
-            $('.mp-useBilling').on('change', function(){
-                var checkbox = $(this).find('input[type="checkbox"]');
-                if (checkbox.prop("checked")) 
-                    useBilling();
-            })
+			$('.mp-checkout-mobileTab').find('button.mp-toOrder').addClass('active');
+			$('.mp-toOrder').click(function(){
+				$('.mp-checkout-mobileTab').find('button.mp-toShipping').removeClass('active');
+				$('.mp-checkout-mobileTab').find('button.mp-toOrder').addClass('active');
+				var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+				var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+				if($sectionRight.hasClass('mp-smallScreenHide')){
+					$sectionLeft.addClass('mp-smallScreenHide');
+					$sectionRight.removeClass('mp-smallScreenHide');		
+				};	
+					
+				 window.scrollTo(0, 0);			
+			});
+			$('.mp-toShipping').click(function(){
+				$('.mp-checkout-mobileTab').find('button.mp-toShipping').addClass('active');
+				$('.mp-checkout-mobileTab').find('button.mp-toOrder').removeClass('active');
+				var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+				var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+				if($sectionLeft.hasClass('mp-smallScreenHide')){
+					$sectionLeft.removeClass('mp-smallScreenHide');
+					$sectionRight.addClass('mp-smallScreenHide');
+				};
+
+				 window.scrollTo(0, 0);
+			});
+            // do not need this because there is no billing address            
+            //            $('.mp-useBilling').on('change', function(){
+            //                var checkbox = $(this).find('input[type="checkbox"]');
+            //               if (checkbox.prop("checked")) 
+            //                    useBilling();
+            //            })
         },
         validate: function($this){
             var $massageDetailsForm = $this.closest('.mp-massageDetails-form');
@@ -298,24 +352,15 @@ var massageDetailsPage = (function(){
             $this.find('button.massageDetailsTime').html('Select Time<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>');
             $this.find('button.genderPreferred').html('Gender Preferred<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>');
         },
-        afterResponse: function(data, $header){
-            var pageId = $header.attr(headerAttr.mpPageId);
+        afterResponse: function(pageId){
             var $this = $('#' + pageId);
-            $this.find("#massageDetails_datepicker").datepicker({
+            var $datePicker = $this.find("input.mp-massageDetails-DatePicker");
+            if ($datePicker.hasClass('hasDatepicker')) {
+                // $datePicker.datepicker("destroy");
+                $datePicker.removeClass("hasDatepicker").removeAttr('id');
+            }
+            $datePicker.datepicker({
                 minDate: new Date()
-            });
-            $this.find("#massageDetails_spinner").spinner({
-                spin: function(event, ui){
-                    if (ui.value > 100) {
-                        $(this).spinner("value", 0);
-                        return false;
-                    }
-                    else 
-                        if (ui.value < 0) {
-                            $(this).spinner("value", 0);
-                            return false;
-                        }
-                }
             });
             setupTimeDropdown($this.find('#massageDetails_timeList'));
             var $genderPreferredList = $this.find('#massageDetails_genderPreferredList');
@@ -332,15 +377,16 @@ var massageDetailsPage = (function(){
 
 
 var defualtSetting = {
-    appBaseURL: '../static/html/',
+    appBaseURL: '/static/html/',
     initActivePage: 'panda_home',
-    loadedPageArray: [],
-    pageState: 0
+    loadedPageArray: []
 };
 
 var pandaPageObj = {};
 
-var pageStateObj = {}
+var pageStateObj = {
+    pageState: 0
+};
 
 var headerAttr = {
     mpController: 'data-mpController',
@@ -367,7 +413,7 @@ var pageController = {
             
             // only	process header has mpPageId.
             if (pageId) {
-                if (defualtSetting.loadedPageArray.indexOf(pageId) == -1) {
+                if (defualtSetting.loadedPageArray.indexOf(pageId) == -1 && $header.attr(headerAttr.mpPageType) === 'default') {
                     //page has not been load for sure
                     pageController.load($header);
                 }
@@ -390,6 +436,7 @@ var pageController = {
         //only load pageType is default
         if ($header.attr(headerAttr.mpPageType) === 'default' || forceLoad === 'true') {
             var getURL = defualtSetting.appBaseURL + mpNewPageId + '.html';
+            var baseURL = defualtSetting.appBaseURL;
             pandaAjax.get(getURL, undefined, function(data){
                 console.log(mpNewPageId + ' page load success ! ');
                 pandaPageObj[mpNewPageId].mpLoaded = true;
@@ -397,7 +444,7 @@ var pageController = {
                 $('#mp-mainContent').append(data);
                 //call afterResponse
                 if (typeof(mpController) === 'object' && typeof(mpController.afterResponse) === 'function') {
-                    mpController.afterResponse(data, $header);
+                    mpController.afterResponse(mpNewPageId);
                 }
                 //this callBack only use for framework. 
                 if (typeof(callBack) === 'function') 
@@ -424,20 +471,20 @@ var pageController = {
             if (!tempPageId) 
                 continue;
             
-            if (headerValidArr.indexOf(tempPageId) == -1) {
+            if (headerValidArr.indexOf(tempPageId) == -1 && defualtSetting.loadedPageArray.indexOf(tempPageId) == -1) {
                 headerValidArr.push(tempPageId);
                 realHeaderArr.push($header);
             }
-            
+            //use other to do lazy loading .use default to do init loading
             if (typeof($header.attr(headerAttr.mpPageType)) === 'undefined') 
-                $header.attr(headerAttr.mpPageType, 'default');
+                $header.attr(headerAttr.mpPageType, 'other');
             
             
             if (typeof(pandaPageObj[tempPageId]) === 'undefined') {
                 pandaPageObj[tempPageId] = {
                     mpLoaded: false,
                     mpShow: false,
-                    mpShowing: false,
+                    mpRefresh: false
                 }
             }
         };
@@ -457,9 +504,14 @@ var pageController = {
             }
             var isAjax = $this.attr(headerAttr.mpAjax);
             if (isAjax !== 'false') {
-            
+                //after refresh need to call afterResponse again
+                if (pandaPageObj[clickPageId].mpRefresh) {
+                    if (typeof(newPageController) === 'object' && typeof(newPageController.afterResponse) === 'function') {
+                        newPageController.afterResponse(clickPageId);
+                    }
+                    pandaPageObj[clickPageId].mpRefresh = false;
+                }
                 if (pandaPageObj[clickPageId].mpLoaded) {
-                    //TODO add animation
                     pageController.changePage($this);
                 }
                 else {
@@ -476,9 +528,8 @@ var pageController = {
     },
     changePage: function($this){
         var newPageId = $this.attr(headerAttr.mpPageId);
-        var activePageId = localStorage.getItem("mp-activePage");
+        var activePageId = sessionStorage.getItem("mp-activePage");
         if (activePageId !== newPageId) {
-            pandaPageObj[activePageId].mpShowing = false;
             $('#' + activePageId).hide(function(){
             
             });
@@ -488,14 +539,13 @@ var pageController = {
                 if (typeof(newPageController) === 'object' && typeof(newPageController.beforeShow) === 'function') {
                     newPageController.beforeShow.apply($('#' + newPageId), $this);
                 }
-            }
-            pandaPageObj[newPageId].mpShowing = true;
-            localStorage.setItem('mp-activePage', newPageId);
+            };
+            sessionStorage.setItem('mp-activePage', newPageId);
             $('#' + newPageId).show(0, function(){
                 window.scrollTo(0, 0);
                 // Change our States
-                defualtSetting.pageState = defualtSetting.pageState + 1;
-                pageStateObj[defualtSetting.pageState] = newPageId;
+                pageStateObj.pageState = pageStateObj.pageState + 1;
+                pageStateObj[pageStateObj.pageState] = newPageId;
                 //setup child page
                 if (!pandaPageObj[newPageId].mpShow) {
                     pandaPageObj[newPageId].mpShow = true;
@@ -503,13 +553,13 @@ var pageController = {
                 }
                 if ($this.attr(headerAttr.mpPageStateType) !== 'replace') {
                     History.pushState({
-                        state: defualtSetting.pageState
-                    }, undefined, "?state=" + defualtSetting.pageState);
+                        state: pageStateObj.pageState
+                    }, undefined, "?tab=" + pageStateObj[pageStateObj.pageState]);
                 }
                 else {
                     History.replaceState({
-                        state: defualtSetting.pageState
-                    }, undefined, "?state=" + defualtSetting.pageState);
+                        state: pageStateObj.pageState
+                    }, undefined, "?tab=" + pageStateObj[pageStateObj.pageState]);
                 }
                 
                 
@@ -531,56 +581,145 @@ var pageController = {
 var pageBackForward = {
     change: function(newState){
         var newPageId = pageStateObj[newState];
-        var activePageId = localStorage.getItem("mp-activePage");
+        var activePageId = sessionStorage.getItem("mp-activePage");
         if (activePageId !== newPageId) {
             $('#' + activePageId).hide(function(){
-                pandaPageObj[activePageId].mpShowing = false;
             });
             
             $('#' + newPageId).show(0, function(){
                 window.scrollTo(0, 0);
-                pandaPageObj[newPageId].mpShowing = true;
-                localStorage.setItem('mp-activePage', newPageId);
+                sessionStorage.setItem('mp-activePage', newPageId);
             });
+        }
+    },
+    afterResponse: function(pageId){
+        var newPageControllerName = $('#' + pageId).attr(headerAttr.mpController);
+        if (window[newPageControllerName]) {
+            var newPageController = window[newPageControllerName];
+            if (typeof(newPageController) === 'object' && typeof(newPageController.afterResponse) === 'function') {
+                newPageController.afterResponse(pageId);
+            }
         }
     }
 }
 
 var pandaInit = function(){
-    localStorage.setItem('mp-activePage', defualtSetting.initActivePage);
-    defualtSetting.loadedPageArray.push(defualtSetting.initActivePage);
-    pandaPageObj[defualtSetting.initActivePage] = {
-        mpLoaded: true,
-        mpShow: true,
-        mpShowing: true
-    };
+
+    var isRefresh = sessionStorage.getItem('pandaRefresh');
+    
+    if (isRefresh) {
+        var oldPageElement = sessionStorage.getItem('mp-pageElement');
+        $('#mp-mainContent').html(oldPageElement);
+        sessionStorage.removeItem('mp-pageElement');
+        var oldPandaPageState = JSON.parse(sessionStorage.getItem('mp-pageState'));
+        var oldPandaPageObj = JSON.parse(sessionStorage.getItem('mp-pageObj'));
+        var oldDefualtSetting = JSON.parse(sessionStorage.getItem('mp-defualtSetting'));
+        $.extend(pageStateObj, oldPandaPageState);
+        $.extend(pandaPageObj, oldPandaPageObj);
+        $.extend(defualtSetting, oldDefualtSetting);
+        var lastState = pageStateObj.pageState;
+        var lastStatePageId = pageStateObj[lastState];
+        //just double check page Id, can be remove later
+        var activePageId = sessionStorage.getItem('mp-activePage');
+        if (activePageId === lastStatePageId) 
+            console.log("pageId is right !!");
+        pageController.setup();
+        //need to call response to setup
+    
+    }
+    else {
+        $('#' + defualtSetting.initActivePage).show();
+        sessionStorage.setItem('mp-activePage', defualtSetting.initActivePage);
+        defualtSetting.loadedPageArray.push(defualtSetting.initActivePage);
+        pandaPageObj[defualtSetting.initActivePage] = {
+            mpLoaded: true,
+            mpShow: true,
+            mpRefresh: false
+        };
+        pageController.setup();
+    }
     
     History.Adapter.bind(window, 'statechange', function(){ // Note: We are using statechange instead of popstate
         var pageState = History.getState(); // Note: We are using History.getState() instead of event.state
         var newState = pageState.data.state;
+        var newPageId = pageStateObj[newState];
+        var activePageId = sessionStorage.getItem("mp-activePage");
+        //after refresh need to call afterResponse again
+        if (pandaPageObj[newPageId].mpRefresh) {
+            pageBackForward.afterResponse(newPageId);
+            pandaPageObj[newPageId].mpRefresh = false;
+        }
+        
         if (newState) {
-            var newPageId = pageStateObj[newState];
-            if (!pandaPageObj[newPageId].mpShowing) 
+            if (activePageId !== newPageId) {
                 pageBackForward.change(newState);
+            }
+            
         }
         else {
-            var activePageId = localStorage.getItem("mp-activePage");
             if (activePageId !== defualtSetting.initActivePage) {
                 $('#' + activePageId).hide(function(){
-                    pandaPageObj[activePageId].mpShowing = false;
                 });
                 $('#' + defualtSetting.initActivePage).show(0, function(){
-                    pandaPageObj[defualtSetting.initActivePage].mpShowing = true;
-                    localStorage.setItem('mp-activePage', defualtSetting.initActivePage);
+                    sessionStorage.setItem('mp-activePage', defualtSetting.initActivePage);
                 });
             }
         }
     });
+    
+    if (isRefresh) {
+        // override last page
+        pageStateObj.pageState = pageStateObj.pageState + 1;
+        pageStateObj[pageStateObj.pageState] = activePageId;
+        History.replaceState({
+            state: pageStateObj.pageState
+        }, undefined, "?tab=" + pageStateObj[pageStateObj.pageState]);
+        
+    }
+    else {
+        //override home page    
+        pageStateObj[pageStateObj.pageState] = defualtSetting.initActivePage;
+        History.replaceState({
+            state: pageStateObj.pageState
+        }, undefined, "?tab=" + pageStateObj[pageStateObj.pageState]);
+        
+    }
+    
+    
 }
 
+function pandaPhoneInit(){
+    var menuLeft = document.getElementById('mp-leftSideNav'), showLeftPush = document.getElementById('mp-showLeftPush'), navBar = document.getElementById('mp-navbar'), mainContent = document.getElementById('mp-mainContent'), footer = document.getElementById('mp-footer');
+    showLeftPush.onclick = function(){
+        classie.toggle(this, 'active');
+        classie.toggle(navBar, 'cbp-spmenu-push-toright');
+        classie.toggle(mainContent, 'cbp-spmenu-push-toright');
+        classie.toggle(footer, 'cbp-spmenu-push-toright');
+        classie.toggle(menuLeft, 'cbp-spmenu-open');
+    };
+	$('#mp-leftSideNav').on('click',function(){
+		$('#mp-showLeftPush').click();
+	});
+    
+}
+
+
+
 $(function(){
-    history.pushState("", document.title, window.location.pathname);
+    $(window).on('beforeunload', function(){
+        for (var i = 0; i < defualtSetting.loadedPageArray.length; i++) {
+            pandaPageObj[defualtSetting.loadedPageArray[i]].mpRefresh = true;
+        }
+        sessionStorage.setItem('mp-pageElement', $('#mp-mainContent').html());
+        sessionStorage.setItem('mp-pageState', JSON.stringify(pageStateObj));
+        sessionStorage.setItem('mp-pageObj', JSON.stringify(pandaPageObj));
+        sessionStorage.setItem('mp-defualtSetting', JSON.stringify(defualtSetting));
+        sessionStorage.setItem('pandaRefresh', true);
+    });
+ 
+	pandaPhoneInit();
+    
     pandaInit();
-    pageController.setup();
+    
     
 })

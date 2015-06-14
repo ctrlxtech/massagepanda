@@ -1,0 +1,15 @@
+Name: {{ customer.user.first_name }}  {{ customer.user.last_name }} {{ customer.user.email }} {{ customer.phone }}<br>
+
+<hr>
+{% if stripeCustomer %}
+{{ stripeCustomer.sources.data.0 }}
+{% else %}
+no stripe customer found
+{% endif %}
+<br>
+<hr>
+{% if shippingAddress %}
+{{ shippingAddress.address_line1 }}
+{% else %}
+no shipping Address found
+{% endif %}

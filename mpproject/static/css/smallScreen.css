@@ -1,50 +1,217 @@
 /**
  * @media query for phone
+ */ @media screen and (max-width: 1024px) {
+	
+#mp-mainContent{
+	padding: 30px 10px !important;
+}	
+.mp-smallScreenPadding{
+	padding: 0px !important;
+}	
+.mp-smallScreenHide{
+	display:none !important;
+}
+.container-fluid{
+	padding: 0px !important;
+}
+/*
+ *   begin navigation
  */
-@media screen and (max-width: 768px) {
-	div#panda_bookMassage {
-      margin-top: 50px;
-    }
-	
-	div#panda_massageDetails {
-     margin-top: 50px;
-    }
-	
-	.mp-massageTypePreview .mp-massageTypePreview-image{
-	  box-shadow: 0px 0px 10px rgb(95, 95, 95);
-	  border-radius:10px; 
-	   overflow: hidden;
-       height:auto;
-       width:100%;
-	}
-	
-	  .mp-massageTypePreview {
-         width: 90%;
-       height: 60vw;
-		margin:30px auto;
-     }
-	
-	 .mp-whyus .mp-whyus-image{
-  	  margin-left:45%;
-    }
-	
-  
-    .mp-massageTypePreview.mp-bookMassagePreview .mp-massageTypePreview-image {
-    width: 100%;
-    height:auto;
-	}
-   
-   .mp-massageTypePreview.mp-bookMassagePreview {
-    width: 100%;
+#mp-leftSideNav {
+	background: -webkit-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
+    background: -moz-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
+    background: linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
+}
+#mp-navbar{
+	position : fixed !important;
+}
+/*
+#mp-navbar.cbp-spmenu-push-toright{
+	position : relative !important;
+}
+*/
+.mp-navigation-mobileIcon {
+  position: relative;
+  z-index: 100;
+display: inline;
+  float: left;
+  margin-top: 10px;
+  border: 1px solid rgb(240, 240, 240);
+  border-radius: 5px;
+  padding: 8px 12px;
+  padding-bottom: 3px;
+  box-shadow: 0px 0px 3px rgb(166, 166, 166) inset;
+  background-color: rgba(232, 232, 232, 0.3);
+}
+span.glyphicon.glyphicon-menu-hamburger {
+  -webkit-transform: scale(1.2,1.2);
+  -moz-transform: scale(1.2,1.2);
+  -ms-transform: scale(1.2,1.2);
+  -o-transform: scale(1.2,1.2);
+  transform: scale(1.2,1.2);
+    opacity: 0.8;
+}
+
+#mp-navbar.cbp-spmenu-push-toright .mp-pageHeader.mp-IconDiv {
+  position: absolute;
+  left: 45%;
+  margin: 0 0 0 -37.5%;
+  width: 75%;
+  z-index: 10;
+}
+
+#mp-navbar.cbp-spmenu-push-toright .mp-pageHeader.mp-IconDiv .mp-pandaIcon{
+  position: relative;
+  left: 80px;
+}
+
+.mp-pageHeader.mp-IconDiv {
+width: 180px;
+height: 60px;
+cursor: pointer;
+  display: inline;
+
+}
+#mp-navbar .container{
+	text-align: center;
+	height:60px;
+}
+/** end navigation**/
+/**begin home page**/
+#panda_home {
+      margin-top: 30px;
+}	
+
+#panda_home hr {
+     width:96% !important;
+	 margin: 0 auto !important;
+}
+
+.mp-home-mobileTitle{
+margin-top:20px;
+background-color: #F5F5F5;
+border-color: #DDD;
+font-size: 24px !important;
+padding: 10px 15px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+box-shadow: 0px 0px 3px #D8D8D8 inset;
+line-height: 32px;
+ont-family: "Oxygen";
+text-align:center;
+color: #666;
+font-weight: 300;
+}	
+
+.mp-homepage-mobileTab{
+	margin-top:20px;
+	margin-bottom:10px;
+}
+
+.panda-home-mobileBookMassage{
+	width:100%;
+	margin-bottom:20px;
+}
+
+.mp-whyus {
     margin: 30px auto;
-    height: 65vw;
-  }
-  
-   .mp-massageDetails {
-    height: 50vw;
-    width: 80%;
-    border-radius: 10px;
-    margin: 30px auto;
+	width:100%;
+	text-align: center;
+	
+}
+
+.mp-test{
+	width:100%;
+	 margin: 30px auto;
+	 text-align: center;
+}
+
+
+.mp-massageTypePreview-text.mp-bookMassagePreview-text {
+  display: inline;
+  float: left;
+  width: 60%;
+}
+
+.mp-massageTypePreview.mp-bookMassagePreview .mp-massageTypePreview-image {
+   display: inline;
+  height: auto;
+  width: 86px;
+ border-radius: 2px;
+  box-shadow: 0px 0px 10px rgb(152, 152, 152);
+  float: left;
+  margin-right: 10px;
+}   
+.mp-massageTypePreview.mp-bookMassagePreview {
+  width: 100%;
+  height: 86px;
+  margin: 10px auto;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  border: 1px solid rgb(231, 231, 231);
+  box-shadow: 3px 3px 5px #DDD;
+  border-radius: 5px;
+  background: -webkit-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  background: -moz-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  background: linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  min-width: 320px !important;
+overflow: hidden;
+}
+
+.mp-massageTypePreview-arrow {
+  float: right;
+  -webkit-transform: scale(1.5,1.5);
+  -moz-transform: scale(1.5,1.5);
+  -ms-transform: scale(1.5,1.5);
+  -o-transform: scale(1.5,1.5);
+  transform: scale(1.5,1.5);
+    width: 25px;
+  margin-top: 20px;
+    opacity: 0.6;
+}
+/** end home page**/
+/** begin massage details page **/
+#panda_massageDetails {
+    margin-top: 20px;
+}	
+
+#panda_massageDetails  hr{
+	display:none;
+}
+
+.panda_massageDetails-partOne {
+	width:100%;
+}
+
+.mp-massageDetails-panel  .mp-massageDetails-title {
+ color: #333;
+background-color: #F5F5F5;
+border-color: #DDD;
+font-size: 24px !important;
+padding: 10px 15px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+box-shadow: 0 0 3px #D8D8D8 inset;
+line-height: 32px;
+}
+
+.mp-massageDetails-description, .mp-massageDetails-info{
+	font-size: 17px !important;
+	padding-left: 6px;
+   padding-right: 6px;
+}
+
+
+.mp-massageDetails-panel{
+width: 100%;
+max-width:500px;
+ margin: 20px auto;
+background-color: #FFF;
+border: 1px solid #C9C9C9;
+border-radius: 4px;
+box-shadow: 0px 0px 5px #C6C6C6;
+padding: 10px;
 }
 
 .mp-massageDetails-form {
@@ -52,22 +219,107 @@
     margin: 0 auto;
 }
 
-.mp-smallScreenHide{
-	display:none;
-}
-
-.mp-massageDetails-image {
-    border-radius: 15px;
-    overflow: hidden;
-    height:auto;
-    width: 100%;
-}
-
-/** checkout page**/
+/**end massage details page**/
+/**begin checkout page**/
 #payment-form .mp-checkoutSection{
 	width:100%;
 	min-width : 320px;
 	margin: 0 auto; 
 }
+
+.mp-checkout-mobileTab{
+	margin-top:50px;
+}
+.mp-paymentForm{
+	top: 0px !important;
+}
+.form-group {
+    min-width: 320px !important;
+}
+
+#panda_helpCenter {
+  margin: 10px auto;
+  width: 98% !important;
+}
+
+/**end checkout page**/
+/* General styles for all menus */
+.form-control.mp-halfwidth.mp-mobile-fullWidth {
+  width: 98%;
+  display: block;
+  margin-top: 15px;
+}
+
+.form-control.mp-tinywidth.mp-mobile-tinywidth{
+	width: 36%;
+}
+
+.form-control.mp-smallwidth.mp-mobile-smallwidth{
+	width: 60%;
+}
+.cbp-spmenu {
+	position: fixed;
+}
+.cbp-spmenu a {
+    font-family: "Oxygen",sans-serif;
+    font-size: 1.2em;
+    line-height: 26px;
+    color: #5D5D5D;
+    font-weight: 300;
+    display: block;
+
+}
+.cbp-spmenu a:hover {
+	 background: -webkit-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  background: -moz-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  background: linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+	text-decoration: none;
+}
+/* Orientation-dependent styles for the content of the menu */
+
+.cbp-spmenu-vertical {
+	width: 240px;
+	height: 100%;
+	top: 0;
+	z-index: 1000;
+}
+.cbp-spmenu-vertical a {
+	border-bottom: 1px solid #969696;
+	padding: 1em;
+}
+/* Vertical menu that slides from the left or right */
+.cbp-spmenu-left {
+	left: -240px;
+}
+.cbp-spmenu-right {
+	right: -240px;
+}
+.cbp-spmenu-left.cbp-spmenu-open {
+	left: 0px;
+}
+.cbp-spmenu-right.cbp-spmenu-open {
+	right: 0px;
+}
+
+/* Push classes applied to the body */
+.cbp-spmenu-push {
+	overflow-x: hidden;
+	position: relative;
+	left: 0;
+}
+.cbp-spmenu-push-toright {
+	left: 240px;
+}
+.cbp-spmenu-push-toleft {
+	left: -240px;
+}
+/* Transitions */
+.cbp-spmenu,
+.cbp-spmenu-push {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
 
 }

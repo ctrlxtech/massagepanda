@@ -5,6 +5,7 @@ from django.core.validators import RegexValidator
 # Create your models here.
 class Customer(models.Model):
     user = models.OneToOneField(User)
+    stripe_customer_id = models.CharField(max_length = 50)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -18,9 +19,9 @@ class Customer(models.Model):
 class Address(models.Model):
     address_line1 = models.CharField("Address line 1", max_length = 45)
     address_line2 = models.CharField("Address line 2", max_length = 45, blank = True)
-    postal_code = models.CharField("Postal Code", max_length = 10)
+    zipcode = models.CharField("Zip Code", max_length = 10)
     city = models.CharField(max_length = 50, blank = False)
-    state_province = models.CharField("State/Province", max_length = 40, blank = True)
+    state = models.CharField("State", max_length = 40, blank = True)
     country = models.CharField(max_length = 45, blank = False)
 
     customer = models.ForeignKey(Customer, blank = False)

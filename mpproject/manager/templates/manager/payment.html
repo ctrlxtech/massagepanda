@@ -11,6 +11,12 @@
     <script type="text/javascript" src="{% static "js/my-stripe.js" %}"></script>
 </head>
 <body>
+<div>
+{% if customer %}
+Hello, 
+<a href="{% url 'customerProfile' %}?id={{customer.id}}">{{ customer.user.first_name }}</a>
+{% endif %}
+</div>
 {% include "manager/payment-form.html" %}
 </body>
 </html> 

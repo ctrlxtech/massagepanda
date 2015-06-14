@@ -7,21 +7,83 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.defaulttags import register
 
 from django.http import HttpResponse, JsonResponse
-from manager.models import Staff, Therapist, InSMS, OutSMS, ForwardNumber, SMSTemplate
+from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardNumber, SMSTemplate
 from payment.models import Order, Charge
 from django.contrib.auth.models import User
-from customers.models import Customer
+from customers.models import Customer, Address
 from django.db import transaction
 import requests
 import json
 import time
 import datetime
 import stripe
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+def terms(request):
+    return render(request, 'manager/terms.html')
 
+def privacy(request):
+    return render(request, 'manager/privacy.html')
+
+def logtest(request):
+    index = 105
+    data = InSMS.objects.all()[index:]
+    data = serializers.serialize("json", data)
+    return HttpResponse(data)
+
+@login_required
 def test(request):
-    address = buildAddress(request)
-    return HttpResponse("I got address: " + address)
+    index = 105
+    data = list(InSMS.objects.all()[index:])
+    data[0].first_name = "Kevin"
+    d = list(data)
+    data = serializers.serialize("json", d)
+    return HttpResponse(d[0].first_name)
+    context = {"data": data}
+    return render(request, 'manager/test.html', context) 
+    return HttpResponse(data)
+    context = ""
+
+    if request.user.is_authenticated():
+        context += "Had been Authenticated: <br>"
+    else:
+        context += "Had not!<br>"
+    '''
+    user = authenticate(username="paul@gmail.com", password="1234")
+    if user is not None:
+        if user.is_active:
+            request.user = user
+            return login(request, user)
+            # Redirect to a success page.
+            context += "hello, " + user.username
+        else:
+            # Return a 'disabled account' error message
+            context += "User is not active"
+    else:
+        # Return an 'invalid login' error message.
+        context += "User not found"
+    if request.user.is_authenticated():
+        context += "<br> Authenticated: " + request.user.username
+    else:
+        context += "<br>Not"
+    '''
+    return HttpResponse(context)
+
+def customerProfile(request):
+    customerId = request.GET.get('id')
+    customer = "Customer not found"
+    stripe.api_key = settings.STRIPE_KEY
+    stripeCustomer = ""
+    try:
+        customer = Customer.objects.get(pk=customerId)
+        shippingAddress = Address.objects.filter(customer=customer)
+
+        stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
+    except:
+        pass
+    context = {'customer': customer, 'shippingAddress': shippingAddress, 'stripeCustomer': stripeCustomer}
+    return render(request, 'manager/profile.html', context) 
 
 def buildAddress(request):
     address = request.POST.get('al1')
@@ -38,18 +100,31 @@ def buildAddress(request):
         sCountry + " " + sZipcode.strip()
     return address
 
-@user_passes_test(lambda u: u.is_superuser)
 def payment(request):
-    return render(request, 'manager/payment.html')
+    customer = None
+    stripeCustomer = None
+
+    if request.user.is_authenticated():
+        if hasattr(request.user, 'customer'):
+            customer = request.user.customer
+            stripe.api_key = settings.STRIPE_KEY
+            try:
+                stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
+            except:
+                pass
+
+    context = {'customer': customer, 'stripeCustomer': stripeCustomer}
+
+    return render(request, 'manager/payment.html', context)
 
 def placeOrder(request):
     data = json.loads(request.body)
-    mamount = data['amount']
+    mamount = data.get('amount')
     mamount = float(mamount) * 100
     # Get the credit card details submitted by the form
-    token = data['stripeToken']
-    bPhone = data['phone']
-    bEmail = data['email']
+    token = data.get('stripeToken')
+    bPhone = data.get('phone')
+    bEmail = data.get('email')
     
     customer = None;
     if request.user.is_authenticated():
@@ -57,34 +132,43 @@ def placeOrder(request):
             customer = request.user.customer
         except:
             pass
-    name = data['full-name']
-    phone = data['phone']
-    email = data['email']
-    address = data['al1']
-    address = address.strip()
-    sAL2 = data['al2']
-    sAL2 = sAL2.strip()
+    name = data.get('first-name')
+    name += " " + data.get('last-name')
+    phone = data.get('phone')
+    email = data.get('email')
+    sAL1 = data.get('al1').strip()
+    sAL2 = data.get('al2')
+    address = sAL1
     if sAL2 is not None and not sAL2:
-        address = address + " " + sAL2
-    sCity = data['city']
-    sCountry = data['country']
-    sState = data['state']
-    sZipcode = data['zipcode']
-    address = address + ", " + sCity.strip() + ", " + sState.strip() + ", " +\
-        sCountry + " " + sZipcode.strip()
+        address = address + " " + sAL2.strip()
+    sCity = data.get('city').strip()
+    sCountry = data.get('country').strip()
+    sState = data.get('state').strip()
+    sZipcode = data.get('zipcode').strip()
+    address = address + ", " + sCity + ", " + sState + ", " +\
+        sCountry + " " + sZipcode
 
     o = Order(token=token, customer=customer, amount=mamount, b_phone=bPhone, b_email=bEmail, shipping_address=address, name=name, phone=phone, email=email)
     o.save()
+    if customer is not None:
+        # update customer's stripe default card
+        stripe.api_key = settings.STRIPE_KEY
+        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
+        cu.source = token
+        cu.save()
+
+        # add shipping address for the customer
+        a = Address(customer=customer, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
+        a.save()
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
-    api_key = "412847f0"
-    api_secret = "55f41401"
-    payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': phone, 'type': 'unicode', 'text': message_body} 
-    r = requests.get("https://rest.nexmo.com/sms/json", params=payload).text
+    nums = [phone]
+    sendSMS(nums, message_body)
+
 
     context = {'status': 'success'}
     return JsonResponse(context)
 
-def placeOrderInfo(request):
+def placeOrderFromForm(request):
     mamount = request.POST.get('amount')
     mamount = float(mamount) * 100
 
@@ -105,6 +189,15 @@ def placeOrderInfo(request):
     sa = buildAddress(request)
     o = Order(token=token, customer=customer, amount=mamount, b_phone=bPhone, b_email=bEmail, shipping_address=sa, name=name, phone=phone, email=email)
     o.save()
+    if customer is not None:
+        stripe.api_key = settings.STRIPE_KEY
+        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
+        cu.source = token
+        cu.save()
+    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
+    nums = [phone]
+    sendSMS(nums, message_body)
+
     context = {'status': 'success'}
     return JsonResponse(context)
 
@@ -114,8 +207,7 @@ def orders(request):
     charge_list = Charge.objects.all()
     order_tl = []
     charge_tl = []
-    #stripe.api_key = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
-    stripe.api_key = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+    stripe.api_key = settings.STRIPE_KEY
     for order in order_list:
         order_tl.append(stripe.Token.retrieve(order.token))
     for charge in charge_list:
@@ -134,6 +226,11 @@ def getOrders(request):
 def lookup(d, key):
     return d[key]
 
+@register.filter
+def staffNumLookup(d, key):
+    return Staff.objects.get(pk=key).phone_number
+
+
 def mcharge(request):
     orderId = request.POST.get('orderId')
     order = Order.objects.get(pk=orderId)
@@ -145,8 +242,7 @@ def mcharge(request):
     mphone = request.POST.get('phone')
     memail = request.POST.get('email')
     sa = request.POST.get('sa')
-    #stripe.api_key = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
-    stripe.api_key = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+    stripe.api_key = settings.STRIPE_KEY
     try:
         chargeObj = stripe.Charge.create(
         amount=mamount, # amount in cents, again
@@ -190,7 +286,8 @@ def mrefund(request):
 def index(request):
     staff_list = Staff.objects.order_by('first_name')
     template_list = SMSTemplate.objects.all()
-    context = {'staff_list': staff_list, 'template_list': template_list}
+    area_list = Area.AREA_CHOICES
+    context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list}
     return render(request, 'manager/sms.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -211,6 +308,17 @@ def logs(request):
     context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list}
     return render(request, 'manager/logs.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)
+def getContactList(request):
+    genderList = request.POST.getlist("gender")
+    area = request.POST.get("areacode")
+    contact_list = []
+    for gender in genderList:
+        contact_list += Staff.objects.filter(area__areacode=area, gender=gender)
+    data = serializers.serialize("json", contact_list)
+    return HttpResponse(data)
+
+
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
     desc = cursor.description
@@ -226,29 +334,30 @@ def send(request):
     if number is not None and number != '':
         nums.append(number)
     message_body = request.POST.get('message')
-    number = ""
-    api_key = "412847f0"
-    api_secret = "55f41401"
+    r = sendSMS(nums, message_body)
+    return HttpResponse(r)
+
+@user_passes_test(lambda u: u.is_superuser)
+def sendWithNum(request):
+    number = request.POST.get('num')
+    message_body = request.POST.get('message')
+    nums = [number]
+    r = sendSMS(nums, message_body)
+    return HttpResponse(r)
+
+def sendSMS(nums, message_body):
+    api_key = settings.NEXMO_KEY
+    api_secret = settings.NEXMO_SECRET
     r = []
     for n in nums:
         payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': n, 'type': 'unicode', 'text': message_body} 
         r.append(requests.get("https://rest.nexmo.com/sms/json", params=payload).text)
-        o = OutSMS(receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        staff = Staff.objects.filter(phone_number=n)
+        o = OutSMS(staff=staff[0], receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         o.save()
         time.sleep(1)
-    return HttpResponse(r)
 
-def sendWithNum(request):
-    number = request.POST.get('num')
-    message_body = request.POST.get('message')
-    api_key = "412847f0"
-    api_secret = "55f41401"
-    payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': number, 'type': 'unicode', 'text': message_body} 
-    r = requests.get("https://rest.nexmo.com/sms/json", params=payload).text
-    o = OutSMS(receiver=number, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    o.save()
-
-    return HttpResponse(r)
+    return r
 
 def receiveSMS(request):
     msisdn = request.GET.get('msisdn')
@@ -259,18 +368,16 @@ def receiveSMS(request):
         return HttpResponse("***Error request")
     
     time_stamp = utc_to_local(time_stamp)
-    i = InSMS(sender=msisdn, messageBody=message_body, timestamp=time_stamp)
+    staff = Staff.objects.filter(phone_number=msisdn)
+    i = InSMS(staff=staff[0], sender=msisdn, messageBody=message_body, timestamp=time_stamp)
     i.save()
-    api_key = "412847f0"
-    api_secret = "55f41401"
+
     message_body += "[sent by " + msisdn + " at " + time_stamp + "]"
     for_numbers = ForwardNumber.objects.all()
+    nums = []
     for num in for_numbers:
-        key = num.number_id
-        payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577",
-            'to': Staff.objects.get(pk=key).phone_number, 'type': 'unicode', 'text': message_body} 
-        requests.get("https://rest.nexmo.com/sms/json", params=payload).text
-        time.sleep(1)
+        nums.append(Staff.objects.get(pk=num.number_id).phone_number)
+    sendSMS(nums, message_body);
 
     return HttpResponse()
 
@@ -302,14 +409,24 @@ def utc_to_local(t):
 @user_passes_test(lambda u: u.is_superuser)
 def getInLogs(request):
     index = request.GET.get('index')
-    data = serializers.serialize("json", InSMS.objects.all()[index:])
-    return HttpResponse(data)
+    cursor = connection.cursor()
+    cursor.execute("select manager_insms.sender, manager_insms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_insms.messageBody from manager_insms left join manager_staff" \
+        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > " + index + " ORDER BY manager_insms.id DESC")
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
 
 @user_passes_test(lambda u: u.is_superuser)
 def getOutLogs(request):
     index = request.GET.get('index')
-    data = serializers.serialize("json", OutSMS.objects.all()[index:])
-    return HttpResponse(data)
+    cursor = connection.cursor()
+    cursor.execute("select manager_outsms.receiver, manager_outsms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
+        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.id > " + index + " ORDER BY manager_outsms.id DESC")
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
 
 @user_passes_test(lambda u: u.is_superuser)
 def getUserInLogs(request):
@@ -371,17 +488,28 @@ def register_view(request):
 def tregister_view(request):
     return render(request, 'manager/tregister.html')
 
-def createUser(request):
+@transaction.atomic
+def createCustomer(request):
     email = request.POST.get('email')
     phone = request.POST.get('phone')
     password = request.POST.get('password')
     first_name = request.POST.get('first_name')
     last_name = request.POST.get('last_name')
+    gender = request.POST.get('gender')
     user = User.objects.create_user(email, email, password,
         first_name=first_name, last_name=last_name)
-    customer = Customer(user=user, phone=phone)
+    full_name = first_name + " " + last_name
+    stripe.api_key = settings.STRIPE_KEY
+
+    stripe_cus = stripe.Customer.create(
+        description=full_name,
+        email=email
+    )
+    customer = Customer(user=user, stripe_customer_id=stripe_cus['id'], gender=gender, phone=phone)
     customer.save()
-    return HttpResponse("Hello, " + customer.user.first_name)
+
+    context = {'customer': customer}
+    return render(request, 'manager/welcome.html', context) 
 
 @transaction.atomic
 def createTherapist(request):
@@ -393,16 +521,19 @@ def createTherapist(request):
         first_name=first_name, last_name=last_name)
     phone = request.POST.get('phone')
     gender = request.POST.get('gender')
-    home_address = request.POST.get('home_address')
+    home_address = buildAddress(request)
     availability = request.POST.get('availability')
+    working_area = request.POST.get('working_area')
     experience = request.POST.get('experience')
     specialty = request.POST.get('specialty')
-    emergency_contact_name = request.POST.get('emergency_contact_name')
-    emergency_contact_phone = request.POST.get('emergency_contact_phone')
+    emergency_first_name = request.POST.get('emergency_first_name')
+    emergency_last_name = request.POST.get('emergency_last_name')
+    emergency_contact_name = emergency_first_name.strip() + "" + emergency_last_name.strip()
+    emergency_contact_phone = request.POST.get('emergency_phone')
     supplementary = request.POST.get('supplementary')
     therapist = Therapist(user=user, phone=phone, gender=gender, home_address=home_address,
-        availability=availability, experience=experience, specialty=specialty, emergency_contact_name=emergency_contact_name,
-        emergency_contact_phone=emergency_contact_phone, supplementary=supplementary,
+        availability=availability, working_area=working_area, experience=experience, specialty=specialty,
+        emergency_contact_name=emergency_contact_name, emergency_contact_phone=emergency_contact_phone, supplementary=supplementary,
         massage_license=request.FILES['massage_license'], driver_license=request.FILES['driver_license'])
     therapist.save()
     return HttpResponse("Thank you for registering MassagePanda, " + therapist.user.first_name)

@@ -1,11 +1,11 @@
 <!-- massageDetails page-->
-<div id="panda_massageDetails" class="mp-pageContent container-fluid" style="display:none">
+<div id="panda_massageDetails" class="mp-pageContent container-fluid" data-mpController="massageDetailsPage" style="display:none">
     <div class="panda_massageDetails-partOne">
-        <div class="col-xs-12 col-sm-6 col-md-6 mp-smallScreenHide">
+        <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenHide">
             <div class="mp-breadcrumb">
                 <ol class="breadcrumb">
                     <li>
-                        <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" data-mpPageType="other">Book Massage</a>
+                        <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" >Book Massage</a>
                     </li>
     
                     <li class="active mp-currentDetailsPage">
@@ -17,9 +17,9 @@
                 <img class="mp-massageDetails-image" src="./image/book_SwedishOneHour.png"/>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
         	
-            <div class="mp-massageDetails-panel">            	
+            <div class="mp-massageDetails-panel mp-right">            	
                 <div class="mp-massageDetails-title">
                     Swedish Massage for 1 hour $79
                 </div>
@@ -34,14 +34,14 @@
                     A couples massage is a wonderfully relaxing, personal experience. During the session, two people receive massages at the same time and in the same room from two different therapists.
                 </p>
                 <p class="mp-massageDetails-info">
-                    Please book your massage session at least 2 hours in advance.
+                    Please book your massage session at least 2 hours in advance.We will reach out to our massage therapists once you have placed your order. We will not charge your card until a therapist responds and confirms the booking.
                 </p>
                 <div class="mp-massageDetails-form">
                 	<input type="hidden" name="detailsFeeType" value=""/>
                 	<div class="mp-detailsAmount" style="display:none"></div>
                 	<div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert" style="display:none">Please select <span class="alertInfo"></span></div>
                     <div class="btn-group mp-massageDetails-input">
-                        <input placeholder="Select Date" name="massageDetailsDate" type="text" id="massageDetails_datepicker" size="30" />
+                        <input class="mp-massageDetails-DatePicker" placeholder="Select Date" name="massageDetailsDate" type="text" />
                     </div>
                     <div class="btn-group mp-massageDetails-input">
                         <input type="hidden" name="massageDetailsTime" value=""/>
@@ -72,13 +72,13 @@
                         </ul>
                     </div>
                   <div class="btn-group mp-massageDetails-input">
-                        <input placeholder="Select a Value" id="massageDetails_spinner" name="quantity" />
+                        <input type="number" class="mp-massageDetails-spinner" placeholder="Select a Value" min="1"  name="quantity" />
 						
                    </div>
 				    <div class="btn-group mp-massageDetails-input">              
 						<input placeholder="Please Enter Coupon"  name="coupon" />
                    </div>
-				   <div class="mp-checkout mp-pageHeader" data-mpPageId="panda_checkout" data-mpController="checkoutPage" data-mpPageType="other">
+				   <div class="mp-checkout mp-pageHeader" data-mpPageId="panda_checkout" data-mpController="checkoutPage" >
 				    <button type="button" class="btn btn-success">
                             Checkout
                      </button>

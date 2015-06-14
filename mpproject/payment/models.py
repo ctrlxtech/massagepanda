@@ -35,3 +35,8 @@ class Charge(models.Model):
     phone = models.CharField(max_length = 16, validators=[phone_regex])
     email = models.EmailField()
     refunded = models.BooleanField(default=False)
+'''
+class StripeCard(model.Model):
+    service = models.ForeignKey(Customer)
+    card_id = models.CharField(max_length = 50)
+'''

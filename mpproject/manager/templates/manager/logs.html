@@ -36,19 +36,20 @@ var curOutIndex = {{outSMS_list|length}};
 })();
 
 function appendOutSMS(data) {
-    var results = JSON.parse(data);
+    var results = data;
+    //var results = JSON.parse(data);
     var mList = document.getElementById('outList');
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].fields.sender, results[i].fields.first_name, results[i].fields.last_name, results[i].fields.timestamp, results[i].fields.messageBody);
+      addToList(mList, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
       curOutIndex += 1;
     }
 }
 
 function appendInSMS(data) {
-    var results = JSON.parse(data);
+    var results = data;
     var mList = document.getElementById('inList');
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].fields.sender, results[i].fields.first_name, results[i].fields.last_name, results[i].fields.timestamp, results[i].fields.messageBody);
+      addToList(mList, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
       curInIndex += 1;
     }
 }

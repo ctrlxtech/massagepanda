@@ -1,0 +1,25 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+(function outWorker() {
+  $.ajax({
+    url: '{% url 'logtest' %}', 
+    method: "GET",
+    success: function(data) {
+        appendOutSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(outWorker, 5000);
+    }
+  });
+})();
+
+function appendOutSMS(data) {
+    var results = JSON.parse(data);
+    for (i = 0; i < results.length; i++) {
+        alert(results[i].fields.first_name);
+    }
+}
+</script>
+
+{{data}}

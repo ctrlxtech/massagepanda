@@ -9,7 +9,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#selecctall1').click(function(event) {  //on click
+    $('#selectall1').click(function(event) {  //on click
         if(this.checked) { // check select status
             $('.checkbox1').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"              
@@ -20,7 +20,7 @@ $(document).ready(function() {
             });        
         }
     });
-    $('#selecctall2').click(function(event) {  //on click
+    $('#selectall2').click(function(event) {  //on click
         if(this.checked) { // check select status
             $('.checkbox2').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"              
@@ -31,7 +31,7 @@ $(document).ready(function() {
             });        
         }
     }); 
-    $('#selecctall3').click(function(event) {  //on click
+    $('#selectall3').click(function(event) {  //on click
         if(this.checked) { // check select status
             $('.checkbox3').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"              
@@ -43,6 +43,17 @@ $(document).ready(function() {
         }
     });
 
+    $('#selectall4').click(function(event) {  //on click
+        if(this.checked) { // check select status
+            $('.checkbox4').each(function() { //loop through each checkbox
+                this.checked = true;  //select all checkboxes with class "checkbox1"              
+            });
+        }else{
+            $('.checkbox4').each(function() { //loop through each checkbox
+                this.checked = false; //deselect all checkboxes with class "checkbox1"                      
+            });        
+        }
+    });
 
  // process the form
     $('#SMSForm').submit(function(event) {
@@ -72,7 +83,7 @@ $(document).ready(function() {
             success: function(data) {
                 var count = data['message-count'];
                 for (i = 0; i < count; i++) {
-                    if (data.messages[0].status == 0) {
+                    if (data.messages[i].status == 0) {
                         document.getElementById("myDiv").innerHTML+="Succeeded in texting to " + data.messages[i].to + "<br>";
                     } else {
                         document.getElementById("myDiv").innerHTML+="Failed in texting to " + data.messages[i].to + "[" + data.messages[i]['error-text'] + "]<br>";
@@ -87,6 +98,39 @@ $(document).ready(function() {
         // stop the form from submitting the normal way and refreshing the page
         event.preventDefault();
     });
+
+    $('#getcontactlistform').submit(function(event) {
+        emptyList("queryList");
+        var gender = new Array();
+        $('input[name=gender]:checked').each(function() { gender.push($(this).val()) });
+        var formData = {
+            'gender'              : gender,
+            'areacode'               : $('select[name=areacode]').val(),
+        };
+        var csrftoken = getCookie('csrftoken'); 
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            traditional: true,
+            beforeSend: function (request)
+            {
+                request.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            url         : "{% url 'getContactList'%}", // the url where we want to POST
+            dataType    : 'json', // what type of data do we expect back from the server
+            data: formData,
+            encode          : true,
+            // using the done promise callback
+            success: function(data) {
+                for (i = 0; i < data.length; i++) {
+                    addToList("queryList", 4, data[i].fields.first_name, data[i].fields.last_name, data[i].fields.phone_number)
+                }
+            }
+        });
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
+    });
+
+
 
 });
 
@@ -106,6 +150,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 
 </script>
  <style>
@@ -130,14 +175,31 @@ function getCookie(name) {
 <a href="{% url 'logs' %}">logs</a>
 <a href="{% url 'configurations' %}">configurations</a>
 
+<hr>
 
 <div>
+<h4>Get logs for a particular phone number</h4>
 <form target="_blank" action="{% url 'getUserLogsByNum' %}" method="get">
 {% csrf_token %}
 <label for="number">Phone Number:</label><input type="number" name="number">
 <input type="submit" value="query" >
 </form>
 </div>
+<hr>
+
+
+<form id="getcontactlistform">
+<label>Male</label><input type="checkbox" name="gender" value="M" id="selectmale"/>
+<label>Female</label><input type="checkbox" name="gender" value="F" id="selectfemale"/>
+{% if area_list %}
+<select name="areacode">
+{% for area in area_list %}
+  <option value="{{ area.0 }}">{{ area.1 }}</option>
+{% endfor %}
+</select>
+{% endif %}
+<input type="submit" value="show">
+</form>
 
 <div>
 {% if staff_list %}
@@ -146,18 +208,25 @@ function getCookie(name) {
 <table>
 <tr>
 <td>
+<ul id="queryList" class="chk-container">
+<h3><input type="checkbox" id="selectall4"/> Select All you queried</h3>
+</ul>
+</td>
+
+
+<td>
 <ul id="adminList" class="chk-container">
-<h3><input type="checkbox" id="selecctall1"/> Selecct All Admin</h3>
+<h3><input type="checkbox" id="selectall1"/> Select All Admin</h3>
 </ul>
 </td>
 <td>
 <ul id="mList" class="chk-container">
-<h3><input type="checkbox" id="selecctall2"/> Selecct All Male</h3>
+<h3><input type="checkbox" id="selectall2"/> Select All Male</h3>
 </ul>
 </td>
 <td>
 <ul id="fList" class="chk-container">
-<h3><input type="checkbox" id="selecctall3"/> Selecct All Female</h3>
+<h3><input type="checkbox" id="selectall3"/> Select All Female</h3>
 </ul>
 </td>
 </tr>
@@ -208,15 +277,15 @@ SMS templates:
 {% for staff in staff_list %}
 {% if staff.title == 1 %}
 <script>
-addToAdminList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "{% static "images/" %}{{staff.profile_photo}}")
+addToList("adminList", 1, "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
 </script>
 {% elif staff.gender == 'M' %}
 <script>
-addToMaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "dummy")
+addToList("mList", 2, "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
 </script>
 {% else %}
 <script>
-addToFemaleList("{{staff.id}}", "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}", "dummy")
+addToList("fList", 3, "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
 </script>
 {% endif %}
 {% endfor %}

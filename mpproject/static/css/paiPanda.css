@@ -12,7 +12,7 @@
 
 #panda_helpCenter {
     margin: 10px auto;
-    width: 80%;
+    width: 90%;
 }
 
 .mp-submit {
@@ -87,9 +87,12 @@ font-size: 200%;
 }
 
 .mp-footerDescription {
-    width: 90%;
-    margin: 0 auto;
-
+ width: 90%;
+  margin: 0 auto;
+  color: #6d6d6d;
+  font-family: 'Oxygen', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
 }
 
 .mp-supportmassage {

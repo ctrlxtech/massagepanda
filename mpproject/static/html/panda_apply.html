@@ -1,0 +1,106 @@
+<div id="panda_apply" class="mp-pageContent container-fluid" style="display:none">
+<div class="mp-paymentForm ">
+<h2 align="center">Massage Therapist Registration Form（按摩师注册表）</h2>
+<form method="POST" id="payment-form" class="form-horizontal">
+<div class="col-xs-12 col-sm-6 col-md-6">
+<div class="mp-checkoutSection mp-checkoutSection-left">
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>English Name（英文姓名）</label><br>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="First Name" name="first-name" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Last Name" name="last-name" required/>
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Gender（性别）</label><br>
+        <select name="gender">
+        <option value="Male（男）">
+        Male（男）
+        </option>
+        <option value="Female（女）">
+        Female（女）
+        </option>
+        </select> 
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Email（邮箱）</label><br>
+        <input type="text" class="form-control" data-serverField="true" name="email" required/>
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Phone Number（电话）</label><br>
+        <input type="text" class="form-control" data-serverField="true" name="phone" required/>
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Home Address, for Salary purpose only（家庭住址-仅用于发工资）</label><br>
+        <input type="text" class="form-control" data-serverField="true" placeholder="Address Line 1" name="al1" required/>
+        <input type="text" class="form-control" data-serverField="true" placeholder="Address Line 2(Optional)" name="al2"/>
+
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="City" name="city" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="State" name="state" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Zip Code" name="zipcode" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Country" name="country" required/>
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>CA Massage License（加州按摩牌）</label><br>
+        <input type="file" class="form-control" name="massage_license" accept="image/*">
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Driver License（驾照）</label><br>
+        <input type="file" class="form-control" name="driver_license" accept="image/*">
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Emergency Contact（紧急联系人）</label><br>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="First Name" name="emergency_first_name" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Last Name" name="emergency_last_name" required/>
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Phone Number（电话）</label><br>
+        <input type="text" class="form-control" data-serverField="true" name="emergency_phone" required/>
+    </div>
+
+
+</div>
+</div>
+
+
+
+<div class="col-xs-12 col-sm-6 col-md-6">
+<div class="mp-checkoutSection mp-checkoutSection-right">
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Availability, Eg M, W, F 9am – 9pm（工作时间, 如周一,周三,周五 早九点到晚九点）</label><br>
+        <textarea class="form-control mp-fieldRequired mp-checkoutNote" rows="4" cols="50" name="availability" required></textarea>
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Specialty of Massage, Eg, Swedish Massage（擅长哪种按摩手法, 如瑞典式按摩等）</label><br>
+        <textarea class="form-control mp-fieldRequired mp-checkoutNote" rows="4" cols="50" name="specialty" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Working Area（服务区域）</label><br>
+        <textarea class="form-control mp-fieldRequired mp-checkoutNote" rows="4" cols="50" name="working_area" required></textarea>
+    </div>
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Professional Experience, Eg, Describe places worked before and how long you worked there（职业经验,如以前在哪里工作过,工作了多久）</label><br>
+        <textarea class="form-control mp-fieldRequired mp-checkoutNote" rows="4" cols="50" name="experience" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Supplementary(补充说明)</label><br>
+        <textarea class="form-control mp-fieldRequired mp-checkoutNote" rows="4" cols="50" name="supplementary"></textarea>
+    </div>
+
+<div>
+By clicking "Submit", you confirm that you have read the <a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_terms">terms and conditions</a>, that you understand them and that you agree to be bound by them. （通过点击“提交”，您确认您已经阅读<a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_terms">条款和条件</a>，你了解他们，你同意受其约束。）
+</div>
+<div class="mp-checkout">
+<button type="submit" class="btn btn btn-success">Submit</button>
+</div>
+
+</div>
+</div>
+
+</form>
+</div>
+</div>

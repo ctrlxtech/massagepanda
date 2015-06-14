@@ -25,32 +25,21 @@ function checkOptions() {
 }
 });
 
-function addToAdminList(id, first_name, last_name, phone_number, src) {
-    var adminList = document.getElementById('adminList');
-    var entry = document.createElement('li');
-    addCheckBox(phone_number, entry, 1);
-    entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
-//    addImage(id, adminList, src);
-    adminList.appendChild(entry);
+function emptyList(list_name) {
+    var list = document.getElementById(list_name);
+    var li = list.getElementsByTagName("li");
+    var len = li.length;
+    for (i = 0; i < len; i++) {
+        list.removeChild(li[0]);
+    }
 }
 
-function addToMaleList(id, first_name, last_name, phone_number, src) {
-    var mList = document.getElementById('mList');
+function addToList(list_name, checkbox_id, first_name, last_name, phone_number) {
+    var list = document.getElementById(list_name);
     var entry = document.createElement('li');
-    addCheckBox(phone_number, entry, 2);
+    addCheckBox(phone_number, entry, checkbox_id);
     entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
-//    addImage(id, mList, src);
-    mList.appendChild(entry);
-}
-
-
-function addToFemaleList(id, first_name, last_name, phone_number, src) {
-    var fList = document.getElementById('fList');
-    var entry = document.createElement('li');
-    addCheckBox(phone_number, entry, 3);
-    entry.appendChild(document.createTextNode(first_name + " " + last_name + ", " + phone_number));
-    fList.appendChild(entry);
-//    addImage(id, fList, src);
+    list.appendChild(entry);
 }
 
 function addCheckBox(phone_number, list, index) {

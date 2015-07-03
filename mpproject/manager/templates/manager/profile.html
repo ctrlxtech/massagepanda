@@ -8,8 +8,28 @@ no stripe customer found
 {% endif %}
 <br>
 <hr>
-{% if shippingAddress %}
-{{ shippingAddress.address_line1 }}
+{% if shippingAddress_list %}
+    {% for address in shippingAddress_list %}
+        {{ address.name }}, {{ address.address_line1 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
+    {% endfor %}
 {% else %}
 no shipping Address found
+{% endif %}
+<br>
+<hr>
+{% if referralCode %}
+link: <a href="signup?referCode={{ referralCode.code }}">signup?referCode={{ referralCode.code }}</a>
+{% else %}
+generate your referral code <a href="#">here</a>.
+{% endif %}
+<hr>
+credits: 0
+<br>
+Referral history:
+{% if referralHistory %}
+    {% for entry in referralHistory %}
+        {{ entry.status }} {{ entry.referral }}
+    {% endfor %}
+{% else %}
+no referral history
 {% endif %}

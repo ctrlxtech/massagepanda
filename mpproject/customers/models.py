@@ -14,9 +14,11 @@ class Customer(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
     # validators should be a list
-    phone = models.CharField(max_length = 16, validators=[phone_regex], unique=True)
+    phone = models.CharField(max_length = 16, validators=[phone_regex])
 
 class Address(models.Model):
+    customer = models.ForeignKey(Customer, blank = False)
+    name = models.CharField("Name", max_length = 45)
     address_line1 = models.CharField("Address line 1", max_length = 45)
     address_line2 = models.CharField("Address line 2", max_length = 45, blank = True)
     zipcode = models.CharField("Zip Code", max_length = 10)
@@ -24,7 +26,5 @@ class Address(models.Model):
     state = models.CharField("State", max_length = 40, blank = True)
     country = models.CharField(max_length = 45, blank = False)
 
-    customer = models.ForeignKey(Customer, blank = False)
     def __unicode__(self):
-        return "%s, %s %s" % (self.city, self.state_province,
-                              str(self.country))
+        return "%s, %s %s %s" % (self.name, self.address_line1, self.city, self.state)

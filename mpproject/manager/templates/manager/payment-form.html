@@ -2,21 +2,45 @@
     Stripe.setPublishableKey('pk_test_704p8Gz1ev0sCJJK5sc4b9cF');
 </script>
 
-<form action="{% url 'placeOrderFromForm' %}" method="POST" id="payment-form">
+<form action="{% url 'placeOrderFromPost' %}" method="POST" id="payment-form">
 {% csrf_token %}
-<br><label>Amount(in cents): $</label>
-<input type="number" min="0" name="amount"/><br>
+<br>
+{% if service_list %}
+    <select name="service_id">
+    {% for service in service_list %}
+    <option value="{{ service.id }}">{{ service.service_type }}</option>
+    {% endfor %}
+    </select>
+{% else %}
+no service added
+{% endif %}
 
+    <select name="serviceGenderPreferred">
+    <option value="Either">Either</option>
+    <option value="Female">Female</option>
+    <option value="Male">Male</option>
+    </select>
+    
+    <input type="date" name="serviceDate">
+    
+    <select name="serviceTime">
+    <option value="9:00am">9:00am</option>
+    <option value="10:30am">10:30am</option>
+    <option value="1:00pm">1:00pm</option>
+    <option value="2:00pm">2:00pm</option>
+    </select>
+     
   <span class="payment-errors"></span>
 <h2>Card Info</h2>
+  <div class="form-row">
+    <label>Name on card: <input type="text" data-stripe="name" name="name"/></label>
+  </div>
+
   <div class="form-row">
     <label>
       <span>Card Number</span>
       <input type="text" size="20" data-stripe="number"/>
     </label>
-  </div>
-
-  <div class="form-row">
     <label>
       <span>CVC</span>
       <input type="text" size="4" data-stripe="cvc"/>
@@ -31,28 +55,9 @@
     <span> / </span>
     <input type="text" size="4" data-stripe="exp-year"/>
   </div>
-<hr>
-  <div class="form-row">
-    <label>
-      <h2>Billing Address</h2>
-    </label>
-    <br>
-    <label>Name on card: <input type="text" data-stripe="name"/></label>
-    <br>
-    <label>Address line 1:  <input type="text" data-stripe="address-line1"/></label>
-    <br>
-    <label>Address line 2:  <input type="text" data-stripe="address-line2"/></label>
-    <br>
-    <label>City:  <input type="text" data-stripe="address-city"/></label>
-    <br>
-    <label>State:  <input type="text" data-stripe="address-state"/></label>
-    <br>
+
+  <div>
     <label>Zip/Post Code:  <input type="text" data-stripe="address-zip"/></label>
-    <label>Country:  <input type="text" data-stripe="address-country"/></label>
-    <br>
-    <label>Phone:  <input type="text" name="b_phone"/></label>
-    <br>
-    <label>Email:  <input type="text" name="b_email"/></label>
   </div>
 <hr>
   <div class="form-row">
@@ -60,7 +65,8 @@
       <h2>Shipping address</h2>
     </label>
     <br>
-    <label>Name on card: <input type="text" name="name"/></label>
+    <label>First Name: <input type="text" name="first-name"/></label>
+    <label>Last Name: <input type="text" name="last-name"/></label>
     <br>
     <label>Address line 1:  <input type="text" name="al1"/></label>
     <br>

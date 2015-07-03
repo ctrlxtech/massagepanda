@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^contact/', include('contact.urls')),
     url(r'^payment/', include('payment.urls')),
     url(r'^manager/', include('manager.urls')),
+    url(r'^referral/', include('referral.urls')),
 ]

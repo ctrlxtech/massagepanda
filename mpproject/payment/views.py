@@ -1,8 +1,10 @@
 from django.shortcuts import render
 
 from django.template.defaulttags import register
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from services.models import Service
+from payment.models import Order
+from django.contrib.auth.decorators import user_passes_test
 import stripe
 # Create your views here.
 # Set your secret key: remember to change this to your live secret key in production
@@ -10,7 +12,6 @@ import stripe
 
 def test(request):
     return render(request, 'payment/test.html')
-
 
 def index(request):
     service_list = Service.objects.order_by('service_type')
@@ -47,6 +48,18 @@ def charge(request):
       pass
 
     return HttpResponse(charge.status)
+
+@user_passes_test(lambda u: u.is_superuser)
+def processOrder(request):
+    orderId = request.POST.get("orderId")
+    statusToUpdate = request.POST.get("statusToUpdate")
+    order = Order.objects.get(pk=orderId)
+    context = {'status': 'error', 'statusToUpdate': statusToUpdate, 'orderId': orderId}
+    if order is not None and order:
+        order.status = statusToUpdate
+        order.save()
+        context['status'] = 'success'
+    return JsonResponse(context)
 
 @register.filter
 def get_service(dictionary, key):

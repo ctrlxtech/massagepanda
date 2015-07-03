@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'payment',
     'manager',
     'customers',
+    'referral',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,6 +119,13 @@ NEXMO_KEY = "412847f0"
 
 NEXMO_SECRET = "55f41401"
 
+EMAIL_HOST = "smtp.mandrillapp.com"
+
+EMAIL_HOST_PASSWORD = "XmFb_bOXtF5oKpOowOBbhA"
+
+EMAIL_HOST_USER = "support@massagepanda.com"
+
+EMAIL_PORT = 587
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = '/home/ubuntu/massagepanda/images/'

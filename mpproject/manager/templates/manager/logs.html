@@ -40,7 +40,7 @@ function appendOutSMS(data) {
     //var results = JSON.parse(data);
     var mList = document.getElementById('outList');
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
+      addToList(mList, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
       curOutIndex += 1;
     }
 }

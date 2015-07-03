@@ -8,17 +8,25 @@ from django.template.defaulttags import register
 
 from django.http import HttpResponse, JsonResponse
 from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardNumber, SMSTemplate
-from payment.models import Order, Charge
+from payment.models import Order, OrderTherapist
+from services.models import Service
+from referral.models import CustomerReferralCode, CustomerReferralHistory
 from django.contrib.auth.models import User
 from customers.models import Customer, Address
 from django.db import transaction
 import requests
 import json
 import time
-import datetime
+from datetime import datetime
 import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail, EmailMultiAlternatives
+
+from referral.views import referralCodeGenerator
+
+from django.template.loader import get_template
+
 # Create your views here.
 def terms(request):
     return render(request, 'manager/terms.html')
@@ -32,18 +40,39 @@ def logtest(request):
     data = serializers.serialize("json", data)
     return HttpResponse(data)
 
+def referralTest(request):
+    code = request.GET.get("referCode")
+    if code:
+        try:
+            referralObj = CustomerReferralCode.objects.get(code=code)
+        except:
+            return HttpResponse("Invalid code")
+        return HttpResponse("Looks like you're referred by " + referralObj.customer.user.first_name)
+    else:
+        return HttpResponse("No code found")
+
+@login_required
+def sendMyEmail(request):
+    subject, from_email, to = 'Your Coupon!', 'support@massagepanda.com', 'yuechen1989@gmail.com'
+    text_content = 'This is an email containing your coupon.'
+    html_content = get_template('manager/hello.html').render()
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return HttpResponse("Email sent!") 
+
 @login_required
 def test(request):
-    index = 105
-    data = list(InSMS.objects.all()[index:])
-    data[0].first_name = "Kevin"
-    d = list(data)
-    data = serializers.serialize("json", d)
-    return HttpResponse(d[0].first_name)
-    context = {"data": data}
-    return render(request, 'manager/test.html', context) 
-    return HttpResponse(data)
-    context = ""
+    plaintext = get_template('manager/hello.html')
+    return HttpResponse(plaintext.render())
+
+
+    user = User.objects.get(pk=11)
+    user = authenticate(username=user.username, password=user.password)
+    if user is not None:
+        return HttpResponse(user.user)
+    else:
+        return HttpResponse("Can't")
 
     if request.user.is_authenticated():
         context += "Had been Authenticated: <br>"
@@ -70,19 +99,27 @@ def test(request):
     '''
     return HttpResponse(context)
 
+@login_required(login_url="/manager/login")
 def customerProfile(request):
     customerId = request.GET.get('id')
-    customer = "Customer not found"
+    user = request.user
+    try:
+        customer = Customer.objects.get(user=user)
+    except:
+        return HttpResponse("No valid customer found(probably you are an admin?)")
+    shippingAddress_list = None
+    referralCode = None 
     stripe.api_key = settings.STRIPE_KEY
     stripeCustomer = ""
     try:
-        customer = Customer.objects.get(pk=customerId)
-        shippingAddress = Address.objects.filter(customer=customer)
-
+        referralCode = CustomerReferralCode.objects.get(customer=customer)
+        referralHistory = CustomerReferralHistory.objects.filter(code_id=referralCode.id)
+        shippingAddress_list = Address.objects.filter(customer=customer)
         stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
     except:
         pass
-    context = {'customer': customer, 'shippingAddress': shippingAddress, 'stripeCustomer': stripeCustomer}
+    context = {'customer': customer, 'shippingAddress_list': shippingAddress_list,
+        'stripeCustomer': stripeCustomer, 'referralCode': referralCode, 'referralHistory': referralHistory}
     return render(request, 'manager/profile.html', context) 
 
 def buildAddress(request):
@@ -90,7 +127,7 @@ def buildAddress(request):
     address = address.strip()
     sAL2 = request.POST.get('al2')
     sAL2 = sAL2.strip()
-    if sAL2 is not None and not sAL2:
+    if sAL2 is not None and sAL2:
         address = address + " " + sAL2
     sCity = request.POST.get('city')
     sCountry = request.POST.get('country')
@@ -113,33 +150,53 @@ def payment(request):
             except:
                 pass
 
-    context = {'customer': customer, 'stripeCustomer': stripeCustomer}
+    service_list = Service.objects.all()
+    context = {'customer': customer, 'stripeCustomer': stripeCustomer, 'service_list': service_list}
 
     return render(request, 'manager/payment.html', context)
 
-def placeOrder(request):
+def placeOrderFromJson(request):
     data = json.loads(request.body)
-    mamount = data.get('amount')
-    mamount = float(mamount) * 100
-    # Get the credit card details submitted by the form
-    token = data.get('stripeToken')
-    bPhone = data.get('phone')
-    bEmail = data.get('email')
-    
+    return placeOrder(request, data);
+
+def placeOrderFromPost(request):
+    data = request.POST;
+    return placeOrder(request, data);
+
+def placeOrder(request, data):
     customer = None;
     if request.user.is_authenticated():
         try:
             customer = request.user.customer
         except:
             pass
-    name = data.get('first-name')
-    name += " " + data.get('last-name')
+
+    serviceId = data.get('service_id')
+    if serviceId is None or not serviceId:
+        context = {'status': 'failure', 'error': 'service[' +  serviceId + '] is not available'}
+        return JsonResponse(context)
+    mamount = Service.objects.get(pk=serviceId).service_fee * 100
+    service_datetime_string = data.get('serviceDate')
+    service_datetime_string += " " + data.get('serviceTime')
+    date_format1 = '%m/%d/%Y %I:%M%p'
+    date_format2 = '%Y-%m-%d %I:%M%p'
+    service_datetime = None
+    try:
+        service_datetime = datetime.strptime(service_datetime_string, date_format1)
+    except:
+        service_datetime = datetime.strptime(service_datetime_string, date_format2)
+    
+    preferred_gender = data.get('serviceGenderPreferred')
+    token = data.get('stripeToken')
+    name = data.get('name')
+    sName = data.get('first-name')
+    sName += " " + data.get('last-name')
     phone = data.get('phone')
     email = data.get('email')
     sAL1 = data.get('al1').strip()
     sAL2 = data.get('al2')
     address = sAL1
-    if sAL2 is not None and not sAL2:
+    if sAL2 is not None and sAL2:
         address = address + " " + sAL2.strip()
     sCity = data.get('city').strip()
     sCountry = data.get('country').strip()
@@ -148,7 +205,9 @@ def placeOrder(request):
     address = address + ", " + sCity + ", " + sState + ", " +\
         sCountry + " " + sZipcode
 
-    o = Order(token=token, customer=customer, amount=mamount, b_phone=bPhone, b_email=bEmail, shipping_address=address, name=name, phone=phone, email=email)
+    o = Order(token=token, service_id=serviceId, service_datetime=service_datetime,
+        preferred_gender=preferred_gender, customer=customer, amount=mamount,
+        shipping_address=address, recipient=sName, name=name, phone=phone, email=email)
     o.save()
     if customer is not None:
         # update customer's stripe default card
@@ -158,7 +217,7 @@ def placeOrder(request):
         cu.save()
 
         # add shipping address for the customer
-        a = Address(customer=customer, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
+        a = Address(customer=customer, name=sName, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
         a.save()
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
     nums = [phone]
@@ -168,52 +227,39 @@ def placeOrder(request):
     context = {'status': 'success'}
     return JsonResponse(context)
 
-def placeOrderFromForm(request):
-    mamount = request.POST.get('amount')
-    mamount = float(mamount) * 100
-
-    # Get the credit card details submitted by the form
-    token = request.POST.get('stripeToken', False)
-    bPhone = request.POST.get('phone', "unknown_billing_phone")
-    bEmail = request.POST.get('email', "unknown_billing_email")
-    
-    customer = None;
-    if request.user.is_authenticated():
-        try:
-            customer = request.user.customer
-        except:
-            pass
-    name = request.POST.get('full-name', "unknown_name")
-    phone = request.POST.get('phone', "unknown_phone")
-    email = request.POST.get('email', "unknown_email")
-    sa = buildAddress(request)
-    o = Order(token=token, customer=customer, amount=mamount, b_phone=bPhone, b_email=bEmail, shipping_address=sa, name=name, phone=phone, email=email)
-    o.save()
-    if customer is not None:
-        stripe.api_key = settings.STRIPE_KEY
-        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
-        cu.source = token
-        cu.save()
-    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
-    nums = [phone]
-    sendSMS(nums, message_body)
-
-    context = {'status': 'success'}
-    return JsonResponse(context)
+@user_passes_test(lambda u: u.is_superuser)
+def assignTherapist(request):
+    orderId = request.POST.get('pk')
+    staffId = request.POST.get('value')
+    orderTherapist = None
+    orderTherapistList = OrderTherapist.objects.filter(order_id=orderId)
+    if orderTherapistList is not None and orderTherapistList:
+        for orderTherapist in orderTherapistList:
+            if orderTherapist.staff_id != staffId:
+                orderTherapist.staff_id = staffId
+    else:
+        orderTherapist = OrderTherapist(order_id=orderId, staff_id=staffId)
+    if orderTherapist is not None:
+        orderTherapist.save()
+    staff = Staff.objects.get(pk=staffId)
+    return HttpResponse(staff.id)
 
 @user_passes_test(lambda u: u.is_superuser)
 def orders(request):
-    order_list = Order.objects.filter(charged=False)
-    charge_list = Charge.objects.all()
+    order_list = Order.objects.all()
+    service_list = Service.objects.all()
+    therapist_list = Staff.objects.filter(title=2)
     order_tl = []
     charge_tl = []
     stripe.api_key = settings.STRIPE_KEY
     for order in order_list:
         order_tl.append(stripe.Token.retrieve(order.token))
+    '''
     for charge in charge_list:
         charge_tl.append(stripe.Charge.retrieve(charge.charge_token))
-    #return HttpResponse(token_list)
-    context = {'order_list': order_list, 'order_tl': order_tl, 'charge_list': charge_list, 'charge_tl': charge_tl}
+    '''
+    context = {'order_list': order_list, 'order_tl': order_tl, 
+        'therapist_list': therapist_list, 'service_list': service_list}
     return render(request, 'manager/orders.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -224,7 +270,25 @@ def getOrders(request):
 
 @register.filter
 def lookup(d, key):
-    return d[key]
+    try:
+        result = d[key]
+        return result
+    except:
+        return
+
+@register.filter
+def lookupServiceType(d, key):
+    try:
+        for service in d:
+            if service.id == key:
+                return service.service_type
+    except:
+        return
+
+@register.filter
+def lookupOrderTherapist(d, key):
+    orderTherapistList = OrderTherapist.objects.filter(order_id=key)
+    return orderTherapistList
 
 @register.filter
 def staffNumLookup(d, key):
@@ -291,24 +355,6 @@ def index(request):
     return render(request, 'manager/sms.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
-def logs(request):
-    cursor = connection.cursor()
-    cursor.execute("select manager_insms.sender, manager_insms.timestamp," \
-        " manager_staff.first_name, manager_staff.last_name," \
-        " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number ORDER BY manager_insms.id DESC")
-    inSMS_list = dictfetchall(cursor)
-
-    cursor.execute("select manager_outsms.receiver, manager_outsms.timestamp," \
-        " manager_staff.first_name, manager_staff.last_name," \
-        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
-        " on manager_outsms.receiver = manager_staff.phone_number ORDER BY manager_outsms.id DESC")
-
-    outSMS_list = dictfetchall(cursor)
-    context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list}
-    return render(request, 'manager/logs.html', context)
-
-@user_passes_test(lambda u: u.is_superuser)
 def getContactList(request):
     genderList = request.POST.getlist("gender")
     area = request.POST.get("areacode")
@@ -331,7 +377,7 @@ def dictfetchall(cursor):
 def send(request):
     nums = request.POST.getlist('needToSend')
     number = request.POST.get('num')
-    if number is not None and number != '':
+    if number is not None and number:
         nums.append(number)
     message_body = request.POST.get('message')
     r = sendSMS(nums, message_body)
@@ -352,8 +398,12 @@ def sendSMS(nums, message_body):
     for n in nums:
         payload = {'api_key': api_key, 'api_secret': api_secret, 'from': "12069396577", 'to': n, 'type': 'unicode', 'text': message_body} 
         r.append(requests.get("https://rest.nexmo.com/sms/json", params=payload).text)
-        staff = Staff.objects.filter(phone_number=n)
-        o = OutSMS(staff=staff[0], receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        staff = None
+        try:
+            staff = Staff.objects.get(phone_number=n)
+        except:
+            pass
+        o = OutSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         o.save()
         time.sleep(1)
 
@@ -368,8 +418,12 @@ def receiveSMS(request):
         return HttpResponse("***Error request")
     
     time_stamp = utc_to_local(time_stamp)
-    staff = Staff.objects.filter(phone_number=msisdn)
-    i = InSMS(staff=staff[0], sender=msisdn, messageBody=message_body, timestamp=time_stamp)
+    staff = None
+    try:
+        staff = Staff.objects.get(phone_number=msisdn)
+    except:
+        pass
+    i = InSMS(staff=staff, sender=msisdn, messageBody=message_body, timestamp=time_stamp)
     i.save()
 
     message_body += "[sent by " + msisdn + " at " + time_stamp + "]"
@@ -401,10 +455,28 @@ def applyConfig(request):
     return render(request, 'manager/done.html', context)
 
 def utc_to_local(t):
-    utc = datetime.datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
-    UTC_OFFSET_TIMEDELTA = datetime.datetime.utcnow() - datetime.datetime.now()
+    utc = datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
+    UTC_OFFSET_TIMEDELTA = datetime.utcnow() - datetime.now()
     local_datetime = utc - UTC_OFFSET_TIMEDELTA
     return local_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+@user_passes_test(lambda u: u.is_superuser)
+def logs(request):
+    cursor = connection.cursor()
+    cursor.execute("select manager_insms.sender, manager_insms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_insms.messageBody from manager_insms left join manager_staff" \
+        " on manager_insms.sender = manager_staff.phone_number ORDER BY manager_insms.id DESC")
+    inSMS_list = dictfetchall(cursor)
+
+    cursor.execute("select manager_outsms.receiver, manager_outsms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
+        " on manager_outsms.receiver = manager_staff.phone_number ORDER BY manager_outsms.id DESC")
+
+    outSMS_list = dictfetchall(cursor)
+    context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list}
+    return render(request, 'manager/logs.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def getInLogs(request):
@@ -458,7 +530,7 @@ def login_view(request):
 def welcome(request):
     userID = request.POST.get('userID')
     fbToken = request.POST.get('fbToken')
-    if fbToken is not None and userID is not None:
+    if fbToken and userID:
         request.session['login'] = True
         return HttpResponse("token: " + fbToken + " userID: " + userID)
     username = request.POST.get('username')
@@ -507,6 +579,10 @@ def createCustomer(request):
     )
     customer = Customer(user=user, stripe_customer_id=stripe_cus['id'], gender=gender, phone=phone)
     customer.save()
+
+    code = referralCodeGenerator()
+    customerReferralCode = CustomerReferralCode(customer=customer, code=code)
+    customerReferralCode.save()
 
     context = {'customer': customer}
     return render(request, 'manager/welcome.html', context) 

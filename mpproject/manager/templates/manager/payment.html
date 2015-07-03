@@ -14,7 +14,7 @@
 <div>
 {% if customer %}
 Hello, 
-<a href="{% url 'customerProfile' %}?id={{customer.id}}">{{ customer.user.first_name }}</a>
+<a href="{% url 'customerProfile' %}">{{ customer.user.first_name }}</a>
 {% endif %}
 </div>
 {% include "manager/payment-form.html" %}

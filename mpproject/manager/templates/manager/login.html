@@ -41,7 +41,6 @@
       var $form = $('#login-form');
       $form.append($('<input type="hidden" name="fbToken" />').val(response.authResponse.accessToken));
       $form.append($('<input type="hidden" name="userID" />').val(response.authResponse.userID));
-      $form.append($('<meta type="hidden" name="REMOTE_USER" content="paul1@gmail.com"/>'));
       // and re-submit
       // $form.get(0).submit();
           FB.api('/me', function(response) {
@@ -87,7 +86,6 @@
             traditional: true,
             beforeSend: function (request)
             {
-                request.setRequestHeader("REMOTE_USER", "paul1@gmail.com");
                 request.setRequestHeader("X-CSRFToken", csrfToken);
             },
             url         : "{% url 'test'%}", // the url where we want to POST
@@ -111,7 +109,6 @@
 
 <form id="login-form" action="{% url 'welcome' %}" method="POST">
 {% csrf_token %}
-<meta type="hidden" name="HTTP_REMOTE_USER" content="paul1@gmail.com"/>
  <label>Email: </label><input type="text" name="username"><br>
 <label>Password: </label><input type="password" id="pass1" name="password"><br>
 <input type="submit" value="Sign Up">

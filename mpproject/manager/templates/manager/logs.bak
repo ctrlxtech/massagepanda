@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+var curInIndex = {{ inSMS_list.0.id }};
+var curOutIndex = {{ outSMS_list.0.id }};
+
+(function outWorker() {
+  $.ajax({
+    url: '{% url 'getOutLogs' %}', 
+    data: {index: curOutIndex},
+    success: function(data) {
+        appendOutSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(outWorker, 5000);
+    }
+  });
+})();
+
+(function inWorker() {
+  $.ajax({
+    url: '{% url 'getInLogs' %}', 
+    data: {index: curInIndex},
+    success: function(data) {
+        appendInSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(inWorker, 5000);
+    }
+  });
+})();
+
+function appendOutSMS(results) {
+    //var results = JSON.parse(data);
+    var mList = document.getElementById('outList');
+    if (results.length > 0) {
+        for (i = 0; i < results.length; i++) {
+            addToList(mList, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
+        }
+        curOutIndex = results[results.length - 1].id;
+    }
+}
+
+function appendInSMS(results) {
+    var mList = document.getElementById('inList');
+    if (results.length > 0) {
+        for (i = 0; i < results.length; i++) {
+            addToList(mList, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
+        }
+        curInIndex = results[results.length - 1].id;
+    }
+}
+
+function addToList(list, sender, first_name, last_name, timestamp, message_body) {
+    var entry = document.createElement('li');
+    entry.appendChild(document.createTextNode(sender + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
+    var br = document.createElement("br");
+    entry.appendChild(br);
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(message_body));
+    entry.appendChild(p);
+    var theFirstChild = list.firstChild;
+    list.insertBefore(entry, theFirstChild);
+}
+$(window).load(function(){
+$('#searchInList').keyup(function() {
+    filterInList(this); 
+});
+
+function filterInList(element) {
+    var value = $(element).val();
+    $("#inList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+$('#searchOutList').keyup(function() {
+    filterOutList(this);
+});
+
+function filterOutList(element) {
+    var value = $(element).val();
+    $("#outList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+});
+</script>
+
+</head>
+<body>
+<a href="{% url 'forwardLogs' %}">forward logs</a>
+
+<table style="width:100%">
+
+  <col width="50%">
+  <col width="50%">
+  <tr>
+    <th>Inbound Messages</th>
+    <th>Outbound Messages</th>
+  </tr>
+  <tr>
+    <td align="middle">
+Search:<input id="searchInList" type="text" size="45"/>
+    </td>
+    <td align="middle">
+Search:<input id="searchOutList" type="text" size="45"/>
+    </td>
+
+  </tr>
+  <tr>
+    <td valign="top">
+{% if inSMS_list %}
+    <ul id="inList">
+        {% for inSMS in inSMS_list %}
+                <li>{{inSMS.sender}}({{inSMS.first_name}} {{inSMS.last_name}}) [{{inSMS.timestamp}}]: <br/><p>{{inSMS.messageBody}} </p></li>
+        {% endfor %}
+     </ul>
+ {% else %}
+ <p>No inbound SMS are available.</p>
+ {% endif %}
+</td>
+<td valign="top">
+{% if outSMS_list %}
+    <ul id="outList">
+        {% for outSMS in outSMS_list %}
+                <li>{{outSMS.receiver}}({{outSMS.first_name}} {{outSMS.last_name}}) [{{outSMS.timestamp}}]: <br/><p>{{outSMS.messageBody}} </p></li>
+        {% endfor %}
+     </ul>
+ {% else %}
+ <p>No outbound SMS are available.</p>
+ {% endif %}
+</td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.defaulttags import register
 
 from django.http import HttpResponse, JsonResponse
-from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardNumber, SMSTemplate
+from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardSMS, ForwardNumber, SMSTemplate
 from payment.models import Order, OrderTherapist
 from services.models import Service
 from referral.models import CustomerReferralCode, CustomerReferralHistory
@@ -403,8 +403,8 @@ def sendSMS(nums, message_body):
             staff = Staff.objects.get(phone_number=n)
         except:
             pass
-        o = OutSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        o.save()
+        f = ForwardSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        f.save()
         time.sleep(1)
 
     return r
@@ -413,6 +413,7 @@ def receiveSMS(request):
     msisdn = request.GET.get('msisdn')
     message_body = request.GET.get('text')
     time_stamp = request.GET.get('message-timestamp')
+    messageId = request.GET.get('messageId')
 
     if (time_stamp is None or msisdn is None or message_body is None):
         return HttpResponse("***Error request")
@@ -423,7 +424,7 @@ def receiveSMS(request):
         staff = Staff.objects.get(phone_number=msisdn)
     except:
         pass
-    i = InSMS(staff=staff, sender=msisdn, messageBody=message_body, timestamp=time_stamp)
+    i = InSMS(staff=staff, messageId=messageId, sender=msisdn, messageBody=message_body, timestamp=time_stamp)
     i.save()
 
     message_body += "[sent by " + msisdn + " at " + time_stamp + "]"
@@ -462,41 +463,86 @@ def utc_to_local(t):
 
 @user_passes_test(lambda u: u.is_superuser)
 def logs(request):
+    '''
     cursor = connection.cursor()
-    cursor.execute("select manager_insms.sender, manager_insms.timestamp," \
+    cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_insms.messageBody from manager_insms left join manager_staff" \
         " on manager_insms.sender = manager_staff.phone_number ORDER BY manager_insms.id DESC")
     inSMS_list = dictfetchall(cursor)
 
-    cursor.execute("select manager_outsms.receiver, manager_outsms.timestamp," \
+    cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_outsms.messageBody from manager_outsms left join manager_staff" \
         " on manager_outsms.receiver = manager_staff.phone_number ORDER BY manager_outsms.id DESC")
 
     outSMS_list = dictfetchall(cursor)
     context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list}
-    return render(request, 'manager/logs.html', context)
+    '''
+    return render(request, 'manager/logs.html')
 
 @user_passes_test(lambda u: u.is_superuser)
-def getInLogs(request):
+def forwardLogs(request):
+    forwardSMS_list = ForwardSMS.objects.all().order_by('-timestamp');
+    context = {'forwardSMS_list': forwardSMS_list}
+    return render(request, 'manager/forwardLogs.html', context)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getForwardLogs(request):
     index = request.GET.get('index')
     cursor = connection.cursor()
-    cursor.execute("select manager_insms.sender, manager_insms.timestamp," \
+    cursor.execute("select manager_forwardsms.id, manager_forwardsms.receiver, manager_forwardsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
-        " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > " + index + " ORDER BY manager_insms.id DESC")
+        " manager_forwardsms.messageBody from manager_forwardsms left join manager_staff" \
+        " on manager_forwardsms.receiver = manager_staff.phone_number where manager_forwardsms.id > " + index + " ORDER BY manager_forwardsms.id ASC")
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
 @user_passes_test(lambda u: u.is_superuser)
-def getOutLogs(request):
-    index = request.GET.get('index')
+def getOldInLogs(request):
+    oldTimestamp = request.POST.get('oldTimestamp')
+    newTimestamp = request.POST.get('newTimestamp')
     cursor = connection.cursor()
-    cursor.execute("select manager_outsms.receiver, manager_outsms.timestamp," \
+    cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_insms.messageBody from manager_insms left join manager_staff" \
+        " on manager_insms.sender = manager_staff.phone_number where timestamp <= \"" + oldTimestamp + "\" and timestamp > \"" + newTimestamp + "\" ORDER BY manager_insms.id DESC")
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getNewInLogs(request):
+    index = request.POST.get('index')
+    timestamp = request.POST.get('timestamp')
+    cursor = connection.cursor()
+    cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_insms.messageBody from manager_insms left join manager_staff" \
+        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > " + index + " and timestamp > \"" + timestamp + "\" ORDER BY manager_insms.id DESC")
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getOldOutLogs(request):
+    oldTimestamp = request.POST.get('oldTimestamp')
+    newTimestamp = request.POST.get('newTimestamp')
+    cursor = connection.cursor()
+    cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_outsms.messageBody from manager_outsms left join manager_staff" \
-        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.id > " + index + " ORDER BY manager_outsms.id DESC")
+        " on manager_outsms.receiver = manager_staff.phone_number where timestamp <= \"" + oldTimestamp + "\" and timestamp > \"" + newTimestamp + "\" ORDER BY manager_outsms.id DESC")
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getNewOutLogs(request):
+    index = request.POST.get('index')
+    timestamp = request.POST.get('timestamp')
+    cursor = connection.cursor()
+    cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
+        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.id > " + index + " and timestamp > \"" + timestamp + "\" ORDER BY manager_outsms.id DESC")
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 

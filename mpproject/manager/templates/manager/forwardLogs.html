@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+var curForwardIndex = {{ forwardSMS_list.0.id }};
+
+(function forwardWorker() {
+  $.ajax({
+    url: '{% url 'getForwardLogs' %}', 
+    data: {index: curForwardIndex},
+    success: function(data) {
+        appendForwardSMS(data);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(forwardWorker, 5000);
+    }
+  });
+})();
+
+function appendForwardSMS(results) {
+    //var results = JSON.parse(data);
+    var mList = document.getElementById('forwardList');
+    if (results.length > 0) {
+        for (i = 0; i < results.length; i++) {
+            addToList(mList, results[i].receiver, results[i].first_name,
+                results[i].last_name, results[i].timestamp, results[i].messageBody);
+        }
+        curForwardIndex = results[results.length - 1].id;
+    }
+}
+
+function addToList(list, sender, first_name, last_name, timestamp, message_body) {
+    var entry = document.createElement('li');
+    entry.appendChild(document.createTextNode(sender + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
+    var br = document.createElement("br");
+    entry.appendChild(br);
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(message_body));
+    entry.appendChild(p);
+    var theFirstChild = list.firstChild;
+    list.insertBefore(entry, theFirstChild);
+}
+$(window).load(function(){
+$('#searchForwardList').keyup(function() {
+    filterInList(this); 
+});
+
+function filterInList(element) {
+    var value = $(element).val();
+    $("#forwardList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+});
+</script>
+
+</head>
+<body>
+
+<table style="width:100%">
+
+  <col width="50%">
+  <col width="50%">
+  <tr>
+    <td align="middle">
+Search:<input id="searchForwardList" type="text" size="45"/>
+    </td>
+
+  </tr>
+  <tr>
+    <td valign="top">
+{% if forwardSMS_list %}
+    <ul id="forwardList">
+        {% for forwardSMS in forwardSMS_list %}
+                <li>{{forwardSMS.sender}}({{forwardSMS.staff.first_name}} {{forwardSMS.staff.last_name}}) [{{forwardSMS.timestamp}}]: <br/><p>{{forwardSMS.messageBody}} </p></li>
+        {% endfor %}
+     </ul>
+ {% else %}
+ <p>No forward SMS are available.</p>
+ {% endif %}
+</td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -66,6 +66,12 @@ class OutSMS(models.Model):
     messageBody = models.CharField(max_length = 1000)
     timestamp = models.CharField(max_length = 200)
 
+class ForwardSMS(models.Model):
+    staff = models.ForeignKey(Staff, null=True)
+    receiver = models.CharField(max_length = 200)
+    messageBody = models.CharField(max_length = 1000)
+    timestamp = models.CharField(max_length = 200)
+
 class ForwardNumber(models.Model):
     number = models.ForeignKey(Staff)
 

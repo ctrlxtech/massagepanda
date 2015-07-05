@@ -1,18 +1,87 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head>
-
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
 <script>
-var curInIndex = {{inSMS_list|length}};
-var curOutIndex = {{outSMS_list|length}};
+var curInIndex = 0; 
+var curOutIndex = 0;
+var dateToGet = new Date();
+dateToGet.setDate(dateToGet.getDate() - 2);
+var timestampToGet = getFormattedDate(dateToGet);
+
+function getFormattedDate(dateObj) {
+    var dd = dateObj.getDate();
+    var mm = dateObj.getMonth()+1; //January is 0!
+
+    var yyyy = dateObj.getFullYear();
+    dd = addZero(dd);
+    mm = addZero(mm);
+    var HH = dateObj.getHours();
+    HH = addZero(HH);
+    var MM = dateObj.getMinutes();
+    MM = addZero(MM);
+    var SS = dateObj.getSeconds();
+    SS = addZero(SS);
+    return yyyy+"-"+mm+"-"+dd+" "+HH+":"+MM+":"+SS;
+}
+
+function addZero(value) {
+    if (value < 10){
+        value = "0" + value;
+    }
+    return value;
+}
+
+function showMore() {
+    oldDate = new Date(dateToGet);
+    dateToGet.setDate(dateToGet.getDate() - 2);
+    getOldLogs('{% url 'getOldOutLogs' %}', getFormattedDate(dateToGet), getFormattedDate(oldDate), true);
+    getOldLogs('{% url 'getOldInLogs' %}', getFormattedDate(dateToGet), getFormattedDate(oldDate), false);
+    return false;
+}
+
+function getOldLogs(url, newTimestamp, oldTimestamp, isOut) {
+  var csrfToken = $.cookie('csrftoken');
+  $.ajax({
+    method: 'POST',
+    url: url,
+    data: {
+        newTimestamp: newTimestamp,
+        oldTimestamp: oldTimestamp
+    },
+    beforeSend: function(request)
+    {
+        request.setRequestHeader("X-CSRFToken", csrfToken);
+    },
+    success: function(data) {
+        addSMS(data, isOut, false);
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+    }
+  });
+}
 
 (function outWorker() {
+  console.log("outIndex: " + curOutIndex);
+  console.log("timestamp: " + timestampToGet);
+  var csrfToken = $.cookie('csrftoken');
   $.ajax({
-    url: '{% url 'getOutLogs' %}', 
-    data: {index: curOutIndex},
+    method: 'POST',
+    url: '{% url 'getNewOutLogs' %}', 
+    data: {
+        index: curOutIndex,
+        timestamp: timestampToGet
+    },
+    beforeSend: function(request)
+    {
+        request.setRequestHeader("X-CSRFToken", csrfToken);
+    },
     success: function(data) {
-        appendOutSMS(data);
+        addSMS(data, true, true);
     },
     complete: function() {
       // Schedule the next request when the current one's complete
@@ -22,11 +91,22 @@ var curOutIndex = {{outSMS_list|length}};
 })();
 
 (function inWorker() {
+  console.log("inIndex: " + curInIndex);
+  console.log("timestamp: " + timestampToGet);
+  var csrfToken = $.cookie('csrftoken');
   $.ajax({
-    url: '{% url 'getInLogs' %}', 
-    data: {index: curInIndex},
+    method: 'POST',
+    url: '{% url 'getNewInLogs' %}', 
+    data: {
+        index: curInIndex,
+        timestamp: timestampToGet
+    },
+    beforeSend: function(request)
+    {
+        request.setRequestHeader("X-CSRFToken", csrfToken);
+    },
     success: function(data) {
-        appendInSMS(data);
+        addSMS(data, false, true);
     },
     complete: function() {
       // Schedule the next request when the current one's complete
@@ -35,36 +115,52 @@ var curOutIndex = {{outSMS_list|length}};
   });
 })();
 
-function appendOutSMS(data) {
-    var results = data;
-    //var results = JSON.parse(data);
-    var mList = document.getElementById('outList');
+function addSMS(results, isOutSMS, needUpdateIndex) {
+    var mList = document.getElementById('SMSList');
+    
+    var index = 0;
+    var children = mList.children;
     for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
-      curOutIndex += 1;
+        console.log(results[i].first_name);
+        while (children[index].querySelector('input[name="timestamp"]').value > results[i].timestamp) {
+            index++;
+        }
+        var position = children[index];
+        if (isOutSMS) {
+            addToList(mList, position, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "rightLi");
+        } else {
+            addToList(mList, position, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "");
+        }
+    }
+
+    if (needUpdateIndex && results.length > 0) {
+        if (isOutSMS) {
+            curOutIndex = results[0].id;
+        } else {
+            curInIndex = results[0].id;
+        }
     }
 }
 
-function appendInSMS(data) {
-    var results = data;
-    var mList = document.getElementById('inList');
-    for (i = 0; i < results.length; i++) {
-      addToList(mList, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody);
-      curInIndex += 1;
-    }
-}
-
-function addToList(list, sender, first_name, last_name, timestamp, message_body) {
+function addToList(list, position, phone_number, first_name, last_name, timestamp, message_body, class_name) {
     var entry = document.createElement('li');
-    entry.appendChild(document.createTextNode(sender + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
+    entry.className = class_name;
+    entry.appendChild(document.createTextNode(phone_number + "(" + first_name + " " + last_name + ") [" + timestamp + "]:"));
     var br = document.createElement("br");
     entry.appendChild(br);
     var p = document.createElement('p');
     p.appendChild(document.createTextNode(message_body));
     entry.appendChild(p);
-    var theFirstChild = list.firstChild;
-    list.insertBefore(entry, theFirstChild);
+
+    var hiddenTimestamp = document.createElement("input");
+    hiddenTimestamp.setAttribute("type", "hidden");
+    hiddenTimestamp.setAttribute("name", "timestamp");
+    hiddenTimestamp.setAttribute("value", timestamp);
+    entry.appendChild(hiddenTimestamp);
+    
+    list.insertBefore(entry, position);
 }
+
 $(window).load(function(){
 $('#searchInList').keyup(function() {
     filterInList(this); 
@@ -72,7 +168,7 @@ $('#searchInList').keyup(function() {
 
 function filterInList(element) {
     var value = $(element).val();
-    $("#inList > li").each(function () {
+    $("#SMSList > li").each(function () {
         if ($(this).text().indexOf(value) > -1) {
             $(this).show();
         } else {
@@ -98,51 +194,39 @@ function filterOutList(element) {
 
 });
 </script>
-
+<style>
+.rightLi {
+    text-align: right
+}
+</style>
 </head>
 <body>
+<a href="{% url 'forwardLogs' %}">forward logs</a>
+
 <table style="width:100%">
 
   <col width="50%">
   <col width="50%">
   <tr>
-    <th>Inbound Messages</th>
-    <th>Outbound Messages</th>
-  </tr>
-  <tr>
     <td align="middle">
 Search:<input id="searchInList" type="text" size="45"/>
-    </td>
-    <td align="middle">
-Search:<input id="searchOutList" type="text" size="45"/>
     </td>
 
   </tr>
   <tr>
     <td valign="top">
-{% if inSMS_list %}
-    <ul id="inList">
-        {% for inSMS in inSMS_list %}
-                <li>{{inSMS.sender}}({{inSMS.first_name}} {{inSMS.last_name}}) [{{inSMS.timestamp}}]: <br/><p>{{inSMS.messageBody}} </p></li>
-        {% endfor %}
-     </ul>
- {% else %}
- <p>No inbound SMS are available.</p>
- {% endif %}
-</td>
-<td valign="top">
-{% if outSMS_list %}
-    <ul id="outList">
-        {% for outSMS in outSMS_list %}
-                <li>{{outSMS.receiver}}({{outSMS.first_name}} {{outSMS.last_name}}) [{{outSMS.timestamp}}]: <br/><p>{{outSMS.messageBody}} </p></li>
-        {% endfor %}
-     </ul>
- {% else %}
- <p>No outbound SMS are available.</p>
- {% endif %}
-</td>
+    <ul id="SMSList">
+    <!-- dummy tail --!>
+    <li>
+    <input type="hidden" name="timestamp" value="1015-07-03 23:05:57">
+    </li>
+    </ul>
+    </td>
   </tr>
 </table>
 
+<div style="text-align:center">
+<a href="#" style="font-size: 20px;" id="showMore" onclick="return showMore();">show more</a>
+</div>
 </body>
 </html>

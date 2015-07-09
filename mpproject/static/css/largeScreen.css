@@ -10,7 +10,7 @@
  *   begin navigation
  */
 .mp-pageHeader.mp-IconDiv {
-  width: 180px;
+  width: 200px;
   height: 60px;
   display: inline;
   float: left;
@@ -19,7 +19,7 @@
 .mp-navigation {
   position: relative;
   top: 20px;
-  left: 15%;
+  left: 10%;
   display: inline;
   overflow: hidden;
 }
@@ -196,6 +196,12 @@
 	 height:auto;
     width: 100%;
 }
+.mp-massageDetails-input.mp-massageDetails-needTable input {
+  display: inline;
+  position: relative;
+  width: 60px;
+  margin-left:10px;
+}
 /**end massage details page**/
 /**begin checkout page**/
 #payment-form .mp-checkoutSection{
@@ -204,7 +210,7 @@
 }
 .mp-checkoutSection.mp-checkoutSection-left {
   width: 80%;
-  height: 680px;
+   height: 730px;
   float: right;
 }
 .mp-checkoutSection.mp-checkoutSection-right {
@@ -217,6 +223,28 @@ width: 80%;
 	margin-bottom:20px
 }
 /**end checkout page**/
+/**start contactus**/
+.mp-contactUsForm{
+width: 36%;
+margin: 20px auto;
+text-align: center;
+	
+}
+.mp-contactUsSubmit{
+min-width: 200px;
+margin: 10px auto;
+height: 50px;
+width: 100%;
+}
+.mp-contactUsSubmit .btn{
+width: 230px;
+margin: 0px auto;
+text-align: center;
+height: 50px;
+font-size: 18px;
+}
+/** end contactus **/
 
 }
+
 

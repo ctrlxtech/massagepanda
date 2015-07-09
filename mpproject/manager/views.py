@@ -173,7 +173,7 @@ def placeOrder(request, data):
 
     serviceId = data.get('service_id')
     if serviceId is None or not serviceId:
-        context = {'status': 'failure', 'error': 'service[' +  serviceId + '] is not available'}
+        context = {'status': 'failure', 'error': 'serviceId is not available'}
         return JsonResponse(context)
     mamount = Service.objects.get(pk=serviceId).service_fee * 100
     service_datetime_string = data.get('serviceDate')
@@ -221,8 +221,7 @@ def placeOrder(request, data):
         a.save()
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
     nums = [phone]
-    sendSMS(nums, message_body)
-
+    sendSMS(nums, message_body, False)
 
     context = {'status': 'success'}
     return JsonResponse(context)
@@ -380,7 +379,7 @@ def send(request):
     if number is not None and number:
         nums.append(number)
     message_body = request.POST.get('message')
-    r = sendSMS(nums, message_body)
+    r = sendSMS(nums, message_body, False)
     return HttpResponse(r)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -388,10 +387,10 @@ def sendWithNum(request):
     number = request.POST.get('num')
     message_body = request.POST.get('message')
     nums = [number]
-    r = sendSMS(nums, message_body)
+    r = sendSMS(nums, message_body, False)
     return HttpResponse(r)
 
-def sendSMS(nums, message_body):
+def sendSMS(nums, message_body, isForward):
     api_key = settings.NEXMO_KEY
     api_secret = settings.NEXMO_SECRET
     r = []
@@ -403,8 +402,13 @@ def sendSMS(nums, message_body):
             staff = Staff.objects.get(phone_number=n)
         except:
             pass
-        f = ForwardSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        f.save()
+        if isForward:
+            f = ForwardSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            f.save()
+        else:
+            o = OutSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            o.save()
+
         time.sleep(1)
 
     return r
@@ -432,7 +436,7 @@ def receiveSMS(request):
     nums = []
     for num in for_numbers:
         nums.append(Staff.objects.get(pk=num.number_id).phone_number)
-    sendSMS(nums, message_body);
+    sendSMS(nums, message_body, True);
 
     return HttpResponse()
 
@@ -573,24 +577,32 @@ def login_view(request):
         return HttpResponse("You have logged in, " + request.user.username)
     return render(request, 'manager/login.html')
 
-def welcome(request):
+def loginFromJson(request):
+    data = json.loads(request.body)
+    return userLogin(request, data)
+ 
+def userLogin(request, data):
+    context = {'status': 'failure'}
     userID = request.POST.get('userID')
     fbToken = request.POST.get('fbToken')
     if fbToken and userID:
         request.session['login'] = True
         return HttpResponse("token: " + fbToken + " userID: " + userID)
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    username = data.get('username')
+    password = data.get('password')
     user = authenticate(username=username, password=password)
     if user is not None:
         if user.is_active:
             login(request, user)
             request.session['login'] = True
-            return HttpResponse("Nice to see you back, " + user.first_name)
+            context['status'] = 'success'
+            context['firstName'] = user.first_name
         else:
-            return HttpResponse("user is inactive!")
+            context['error'] = "user is inactive!"
     else:
-        return HttpResponse("can't found user")
+        context['error'] = "can't found user"
+    return JsonResponse(context)
+
 
 def logout_view(request):
     logout(request)
@@ -607,13 +619,13 @@ def tregister_view(request):
     return render(request, 'manager/tregister.html')
 
 @transaction.atomic
-def createCustomer(request):
-    email = request.POST.get('email')
-    phone = request.POST.get('phone')
-    password = request.POST.get('password')
-    first_name = request.POST.get('first_name')
-    last_name = request.POST.get('last_name')
-    gender = request.POST.get('gender')
+def createCustomer(data):
+    email = data.get('email')
+    phone = data.get('phone')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    gender = data.get('gender')
     user = User.objects.create_user(email, email, password,
         first_name=first_name, last_name=last_name)
     full_name = first_name + " " + last_name

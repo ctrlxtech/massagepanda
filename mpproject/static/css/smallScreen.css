@@ -1,6 +1,7 @@
 /**
  * @media query for phone
- */ @media screen and (max-width: 1024px) {
+ */ 
+@media screen and (max-width: 1024px) {
 	
 #mp-mainContent{
 	padding: 30px 10px !important;
@@ -22,14 +23,57 @@
     background: -moz-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
     background: linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
 }
+
 #mp-navbar{
 	position : fixed !important;
+}
+
+ul.mp-sideBar-socialLink{
+ margin: 0;
+  padding: 20px 0;
+  list-style-type: none;
+}
+
+ul.mp-sideBar-socialLink li{
+display: inline;
+}
+
+.mp-sideBar-socialLink .mp-socialLink-facebook{
+	  background: url(../image/footer_socialIcons.png) no-repeat 0px -45px;
+}
+.mp-sideBar-socialLink .mp-socialLink-facebook:hover {
+  background: url(../image/footer_socialIcons.png) no-repeat 0px -24px;
+}
+.mp-sideBar-socialLink .mp-socialLink-twitter{
+	  background: url(../image/footer_socialIcons.png) no-repeat -71px -45px;
+}
+.mp-sideBar-socialLink .mp-socialLink-twitter:hover {
+  background: url(../image/footer_socialIcons.png) no-repeat -71px -24px;
+}
+.mp-sideBar-socialLink .mp-socialLink-plus{
+	background: url(../image/footer_socialIcons.png) no-repeat -322px -45px;
+}
+.mp-sideBar-socialLink .mp-socialLink-plus:hover {
+  background: url(../image/footer_socialIcons.png) no-repeat -322px -24px;
+}
+.mp-sideBar-socialLink .mp-socialLink-pinterest{
+	background: url(../image/footer_socialIcons.png) no-repeat -214px -45px;
+}
+.mp-sideBar-socialLink .mp-socialLink-pinterest:hover {
+  background: url(../image/footer_socialIcons.png) no-repeat -214px -24px;
+}
+.mp-sideBar-socialLink .mp-socialLink-mail{
+	 background: url(../image/footer_socialIcons.png) no-repeat -353px -45px;
+}
+.mp-sideBar-socialLink  .mp-socialLink-mail:hover {
+  background: url(../image/footer_socialIcons.png) no-repeat -353px -24px;
 }
 /*
 #mp-navbar.cbp-spmenu-push-toright{
 	position : relative !important;
 }
 */
+
 .mp-navigation-mobileIcon {
   position: relative;
   z-index: 100;
@@ -38,11 +82,20 @@ display: inline;
   margin-top: 10px;
   border: 1px solid rgb(240, 240, 240);
   border-radius: 5px;
-  padding: 8px 12px;
+    padding: 6px 10px;
   padding-bottom: 3px;
   box-shadow: 0px 0px 3px rgb(166, 166, 166) inset;
   background-color: rgba(232, 232, 232, 0.3);
 }
+
+.mp-navigation-mobileSetting {
+z-index: 10;
+  display: inline;
+  position: absolute;
+  left: 90%;
+  top: 20px;
+}
+
 span.glyphicon.glyphicon-menu-hamburger {
   -webkit-transform: scale(1.2,1.2);
   -moz-transform: scale(1.2,1.2);
@@ -52,6 +105,22 @@ span.glyphicon.glyphicon-menu-hamburger {
     opacity: 0.8;
 }
 
+span.glyphicon.glyphicon-cog {
+  -webkit-transform: scale(1.5,1.5);
+  -moz-transform: scale(1.5,1.5);
+  -ms-transform: scale(1.5,1.5);
+  -o-transform: scale(1.5,1.5);
+  transform: scale(1.5,1.5);
+    opacity: 0.8;
+}
+nav#mp-rightSideNav {
+  width: 240px;
+  margin-top: 62px;
+  background: -webkit-linear-gradient(to right, rgb(228, 228, 228), rgb(245, 245, 245)) repeat scroll 0% 0% !important;
+  background: -moz-linear-gradient(to right, rgb(228, 228, 228), rgb(245, 245, 245)) repeat scroll 0% 0% !important;
+  background: linear-gradient(to right, rgb(228, 228, 228), rgb(245, 245, 245)) repeat scroll 0% 0% !important;
+}
+
 #mp-navbar.cbp-spmenu-push-toright .mp-pageHeader.mp-IconDiv {
   position: absolute;
   left: 45%;
@@ -59,6 +128,7 @@ span.glyphicon.glyphicon-menu-hamburger {
   width: 75%;
   z-index: 10;
 }
+
 
 #mp-navbar.cbp-spmenu-push-toright .mp-pageHeader.mp-IconDiv .mp-pandaIcon{
   position: relative;
@@ -73,8 +143,10 @@ cursor: pointer;
 
 }
 #mp-navbar .container{
-	text-align: center;
-	height:60px;
+  text-align: center;
+  height: 60px;
+  display: block;
+  width: 100%;
 }
 /** end navigation**/
 /**begin home page**/
@@ -174,7 +246,11 @@ overflow: hidden;
 /** begin massage details page **/
 #panda_massageDetails {
     margin-top: 20px;
+}
+#panda_gift {
+    margin-top: 20px;
 }	
+	
 
 #panda_massageDetails  hr{
 	display:none;
@@ -184,7 +260,7 @@ overflow: hidden;
 	width:100%;
 }
 
-.mp-massageDetails-panel  .mp-massageDetails-title {
+.mp-massageDetails-panel .mp-massageDetails-title, .mp-massageDetails-panel .mp-massageDetails-titlePrice {
  color: #333;
 background-color: #F5F5F5;
 border-color: #DDD;
@@ -219,6 +295,14 @@ padding: 10px;
     margin: 0 auto;
 }
 
+.mp-massageDetails-input.mp-massageDetails-needTable input {
+  display: inline;
+  position: relative;
+  width: 30px;
+  margin-left: 10px;
+
+}
+
 /**end massage details page**/
 /**begin checkout page**/
 #payment-form .mp-checkoutSection{
@@ -227,15 +311,17 @@ padding: 10px;
 	margin: 0 auto; 
 }
 
+.mp-checkout.mp-checkoutShort .btn {
+    width: 100%;
+}
+
 .mp-checkout-mobileTab{
 	margin-top:50px;
 }
 .mp-paymentForm{
 	top: 0px !important;
 }
-.form-group {
-    min-width: 320px !important;
-}
+
 
 #panda_helpCenter {
   margin: 10px auto;
@@ -260,7 +346,7 @@ padding: 10px;
 .cbp-spmenu {
 	position: fixed;
 }
-.cbp-spmenu a {
+.cbp-spmenu > a {
     font-family: "Oxygen",sans-serif;
     font-size: 1.2em;
     line-height: 26px;
@@ -283,7 +369,7 @@ padding: 10px;
 	top: 0;
 	z-index: 1000;
 }
-.cbp-spmenu-vertical a {
+.cbp-spmenu-vertical> a {
 	border-bottom: 1px solid #969696;
 	padding: 1em;
 }
@@ -319,6 +405,30 @@ padding: 10px;
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+}
+/*start contactUs */
+.mp-contactUsForm{
+	  width: 98%;
+  margin: 20px auto;
+  text-align: center;
+  margin-top: 50px;
+}
+.form-group.mp-mobileFormGroup{
+	  width: 90%;
+}
+
+.mp-contactUsSubmit{
+min-width: 200px;
+margin: 10px auto;
+height: 50px;
+width: 100%;
+}
+.mp-contactUsSubmit .btn{
+width: 230px;
+margin: 0px auto;
+text-align: center;
+height: 50px;
+font-size: 18px;
 }
 
 

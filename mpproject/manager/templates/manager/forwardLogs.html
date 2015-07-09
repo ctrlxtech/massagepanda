@@ -80,7 +80,7 @@ Search:<input id="searchForwardList" type="text" size="45"/>
 {% if forwardSMS_list %}
     <ul id="forwardList">
         {% for forwardSMS in forwardSMS_list %}
-                <li>{{forwardSMS.sender}}({{forwardSMS.staff.first_name}} {{forwardSMS.staff.last_name}}) [{{forwardSMS.timestamp}}]: <br/><p>{{forwardSMS.messageBody}} </p></li>
+                <li>{{forwardSMS.receiver}}({{forwardSMS.staff.first_name}} {{forwardSMS.staff.last_name}}) [{{forwardSMS.timestamp}}]: <br/><p>{{forwardSMS.messageBody}} </p></li>
         {% endfor %}
      </ul>
  {% else %}

@@ -1,0 +1,16 @@
+<div id="panda_login" class="mp-pageContent container-fluid" data-mpController="pandaLoginPage" style="display:none">
+    <div class="login-card">
+        <h1>Log-in</h1>
+        <br/>
+        <form class="mp-loginForm">
+        	<div id="mp-loginForm-panelAlert" class="alert alert-danger" role="alert" style="display:none">Username or Password is wrong</div>
+            <input type="text" name="loginUser" placeholder="Username" data-serverField="true" required /><input type="password" name="loginPassword" placeholder="Password" data-serverField="true" required /><input type="submit" name="loginSubmit" class="login login-submit" value="login" />
+        </form>
+        <div class="login-help">
+        	  <a href="" class="mp-pageHeader" data-mpPageId="panda_register" data-mpController="pandaRegisterPage">Register</a>
+            • <a href="#">Forgot Password</a>
+        </div>
+    </div>
+	 <div class="mp-loginSuccess mp-pageHeader" data-mpPageId="panda_home" data-pageStateType="replace" style="display:none">
+    </div>
+</div>

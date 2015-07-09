@@ -1,7 +1,92 @@
-<div id="panda_gift" class="mp-pageContent container-fluid" style="display:none">
-    <div class="container panda-home-partOne">
-        <h1>Massage, At Your Door</h1>     
-		
+<div id="panda_gift" class="mp-pageContent container-fluid" data-mpController="massageGiftPage" style="display:none">
+    <div class="panda_massageDetails-partOne">
+        <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenHide">
+            <div class="mp-breadcrumb">
+                <ol class="breadcrumb">
+                    <li>
+                        Giftcard
+                    </li>
+                    <li class="active mp-currentDetailsPage">
+                        MassagePanda e-Gift Card
+                    </li>
+                </ol>
+            </div>
+            <div class="mp-left mp-massageDetails">
+                <img class="mp-massageDetails-image" src="./image/giveAGift.jpg" alt="giveAGift"/>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
+            <div class="mp-massageDetails-panel mp-right">
+                <div class="mp-massageDetails-title">
+                    MassagePanda e-Gift Card 
+                </div>
+                <div class="mp-massageDetails-titlePrice">
+                </div>
+                <hr class="mp-fullwidth"/>
+                <p class="mp-massageDetails-description">
+                    Give the gift of MassagePanda to your loved ones this holiday season.
+                </p>
+                <p class="mp-massageDetails-description">
+                    Please note the Recipient Name, Recipient's Email Address, and Message to Recipient in Note to Seller section before you complete the order.
+                </p>
+                <p class="mp-massageDetails-description">
+                    The available massage types are Swedish Massage and Deep Tissue Massage.
+                </p>
+                <div class="mp-massageDetails-form">
+                    <input type="hidden" name="detailsFeeType" value="7"/>
+					<input type="hidden" name="detailsAmount" value="" />
+                    <div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert" style="display:none">
+                        Please select <span class="alertInfo"></span>
+                    </div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input type="hidden" name="massageDetailsType" value=""/>
+                        <button type="button" class="btn btn-default dropdown-toggle mp-massageTypeSelection" data-toggle="dropdown" aria-expanded="false">
+                            Massage Type<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                        </button>
+                        <ul class="dropdown-menu mp-massageDetailsSelectionList" role="menu">
+                            <li class="mp-item">
+                                <a>Individual</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li class="mp-item">
+                                <a>Couple</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input type="hidden" name="massageDetailsLength" value=""/>
+                        <button type="button" class="btn btn-default dropdown-toggle mp-massageLengthSelection" data-toggle="dropdown" aria-expanded="false">
+                            Massage Length<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                        </button>
+                        <ul class="dropdown-menu mp-massageDetailsSelectionList" role="menu">
+                            <li class="mp-item">
+                                <a>1hour</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li class="mp-item">
+                                <a>1.5hour</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-group mp-massageDetails-input">
+                        <input type="number" class="mp-massageDetails-spinner" placeholder="Select a Quantity" min="1" name="quantity" />
+                    </div>
+					<!--
+                    <div class="btn-group mp-massageDetails-input">
+                        <input placeholder="Please Enter Coupon" name="coupon" />
+                    </div>
+					-->
+                    <div class="mp-checkout mp-pageHeader" data-mpPageId="panda_checkout" data-mpController="checkoutPage">
+                        <div class="mp-pageId" style="display:none">panda_gift</div>
+                        <button type="button" class="btn btn-success">
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+				<div style="clear:both;"></div>
+            </div>
+        </div>
     </div>
-	
 </div>

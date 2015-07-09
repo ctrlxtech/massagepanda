@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 {% load staticfiles %}
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -10,44 +9,59 @@
         <title>Panda</title>
         <link rel="stylesheet" href="{% static "./css/bootstrap.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/jquery-ui.min.css" %}" type="text/css">
+		<link rel="stylesheet" href="{% static "./css/hover.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/panda.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/paiPanda.css" %}" type="text/css">
+		<link rel="stylesheet" href="{% static "./css/largeScreen.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/smallScreen.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/largeScreen.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/hover.css" %}" type="text/css">
         <script type="text/javascript" src="{% static "./js/jquery.js" %}">
-        </script>
-        <script type="text/javascript" src="{% static "./js/bootstrap.js" %}">
         </script>
         <script type="text/javascript" src="{% static "./js/jquery.cookie.js" %}">
         </script>
-        <script type="text/javascript" src="{% static "./js/modernizr.custom.js" %}">
+        <script type="text/javascript" src="{% static "./js/bootstrap.js" %}">
         </script>
         <script type="text/javascript" src="{% static "./js/jquery.history.js" %}">
         </script>
-        <script type="text/javascript" src="{% static "./js/jquery-ui.min.js" %}">
-        </script>
-        <script type="text/javascript" src="{% static "./js/validator.js" %}">
+		<script type="text/javascript" src="{% static "./js/pandaUtil.js" %}">
         </script>
         <script type="text/javascript" src="https://js.stripe.com/v2/">
         </script>
         <script type="text/javascript" src="{% static "./js/panda.js" %}">
         </script>
+
     </head>
     <body>
+{% csrf_token %}
+
         <nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide">
             <a href="" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
-            <a href="" class="mp-pageHeader" data-mpPageId="panda_gift">Give a Gift</a>
-            <a href="#" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">Help Center</a>
-            <a href="#" class="mp-pageHeader" data-mpPageId="panda_about">About Panda</a>
+           <a href="" class="mp-pageHeader" data-mpController="massageGiftPage"  data-mpPageId="panda_gift" >Give a Gift</a>
+            <a href="" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">Help Center</a>
+            <a href="" class="mp-pageHeader" data-mpPageId="panda_about">About Panda</a>
+			<a href="" class="mp-pageHeader" data-mpController="pandaContactUsPage"  data-mpPageId="panda_contactUs">Contact Us</a>
+
+			<ul class="mp-sideBar-socialLink">
+				<li> <a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a> </li>
+                <li> <a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a> </li>   
+                <li> <a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a> </li>   
+				<li> <a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a> </li>	
+				<li> <a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a> </li>				
+			</ul>
         </nav>
+		<nav id="mp-rightSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right mp-largeScreenHide" >
+				<a href="" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
+				<a href="" class="mp-pageHeader mp-mobileLoginTrue mp-mobileLoginName" style="display:none"></a>
+				<a href="" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout" style="display:none">Logout</a>
+		</nav>
         <nav id="mp-navbar" class="navbar navbar-default navbar-fixed-top cbp-spmenu-push">
             <div class="container">
                 <div id="mp-showLeftPush" class="mp-navigation-mobileIcon mp-largeScreenHide">
                     <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                 </div>
                 <div class="mp-pageHeader mp-IconDiv" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">
-                    <img class="mp-pandaIcon" src="{% static "./images/pandaIcon.png" %}"/>
+                    <img class="mp-pandaIcon" src="{% static "./images/pandaNewIcon.png" %}"/>
+                </div>
+				<div id="mp-showRightPush"  class="mp-navigation-mobileSetting mp-largeScreenHide">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </div>
                 <div class="mp-navigation mp-smallScreenHide">
                     <ul>
@@ -58,11 +72,22 @@
                             <a href="" class="mp-pageHeader" data-mpPageId="panda_bookMassage">Book Massage</a>
                         </li>
                         <li>
-                            <a href="" class="mp-pageHeader" data-mpPageId="panda_gift">Give a Gift</a>
+                            <a href="" class="mp-pageHeader" data-mpPageId="panda_gift" data-mpController="massageGiftPage" >Give a Gift</a>
                         </li>
-                        <li>
-                            <a class="mp-pageHeader" data-mpPageId="panda_login" data-mpPageType="popup">Login</a>
+						 <li>
+                            <a href="" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">How It Works</a>
                         </li>
+                        <li class="mp-loginHeader" >
+                            <a href="" class="mp-pageHeader" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
+                        </li>
+						<li role="presentation" class="dropdown" style="display:none">
+                               <a  class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                              	  <span class="caret"></span>
+							   </a>
+                               <ul class="dropdown-menu">
+                               	  <li class="logout"><a href="" class="mp-pageHeader" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout" >Logout</a></li>
+                               </ul>
+                         </li>
                     </ul>
                 </div>
             </div>
@@ -253,6 +278,13 @@
                             <a href="#" class="mp-pageHeader" data-mpPageId="panda_about">About Panda</a>
                         </td>
                         <td>
+                        	<span>
+                        		<a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a>
+                        		<a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a>
+    					<a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a>
+        				<a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a>
+					<a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a>
+            			</span>
                         </td>
                         <td>
                             (855) 68-PANDA 9am-10pm
@@ -260,19 +292,19 @@
                     </tr>
                     <tr>
                         <td>
-                            <a href="{% static "./html/panda_success.html" %}">Contact Us</a>
+                            <a href="#" class="mp-pageHeader" data-mpController="pandaContactUsPage"  data-mpPageId="panda_contactUs">Contact Us</a>
                         </td>
                         <td>
                         </td>
                         <td>
-                           <a href="#" class="mp-pageHeader mp-threewords" data-mpPageId="panda_apply">Apply as Therapist</a>
+                            <a href="#" class="mp-pageHeader mp-threewords" data-mpPageId="panda_apply">Apply as Therapist</a>
                         </td>
                     </tr>
                 </table>
             </div>
             <hr class="mp-smallScreenHide"/>
             <div class="mp-footerDescription">
-                ©2015 MassagePanda. All Rights Reserved. Terms of Use | Privacy Policy. Copyright 2015, Ctrl X, Inc., 39105 Cedar Blvd, Newark, CA 94560.
+                ©2015 MassagePanda. All Rights Reserved. <a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_terms">Terms of Use</a> | <a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_privacy">Privacy Policy</a>. Copyright 2015, Ctrl X, Inc., 39105 Cedar Blvd, Newark, CA 94560.
             </div>
             <div class="mp-footerDescription mp-smallScreenHide">
                 MASSAGEPANDA®, MASSAGE AT YOUR DOOR®, and FIND A PANDA® are trademarks of Ctrl X, Inc. The contents of the MassagePanda web site are 

@@ -28,6 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = (('Kevin Chen', 'yuechen1989@gmail.com'))
+MANAGERS = (('Kevin Chen', 'yuechen1989@gmail.com'))
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False
+}
 
 # Application definition
 
@@ -48,6 +55,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,10 +101,9 @@ WSGI_APPLICATION = 'mpproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
-	'USER': 'root',
-	'PASSWORD': '1234',
-	'HOST': 'localhost'
+        'OPTIONS': {
+            'read_default_file': '/etc/database.cnf',
+        }, 
     }
 }
 
@@ -123,9 +130,12 @@ with open('/etc/nexmo_key.txt') as f:
 with open('/etc/nexmo_secret.txt') as f:
     NEXMO_SECRET = f.read().strip()
 
+SERVER_EMAIL = "support@massagepanda.com"
+
 EMAIL_HOST = "smtp.mandrillapp.com"
 
-EMAIL_HOST_PASSWORD = "XmFb_bOXtF5oKpOowOBbhA"
+with open('/etc/email_host_password.txt') as f:
+    EMAIL_HOST_PASSWORD = f.read().strip()
 
 EMAIL_HOST_USER = "support@massagepanda.com"
 

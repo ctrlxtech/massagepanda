@@ -20,7 +20,8 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e@u1krz3ruxw)pvmh61fryy&tk53vp14@!f$ul8)kgogv6w(66'
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -113,11 +114,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-STRIPE_KEY = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+with open('/etc/stripe_key.txt') as f:
+    STRIPE_KEY = f.read().strip()
 
-NEXMO_KEY = "412847f0"
+with open('/etc/nexmo_key.txt') as f:
+    NEXMO_KEY = f.read().strip()
 
-NEXMO_SECRET = "55f41401"
+with open('/etc/nexmo_secret.txt') as f:
+    NEXMO_SECRET = f.read().strip()
 
 EMAIL_HOST = "smtp.mandrillapp.com"
 

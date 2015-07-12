@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
@@ -20,9 +21,12 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('/etc/secret_key.txt') as f:
-    SECRET_KEY = f.read().strip()
-
+with open('/etc/keys.json') as f:
+    keys = json.load(f)
+if keys is not None:
+    for (n, v) in keys.items():
+        exec('%s=%s' % (n, repr(v)))
+    
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -121,21 +125,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-with open('/etc/stripe_key.txt') as f:
-    STRIPE_KEY = f.read().strip()
-
-with open('/etc/nexmo_key.txt') as f:
-    NEXMO_KEY = f.read().strip()
-
-with open('/etc/nexmo_secret.txt') as f:
-    NEXMO_SECRET = f.read().strip()
-
 SERVER_EMAIL = "support@massagepanda.com"
 
 EMAIL_HOST = "smtp.mandrillapp.com"
-
-with open('/etc/email_host_password.txt') as f:
-    EMAIL_HOST_PASSWORD = f.read().strip()
 
 EMAIL_HOST_USER = "support@massagepanda.com"
 

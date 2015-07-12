@@ -39,34 +39,34 @@ display: inline;
 }
 
 .mp-sideBar-socialLink .mp-socialLink-facebook{
-	  background: url(../image/footer_socialIcons.png) no-repeat 0px -45px;
+	  background: url(../images/footer_socialIcons.png) no-repeat 0px -45px;
 }
 .mp-sideBar-socialLink .mp-socialLink-facebook:hover {
-  background: url(../image/footer_socialIcons.png) no-repeat 0px -24px;
+  background: url(../images/footer_socialIcons.png) no-repeat 0px -24px;
 }
 .mp-sideBar-socialLink .mp-socialLink-twitter{
-	  background: url(../image/footer_socialIcons.png) no-repeat -71px -45px;
+	  background: url(../images/footer_socialIcons.png) no-repeat -71px -45px;
 }
 .mp-sideBar-socialLink .mp-socialLink-twitter:hover {
-  background: url(../image/footer_socialIcons.png) no-repeat -71px -24px;
+  background: url(../images/footer_socialIcons.png) no-repeat -71px -24px;
 }
 .mp-sideBar-socialLink .mp-socialLink-plus{
-	background: url(../image/footer_socialIcons.png) no-repeat -322px -45px;
+	background: url(../images/footer_socialIcons.png) no-repeat -322px -45px;
 }
 .mp-sideBar-socialLink .mp-socialLink-plus:hover {
-  background: url(../image/footer_socialIcons.png) no-repeat -322px -24px;
+  background: url(../images/footer_socialIcons.png) no-repeat -322px -24px;
 }
 .mp-sideBar-socialLink .mp-socialLink-pinterest{
-	background: url(../image/footer_socialIcons.png) no-repeat -214px -45px;
+	background: url(../images/footer_socialIcons.png) no-repeat -214px -45px;
 }
 .mp-sideBar-socialLink .mp-socialLink-pinterest:hover {
-  background: url(../image/footer_socialIcons.png) no-repeat -214px -24px;
+  background: url(../images/footer_socialIcons.png) no-repeat -214px -24px;
 }
 .mp-sideBar-socialLink .mp-socialLink-mail{
-	 background: url(../image/footer_socialIcons.png) no-repeat -353px -45px;
+	 background: url(../images/footer_socialIcons.png) no-repeat -353px -45px;
 }
 .mp-sideBar-socialLink  .mp-socialLink-mail:hover {
-  background: url(../image/footer_socialIcons.png) no-repeat -353px -24px;
+  background: url(../images/footer_socialIcons.png) no-repeat -353px -24px;
 }
 /*
 #mp-navbar.cbp-spmenu-push-toright{

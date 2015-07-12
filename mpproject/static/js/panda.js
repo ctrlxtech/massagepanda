@@ -102,7 +102,7 @@ var pandaRegisterPage = (function(){
         $form.find('input').val('');
 		$('#panda_register').find('#mp-registerForm-panelAlert').hide();
 		//check login is success or not
-		if(returnObj.success)
+		if(returnObj.status = 'success')
 		{
 			//register success
 			var firstName = returnObj.firstName;		
@@ -142,7 +142,7 @@ var pandaRegisterPage = (function(){
 				var gender = $('#panda_register').find('input[name="registerGender"]:checked').val();
 		        serverObj['registerGender']=gender;
 				//TODO need use server side path for panda register!!!
-		        var url = '/manager/register';
+		        var url = '/manager/createCustomerFromJson';
     	        pandaAjax.post(url, serverObj, afterSubmit);
 				event.preventDefault()
             });

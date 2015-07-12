@@ -53,7 +53,7 @@ def referralTest(request):
 
 @login_required
 def sendMyEmail(request):
-    subject, from_email, to = 'Your Coupon!', 'support@massagepanda.com', 'yuechen1989@gmail.com'
+    subject, from_email, to = 'Your Coupon!', settings.SERVER_EMAIL, 'yuechen1989@gmail.com'
     text_content = 'This is an email containing your coupon.'
     html_content = get_template('manager/hello.html').render()
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -61,10 +61,22 @@ def sendMyEmail(request):
     msg.send()
     return HttpResponse("Email sent!") 
 
+def sendWelcomeEmail(to, first_name, code):
+    subject = "Welcome!"
+    text_content = "Thanks for signing up on MassagePanda, please click the following link to active your account: http://ec2-52-8-5-153.us-west-1.compute.amazonaws.com/?referCode=" + code
+    msg = EmailMultiAlternatives(subject, text_content, settings.SERVER_EMAIL, [to])
+    msg.send()
+    return HttpResponse("Email sent!") 
+
 @login_required
 def test(request):
-    plaintext = get_template('manager/hello.html')
-    return HttpResponse(plaintext.render())
+    nums = request.POST.getlist('needToSend')
+    number = request.POST.get('num')
+    nums.append(number)
+    message_body = request.POST.get('message')
+
+    context = {'nums': nums, 'message': message_body}
+    return JsonResponse(context)
 
 
     user = User.objects.get(pk=11)
@@ -382,14 +394,6 @@ def send(request):
     r = sendSMS(nums, message_body, False)
     return HttpResponse(r)
 
-@user_passes_test(lambda u: u.is_superuser)
-def sendWithNum(request):
-    number = request.POST.get('num')
-    message_body = request.POST.get('message')
-    nums = [number]
-    r = sendSMS(nums, message_body, False)
-    return HttpResponse(r)
-
 def sendSMS(nums, message_body, isForward):
     api_key = settings.NEXMO_KEY
     api_secret = settings.NEXMO_SECRET
@@ -498,7 +502,7 @@ def getForwardLogs(request):
     cursor.execute("select manager_forwardsms.id, manager_forwardsms.receiver, manager_forwardsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_forwardsms.messageBody from manager_forwardsms left join manager_staff" \
-        " on manager_forwardsms.receiver = manager_staff.phone_number where manager_forwardsms.id > " + index + " ORDER BY manager_forwardsms.id ASC")
+        " on manager_forwardsms.receiver = manager_staff.phone_number where manager_forwardsms.id > %s ORDER BY manager_forwardsms.id ASC", (index))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -510,7 +514,7 @@ def getOldInLogs(request):
     cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number where timestamp <= \"" + oldTimestamp + "\" and timestamp > \"" + newTimestamp + "\" ORDER BY manager_insms.id DESC")
+        " on manager_insms.sender = manager_staff.phone_number where timestamp <= %s and timestamp > %s ORDER BY manager_insms.id DESC", (oldTimestamp, newTimestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -522,7 +526,7 @@ def getNewInLogs(request):
     cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > " + index + " and timestamp > \"" + timestamp + "\" ORDER BY manager_insms.id DESC")
+        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > %s and timestamp > %s ORDER BY manager_insms.id DESC", (index, timestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -534,7 +538,7 @@ def getOldOutLogs(request):
     cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_outsms.messageBody from manager_outsms left join manager_staff" \
-        " on manager_outsms.receiver = manager_staff.phone_number where timestamp <= \"" + oldTimestamp + "\" and timestamp > \"" + newTimestamp + "\" ORDER BY manager_outsms.id DESC")
+        " on manager_outsms.receiver = manager_staff.phone_number where timestamp <= %s and timestamp > %s ORDER BY manager_outsms.id DESC", (oldTimestamp, newTimestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -546,7 +550,7 @@ def getNewOutLogs(request):
     cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_outsms.messageBody from manager_outsms left join manager_staff" \
-        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.id > " + index + " and timestamp > \"" + timestamp + "\" ORDER BY manager_outsms.id DESC")
+        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.id > %s and timestamp > %s ORDER BY manager_outsms.id DESC", (index, timestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -603,7 +607,6 @@ def userLogin(request, data):
         context['error'] = "can't found user"
     return JsonResponse(context)
 
-
 def logout_view(request):
     logout(request)
     try:
@@ -617,6 +620,10 @@ def register_view(request):
 
 def tregister_view(request):
     return render(request, 'manager/tregister.html')
+
+def createCustomerFromJson(request):
+    data = json.loads(request.body)
+    return createCustomer(data)
 
 @transaction.atomic
 def createCustomer(data):
@@ -642,8 +649,9 @@ def createCustomer(data):
     customerReferralCode = CustomerReferralCode(customer=customer, code=code)
     customerReferralCode.save()
 
-    context = {'customer': customer}
-    return render(request, 'manager/welcome.html', context) 
+    sendWelcomeEmail(email, first_name, code)
+    context = {'status': 'success', 'firstName': first_name}
+    return JsonResponse(context) 
 
 @transaction.atomic
 def createTherapist(request):

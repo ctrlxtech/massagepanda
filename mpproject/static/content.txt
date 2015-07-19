@@ -1,3 +1,0 @@
-hello world
-this is second paragraph
-this is third

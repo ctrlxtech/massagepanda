@@ -1,0 +1,176 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="main-wrap">
+   <div class="container">
+      <div id="wsite-content" class="wsite-elements wsite-not-footer">
+         <div>
+            <div class="wsite-multicol">
+               <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                  <table class="wsite-multicol-table">
+                     <tbody class="wsite-multicol-tbody">
+                        <tr class="wsite-multicol-tr">
+                           <td class="wsite-multicol-col" style="width:21.717171717172%; padding:0 15px;">
+                               {% include "customers/profile_nav.html" %}
+                           </td>
+                           <td class="wsite-multicol-col" style="width:78.282828282828%; padding:0 15px;">
+                              <h2 class="wsite-content-title" style="text-align:center;"><font size="5">PROFILE</font></h2>
+                              <div class="wsite-spacer" style="height:11px;"></div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="paragraph" style="text-align:left;"><font size="3"><strong>General Information</strong></font></div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div>
+                                 <div id="160172961544217299" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                                    <div class="wsite-com-checkout-section" style="padding-bottom:0px;">
+                                       <form id="wsite-com-checkout-payment-personal">
+                                          <div class="inner">
+                                             <div class="wsite-form-field wsite-name-field">
+                                                <div class="wsite-form-input-container wsite-form-left">
+                                                   <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="First Name">
+                                                </div>
+                                                <div class="wsite-form-input-container wsite-form-right">
+                                                   <input class="wsite-form-input" type="text" name="name_last" value="" placeholder="Last Name">
+                                                </div>
+                                             </div>
+                                             <div class="wsite-form-field">
+                                                <div class="wsite-form-input-container wsite-form-left">
+                                                   <input class="wsite-form-input" type="text" name="email" value="" placeholder="Email">
+                                                </div>
+                                                <div class="wsite-form-input-container wsite-form-right">
+                                                   <input class="wsite-form-input" type="text" name="home_phone" value="" placeholder="Phone">
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </form>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div>
+                                 <div id="160172961544217299" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                                    <div class="wsite-com-checkout-section" style="padding-bottom:0px;">
+                                       {% include "customers/shipping.html" %}
+                                    </div>
+                                    <div style="display:block;font-size:90%"></div>
+                                 </div>
+                              </div>
+                              <div>
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div>
+                                 <div class="wsite-multicol">
+                                    <div class="wsite-multicol-table-wrap" style="margin:0 -0px;">
+                                       <table class="wsite-multicol-table">
+                                          <tbody class="wsite-multicol-tbody">
+                                             <tr class="wsite-multicol-tr">
+                                                <td class="wsite-multicol-col" style="width:16.638345719182%; padding:0 0px;">
+                                                   <div class="paragraph" style="text-align:left;"><font size="3">Profile Photo</font></div>
+                                                </td>
+                                                <td class="wsite-multicol-col" style="width:33.276691438363%; padding:0 0px;">
+                                                   <div>
+                                                      <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:0;margin-left:0;margin-right:10px;text-align:left">
+                                                         <a>
+                                                         <img src="{% static "./images/pandaNewIcon.png" %}" alt="Picture" style="width:auto;max-width:100%">
+                                                         </a>
+                                                         <div style="display:block;font-size:90%"></div>
+                                                      </div>
+                                                   </div>
+                                                </td>
+                                                <td class="wsite-multicol-col" style="width:16.642810222323%; padding:0 0px;">
+                                                   <div class="paragraph" style="text-align:left;"><font size="3">Password</font></div>
+                                                </td>
+                                                <td class="wsite-multicol-col" style="width:16.653923393158%; padding:0 0px;">
+                                                   <div class="paragraph" style="text-align:left;">••••••••••••<br></div>
+                                                </td>
+                                                <td class="wsite-multicol-col" style="width:16.788229226974%; padding:0 0px;">
+                                                   <div class="paragraph" style="text-align:right;"><font color="#2a2a2a"><a href="http:/#" title="">change</a></font></div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div style="text-align:center;">
+                                 <div style="height: 10px; overflow: hidden;"></div>
+                                 <a class="wsite-button wsite-button-small wsite-button-normal" href="javascript:;">
+                                 <span class="wsite-button-inner">Update Profile</span>
+                                 </a>
+                                 <div style="height: 10px; overflow: hidden;"></div>
+                              </div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="paragraph" style="text-align:left;"><strong>Connected Accounts</strong></div>
+                              <div>
+                                 <div class="wsite-multicol">
+                                    <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                                       <table class="wsite-multicol-table">
+                                          <tbody class="wsite-multicol-tbody">
+                                             <tr class="wsite-multicol-tr">
+                                                <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
+                                                   <div>
+                                                      <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                                      <hr class="styled-hr" style="width:100%;">
+                                                      <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                                                   </div>
+                                                   <div>
+                                                      <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;text-align:left">
+                                                         <a>
+                                                         <img src="{% static "images/connectWithFB.png" %}" alt="Picture" style="width:193;max-width:100%">
+                                                         </a>
+                                                         <div style="display:block;font-size:90%"></div>
+                                                      </div>
+                                                   </div>
+                                                   <div>
+                                                      <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                                                      <hr class="styled-hr" style="width:100%;">
+                                                      <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                                                   </div>
+                                                </td>
+                                                <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
+                                                   <div class="wsite-spacer" style="height:50px;"></div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    </div>
+                                 </div>
+                              </div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="wsite-spacer" style="height:50px;"></div>
+      </div>
+   </div>
+   <!-- end container -->
+</div>
+<!-- end main-wrap -->
+{% endblock %}
+

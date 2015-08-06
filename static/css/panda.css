@@ -72,7 +72,10 @@ hr {
 /**home page**/
 div.mp-pageContent {
     overflow: hidden;
-    padding: 0 0 0 0;
+    padding-top: 0px;
+    padding-right: 50px;
+    padding-bottom: 25px;
+    padding-left: 50px;
 }
 
 .panda-home-partOne {
@@ -597,7 +600,7 @@ input[type = checkbox] {
 }
 
 #panda_helpCenter {
-    margin: 10px auto;
+    margin: 30px auto;
     width: 90%;
 }
 

@@ -1,0 +1,35 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+
+{% block style %}
+    <style>
+    .wsite-background {background-image: url("{% static "images/AboutImage.jpg" %}") !important;background-repeat: no-repeat !important;background-position: 50% 50% !important;background-size: 100% !important;background-color: transparent !important;background: inherit;}
+    body.wsite-background {background-attachment: fixed !important;}.wsite-background.wsite-custom-background{ background-size: cover !important}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% include "index/wbanner_company.html" %}
+
+<div id="panda_about" class="mp-pageContent container-fluid">
+    <div>
+        <h2 class="mp-aboutTitle">About MassagePanda</h2>
+    </div>
+    <p>
+        MassagePanda delivers a top-quality massage to customers’ home, hotel, workplace or event in as little as two hours. We currently provide our customers Swedish, Deep Tissue, and Couples Massages. We also offer corporate massage service like Chair Massage. We plan to offer more types of services in the wellness area in the near future.
+    </p>
+    <p>
+        All our therapists come with a massage table, high-quality sheets, massage lotions and oils, and everything else needed to bring the spa experience to your home. MassagePanda empowers you to relax on your own schedule at your own home, while helping the best massage therapists earn extra income. MassagePanda currently serves the greater San Francisco Bay Area. We plan to be in every major city in the United States within 24 months.
+    </p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+{% endblock %}

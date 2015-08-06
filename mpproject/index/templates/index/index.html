@@ -1,318 +1,320 @@
-﻿<!DOCTYPE html>
+{% extends "index/wbase.html" %}
 {% load staticfiles %}
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta http-equiv="Cache-control" content="no-cache">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Panda</title>
-        <link rel="stylesheet" href="{% static "./css/bootstrap.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/jquery-ui.min.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/hover.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/panda.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/terms.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/largeScreen.css" %}" type="text/css">
-        <link rel="stylesheet" href="{% static "./css/smallScreen.css" %}" type="text/css">
-        <script type="text/javascript" src="{% static "./js/jquery.js" %}">
-        </script>
-        <script type="text/javascript" src="{% static "./js/jquery.cookie.js" %}">
-        </script>
-        <script type="text/javascript" src="{% static "./js/bootstrap.js" %}">
-        </script>
-        <script type="text/javascript" src="{% static "./js/jquery.history.js" %}">
-        </script>
-		<script type="text/javascript" src="{% static "./js/pandaUtil.js" %}">
-        </script>
-        <script type="text/javascript" src="https://js.stripe.com/v2/">
-        </script>
-        <script type="text/javascript" src="{% static "./js/panda.js" %}">
-        </script>
 
-    </head>
-    <body>
-{% csrf_token %}
+{% block content %}
+  
+{% include 'index/wbanner.html' %}
 
-        <nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide">
-            <a href="" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
-           <a href="" class="mp-pageHeader" data-mpController="massageGiftPage"  data-mpPageId="panda_gift" >Give a Gift</a>
-            <a href="" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">Help Center</a>
-            <a href="" class="mp-pageHeader" data-mpPageId="panda_about">About Panda</a>
-			<a href="" class="mp-pageHeader" data-mpController="pandaContactUsPage"  data-mpPageId="panda_contactUs">Contact Us</a>
-
-			<ul class="mp-sideBar-socialLink">
-				<li> <a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a> </li>
-                <li> <a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a> </li>   
-                <li> <a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a> </li>   
-				<li> <a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a> </li>	
-				<li> <a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a> </li>				
-			</ul>
-        </nav>
-		<nav id="mp-rightSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right mp-largeScreenHide" >
-				<a href="" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
-				<a href="" class="mp-pageHeader mp-mobileLoginTrue mp-mobileLoginName" style="display:none"></a>
-				<a href="" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout" style="display:none">Logout</a>
-		</nav>
-        <nav id="mp-navbar" class="navbar navbar-default navbar-fixed-top cbp-spmenu-push">
-            <div class="container">
-                <div id="mp-showLeftPush" class="mp-navigation-mobileIcon mp-largeScreenHide">
-                    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
-                </div>
-                <div class="mp-pageHeader mp-IconDiv" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">
-                    <img class="mp-pandaIcon" src="{% static "./images/pandaNewIcon.png" %}"/>
-                </div>
-				<div id="mp-showRightPush"  class="mp-navigation-mobileSetting mp-largeScreenHide">
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                </div>
-                <div class="mp-navigation mp-smallScreenHide">
-                    <ul>
-                        <li>
-                            <a href="" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
-                        </li>
-                        <li>
-                            <a href="" class="mp-pageHeader" data-mpPageId="panda_bookMassage">Book Massage</a>
-                        </li>
-                        <li>
-                            <a href="" class="mp-pageHeader" data-mpPageId="panda_gift" data-mpController="massageGiftPage" >Give a Gift</a>
-                        </li>
-						 <li>
-                            <a href="" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">How It Works</a>
-                        </li>
-                        <li class="mp-loginHeader" >
-                            <a href="" class="mp-pageHeader" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
-                        </li>
-						<li role="presentation" class="dropdown" style="display:none">
-                               <a  class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                              	  <span class="caret"></span>
-							   </a>
-                               <ul class="dropdown-menu">
-                               	  <li class="logout"><a href="" class="mp-pageHeader" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout" >Logout</a></li>
-                               </ul>
-                         </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Tab panes -->
-        <div id="mp-mainContent" class="jumbotron cbp-spmenu-push">
-            <div id="panda_home" class="mp-pageContent container-fluid" style="display:none">
-                <div class="panda-home-partOne">
-                    <h1>Massage, At Your Door</h1>
-                    <h2>Anywhere. Anytime. Starting at $79.</h2>
-                    <a class="mp-pageHeader mp-homebookNow" data-mpPageId="panda_massageDetails" data-mpController="massageDetailsPage">Book Now
-                        <div style="display:none">
-                            <input type="hidden" name="panda-massageFeeType" value="1"/><input type="hidden" name="panda-massageType" value="swedish"/><img class="mp-massageTypePreview-image" src="{% static "./images/homePage_swdishMassage.png" %}"/>
-                            <div class="mp-massageTypePreview-text">
-                                <span class="mp-massageTypePreview-name">Swedish Massage for</span>
-                                <span class="mp-massageTypePreview-price">$79/hr</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="mp-home-mobileTitle mp-largeScreenHide">More Options</div>
-                <div class="panda-home-mobileBookMassage mp-largeScreenHide">
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="1"/><input type="hidden" name="panda-massageType" value="swedish"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_SwedishOneHour.png" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Swedish Massage for 1 hour</span>
-                            <span class="mp-massageTypePreview-price">$79</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="2"/><input type="hidden" name="panda-massageType" value="deeptissue"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_DeepTissueOneHour.png" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Deep Tissue Massage for 1 hour</span>
-                            <span class="mp-massageTypePreview-price">$79</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="3"/><input type="hidden" name="panda-massageType" value="swedish"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_SwedishOneHalfHour.png" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Swedish Massage for 1.5 hours</span>
-                            <span class="mp-massageTypePreview-price">$109</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="4"/><input type="hidden" name="panda-massageType" value="deeptissue"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_DeepTissueOneHalfHour.png" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Deep Tissue Massage for 1.5 hours</span>
-                            <span class="mp-massageTypePreview-price">$109</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="6"/><input type="hidden" name="panda-massageType" value="couples"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_CouplesSwedishOneHour.jpg" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Couples - Swedish Massage for 1 hour</span>
-                            <span class="mp-massageTypePreview-price">$149</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                    <div class="mp-massageTypePreview mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                        <input type="hidden" name="panda-massageFeeType" value="6"/><input type="hidden" name="panda-massageType" value="couples"/><img class="mp-massageTypePreview-image" src="{% static "./images/mobile/book_CouplesDeepTissueOneHour.jpg" %}"/>
-                        <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                            <span class="mp-massageTypePreview-name">Couples - Deep Tissue Massage for 1 hour</span>
-                            <span class="mp-massageTypePreview-price">$149</span>
-                        </div>
-                        <span class="mp-massageTypePreview-arrow glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </div>
-                </div>
-                <div class="row panda-home-partTwo mp-smallScreenHide">
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="mp-massageTypePreview mp-left mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                            <input type="hidden" name="panda-massageFeeType" value="1"/><input type="hidden" name="panda-massageType" value="swedish"/><img class="mp-massageTypePreview-image" src="{% static "./images/homePage_swdishMassage.png" %}"/>
-                            <div class="mp-massageTypePreview-text">
-                                <span class="mp-massageTypePreview-name">Swedish Massage for</span>
-                                <span class="mp-massageTypePreview-price">$79/hr</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="mp-massageTypePreview mp-right mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails">
-                            <input type="hidden" name="panda-massageFeeType" value="2"/><input type="hidden" name="panda-massageType" value="deeptissue"/><img class="mp-massageTypePreview-image" src="{% static "./images/homePage_DeepTissue.png" %}"/>
-                            <div class="mp-massageTypePreview-text">
-                                <span class="mp-massageTypePreview-name">Deep Tissue Massage for</span>
-                                <span class="mp-massageTypePreview-price">$79/hr</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mp-seeMoreOptions mp-pageHeader" data-mpPageId="panda_bookMassage">
-                        <button type="button" class="btn btn-success">
-                            See more options
-                        </button>
-                    </div>
-                </div>
-                <hr/>
-                <div class="panda-home-partThree">
-                    <div class="mp-whyus">
-                        <img class="mp-whyus-image thumbnail hvr-bob" src="{% static "./images/homePage_bestTherapists.png" %}"/><h2 class="mp-whyus-header">The Best Therapists</h2>
-                        <div class="mp-whyus-text">
-                            State licensed, insured
-                        </div>
-                        <div class="mp-whyus-text">
-                            background checked
-                        </div>
-                        <div class="mp-whyus-text">
-                            and personally vetted
-                        </div>
-                    </div>
-                    <div class="mp-whyus">
-                        <img class="mp-whyus-image thumbnail hvr-bob" src="{% static "./images/homePage_DeliverToYou.png" %}"/><h2 class="mp-whyus-header">Deliver To You</h2>
-                        <div class="mp-whyus-text">
-                            Same-day, in-home 
-                        </div>
-                        <div class="mp-whyus-text">
-                            7 days a week,  9am to 10pm 
-                        </div>
-                        <div class="mp-whyus-text">
-                            massage table, sheets, and oils
-                        </div>
-                    </div>
-                    <div class="mp-whyus">
-                        <img class="mp-whyus-image thumbnail hvr-bob" src="{% static "./images/howPage_RestAssured.png" %}"/><h2 class="mp-whyus-header">Rest Assured</h2>
-                        <div class="mp-whyus-text">
-                            Book in minutes
-                        </div>
-                        <div class="mp-whyus-text">
-                            pay online
-                        </div>
-                        <div class="mp-whyus-text">
-                            simple and safe
-                        </div>
-                    </div>
-                </div>
-                <hr/>
-                <div class="panda-home-partFour">
-                    <div class="mp-testHeader">
-                        <img src="{% static "./images/home_testimonials.png" %}"/><h3>Testimonials</h3>
-                    </div>
-                    <div class="mp-test">
-                        <img class="mp-test-image hvr-bob" src="{% static "./images/test_chris.jpg" %}"/>
-                        <div class="mp-test-text">
-                           Nice massage with most professional therapist who will relive your muscle stress in a few minutes.Treatment of customers is fabulous.I would for sure recommend this to anyone. I will book again!
-                        </div>
-                        <div class="mp-test-text">
-                            - Chris P. (San Francisco)
-                        </div>
-                    </div>
-                    <div class="mp-test">
-                        <img class="mp-test-image hvr-bob" src="{% static "./images/test_amy.jpg" %}"/>
-                        <div class="mp-test-text">
-                            I booked 2 hours in advance and the masseuse came on time. The massage table was comfortable and the set up was fast. She put on soothing music and used lavender scents. It indeed created a quality spa-like experience.
-                        </div>
-                        <div class="mp-test-text">
-                            - Amy W. (San Jose)
-                        </div>
-                    </div>
-                    <div class="mp-test">
-                        <img class="mp-test-image hvr-bob" src="{% static "./images/test_sarah.jpg" %}"/>
-                        <div class="mp-test-text">
-                            My husband surprised me with a massage on mother's day! I feel so spoiled. The masseuse was professional, courteous and responsive. What an amazing service!
-                        </div>
-                        <div class="mp-test-text">
-                            - Sarah L. (Oakland)
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div id="main-wrap">
+  <div class="container">
+    <div id="wsite-content" class="wsite-elements wsite-not-footer">
+      <div>
+        <div id="530265105377007353" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+          <h2 class="wsite-content-title" style="text-align:center;margin-top: -20px;"><strong><font color="#626262"><span id="selectionBoundary_1434616231536_4588271945249289" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span>Featured services<span id="selectionBoundary_1434616231535_2634860430844128" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></font></strong></h2>
         </div>
-        <div id="mp-footer" class="cbp-spmenu-push">
-            <div class="mp-tableContainer mp-smallScreenHide">
-                <table class="mp-footerTable">
-                    <tr>
-                        <td>
-                            <a href="#" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">Help Center</a>
-                        </td>
-                        <td>
-                            Made with <span class="mp-wordLove">love</span>
-                            in Silicon Valley
-                        </td>
-                        <td class="mp-supportmassage">
-                            Support@massagepanda.com
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" class="mp-pageHeader" data-mpPageId="panda_about">About Panda</a>
-                        </td>
-                        <td>
-                        	<span>
-                        		<a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a>
-                        		<a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a>
-    					<a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a>
-        				<a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a>
-					<a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a>
-            			</span>
-                        </td>
-                        <td>
-                            (855) 68-PANDA 9am-10pm
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="#" class="mp-pageHeader" data-mpController="pandaContactUsPage"  data-mpPageId="panda_contactUs">Contact Us</a>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            <a href="#" class="mp-pageHeader mp-threewords" data-mpPageId="panda_apply">Apply as Therapist</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <hr class="mp-smallScreenHide"/>
-            <div class="mp-footerDescription">
-                ©2015 MassagePanda. All Rights Reserved. <a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_terms">Terms of Use</a> | <a href="#" class="mp-pageHeader" data-mpPageType="other" data-mpPageId="panda_privacy">Privacy Policy</a>. Copyright 2015, Ctrl X, Inc., 39105 Cedar Blvd, Newark, CA 94560.
-            </div>
-            <div class="mp-footerDescription mp-smallScreenHide">
-                MASSAGEPANDA®, MASSAGE AT YOUR DOOR®, and FIND A PANDA® are trademarks of Ctrl X, Inc. The contents of the MassagePanda web site are 
-            </div>
-            <div class="mp-footerDescription mp-smallScreenHide">
-                for informational purposes only. None of the information on the site should be construed or used as professional medical advice or consultation.
-            </div>
+      </div>
+      <div>
+        <div class="wsite-multicol">
+          <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+            <table class="wsite-multicol-table">
+              <tbody class="wsite-multicol-tbody">
+                <tr class="wsite-multicol-tr">
+                  <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+                        <a href="{% url 'serviceDetails' %}">
+                        <img src="{% static "images/book_SwedishOneHour.png" %}" alt="Picture" style="width:461;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <div class="paragraph" style="text-align:center;"><font color="#2ecc71" size="5"><a href="http://www.massagepanda.com/store/p42/In-Home_Swedish_Massage_for_1_hour.html">In-Home Swedish Massage for 1 Hour</a></font></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+                        <a href="{% url 'serviceDetails' %}">
+                        <img src="{% static "images/book_DeepTissueOneHour.png" %}" alt="Picture" style="width:465;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <div class="paragraph" style="text-align:center;"><font size="5"><a href="http://www.massagepanda.com/store/p43/In-Home_Deep_Tissue_Massage_for_1_Hour.html" title="">In-Home Deep Tissue Massage for 1 Hour</a></font></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-    </body>
-</html>
+      </div>
+      <div style="text-align:center;">
+        <div style="height: 20px; overflow: hidden;"></div>
+        <a class="wsite-button wsite-button-small wsite-button-normal" href="{% url 'services' %}">
+        <span class="wsite-button-inner">See More Options</span>
+        </a>
+        <div style="height: 20px; overflow: hidden;"></div>
+      </div>
+      <div>
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+        <hr class="styled-hr" style="width:100%;">
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+      </div>
+      <h2 class="wsite-content-title" style="text-align:center;"><strong><font color="#626262"><span id="selectionBoundary_1434616231536_4588271945249289" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span>Locations we&nbsp;serve<span id="selectionBoundary_1434616231535_2634860430844128" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></font></strong></h2>
+      <div class="wsite-spacer" style="height:15px;"></div>
+      <div>
+        <div class="wsite-multicol">
+          <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+            <table class="wsite-multicol-table">
+              <tbody class="wsite-multicol-tbody">
+                <tr class="wsite-multicol-tr">
+                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                    <div>
+                      <div id="755860824386653169" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                        <div class="discovery-card" style="background-image:url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/275.jpg&#39;);">
+                          <!--<a href="/" class="link-reset" data-hook="discovery-card" data-id="San Francisco">-->
+                          <div class="lo-container">
+                            <div class="lo-middle">
+                              <div class="lo-text">
+                                <strong>
+                                San Francisco
+                                </strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                    <div>
+                      <div id="695686707556529475" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                        <div class="discovery-card rm-padding-sm row-space-4 darken-on-hover " style="background-image: url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/stanford_meitu_1.jpg&#39;);">
+                          <!--<a href="/" class="link-reset" data-hook="discovery-card" data-id="San Francisco">-->
+                          <div class="lo-container">
+                            <div class="lo-middle">
+                              <div class="lo-text">
+                                <strong>
+                                Silicon Valley
+                                </strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                    <div>
+                      <div id="438115153693118998" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                        <div class="discovery-card rm-padding-sm row-space-4 darken-on-hover " style="background-image: url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/oakland_b_meitu_1.jpg&#39;);">
+                          <!--<a href="/" class="link-reset" data-hook="discovery-card" data-id="San Francisco">-->
+                          <div class="lo-container">
+                            <div class="lo-middle">
+                              <div class="lo-text">
+                                <strong>
+                                East Bay
+                                </strong>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="wsite-spacer" style="height:24px;"></div>
+      <div style="text-align:center;">
+        <div style="height: 10px; overflow: hidden;"></div>
+        <a class="wsite-button wsite-button-small wsite-button-normal" href="http://www.massagepanda.com/service-coverage.html">
+        <span class="wsite-button-inner">See All Locations</span>
+        </a>
+        <div style="height: 10px; overflow: hidden;"></div>
+      </div>
+      <div class="paragraph" style="text-align:center;"><font size="4">Sign up now to be the first to know about special offers and to be&nbsp;notified when we arrive in your city:</font></div>
+      <div>
+        <div id="709667427541170752" align="center" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+          <!-- Begin MailChimp Signup Form -->
+          <!--
+            <div id="mc_embed_signup">
+            <form action="//massagepanda.us10.list-manage.com/subscribe/post?u=3783a3287b4f04dd340629f4b&amp;id=e77933f373" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                <div id="mc_embed_signup_scroll">
+                
+                <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Enter Your Email Address" required>
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--><!--
+            <div style="position: absolute; left: -5000px;"><input type="text" name="b_3783a3287b4f04dd340629f4b_e77933f373" tabindex="-1" value=""></div>
+            <div class="clear"><input type="submit" value="Sign Up" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+            </div>
+            </form>
+            </div>
+            <!--End mc_embed_signup-->
+          <script type="text/javascript">var submitted=false;</script>
+          <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted)
+            {var div = document.getElementById(&#39;textDiv&#39;);div.textContent = &#39;Thank you for signing up!&#39;;var text = div.textContent;}"></iframe>
+          <div id="mc_embed_signup">
+            <form action="https://docs.google.com/a/massagepanda.com/forms/d/190RTYSIWfRQNFrNvsKjfkGxIJ7S_A4VnlIA2TXWzlYw/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;">
+              <div id="mc_embed_signup_scroll">
+                <div class="ss-form-question errorbox-good" role="listitem">
+                  <div dir="ltr" class="ss-item ss-item-required ss-text">
+                    <div class="ss-form-entry">
+                      <!-- <label class="ss-q-item-label" for="entry_863216307"><div class="ss-q-title">Email
+                        <label for="itemView.getDomIdToLabel()" aria-label="(Required field)"></label>
+                        <span class="ss-required-asterisk" aria-hidden="true">*</span></div>
+                        <div class="ss-q-help ss-secondary-text" dir="ltr"></div></label> -->
+                      <input type="text" name="entry.863216307" value="" class="email" id="entry_863216307" placeholder="Enter Your Email Address" dir="auto" aria-label="Email  Must match pattern" aria-required="true" required="" pattern="[a-zA-Z0-9_\.\+-]+@[a-zA-Z0-9-]+\.[a-zA-Z-\.]+" title="Must match pattern">
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" name="draftResponse" value="[,,&quot;4711226227032658317&quot;]
+                  ">
+                <input type="hidden" name="pageHistory" value="0">
+                <input type="hidden" name="fbzx" value="4711226227032658317">
+                <div class="ss-item ss-navigate">
+                  <input type="submit" name="submit" value="Sign Up" id="ss-submit" class="button">
+                </div>
+                <div id="textDiv" style="display: block;font-size: 17px;font-family: &#39;Oxygen&#39;;"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+        <hr class="styled-hr" style="width:100%;">
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+      </div>
+      <h2 class="wsite-content-title" style="text-align:center;"><font color="#626262"><strong><span id="selectionBoundary_1435391978585_6464007487520576" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span>Why book with us<span id="selectionBoundary_1435391978585_40281131607480347" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></strong></font></h2>
+      <div class="wsite-spacer" style="height:13px;"></div>
+      <div>
+        <div class="wsite-multicol">
+          <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+            <table class="wsite-multicol-table">
+              <tbody class="wsite-multicol-tbody">
+                <tr class="wsite-multicol-tr">
+                  <td class="wsite-multicol-col" style="width:33.81192106418%; padding:0 15px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/homePage_bestTherapists.png" %}" alt="Picture" style="width:60;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <h2 class="wsite-content-title" style="text-align:center;"><span style="">The Best Therapists</span><br></h2>
+                    <div class="paragraph" style="text-align:center;"><span style="">State licensed,&nbsp;insured,&nbsp;</span><br><span style="">&nbsp;</span><span style="">background checked,</span><br><span style="">and personally vetted</span></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:32.297954449365%; padding:0 15px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/homePage_DeliverToYou.png" %}" alt="Picture" style="width:auto;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <h2 class="wsite-content-title" style="text-align:center;"><span style="">Deliver To You</span></h2>
+                    <div class="paragraph" style="text-align:center;"><span style="">Same-day, in-home,&nbsp;</span><br><span style="">7 days a week,&nbsp;&nbsp;9am to 11pm,&nbsp;</span><br><span style="">massage table, sheets, and oil</span></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:33.890124486455%; padding:0 15px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/howPage_RestAssured.png" %}" alt="Picture" style="width:58;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <h2 class="wsite-content-title" style="text-align:center;"><span style="">Rest Assured</span></h2>
+                    <div class="paragraph" style="text-align:center;"><span style="">Book in<span id="selectionBoundary_1430888740545_4266666683834046" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span> minutes,&nbsp;</span><br><span style="">pay online,&nbsp;</span><span style="">simple and safe&nbsp;</span><br>rate your therapists</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+        <hr class="styled-hr" style="width:100%;">
+        <div style="height: 30px; overflow: hidden; width: 100%;"></div>
+      </div>
+      <div>
+        <div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+          <a>
+          <img src="{% static "images/home_testimonials.png" %}" alt="Picture" style="width:63;max-width:100%">
+          </a>
+          <div style="display:block;font-size:90%"></div>
+        </div>
+      </div>
+      <h2 class="wsite-content-title" style="text-align:center;"><strong style=""><font color="#626262">Testimonials</font></strong></h2>
+      <div class="wsite-spacer" style="height:10px;"></div>
+      <div>
+        <div class="wsite-multicol">
+          <div class="wsite-multicol-table-wrap" style="margin:0 -10px;">
+            <table class="wsite-multicol-table">
+              <tbody class="wsite-multicol-tbody">
+                <tr class="wsite-multicol-tr">
+                  <td class="wsite-multicol-col" style="width:33.838383838384%; padding:0 10px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/test_chris.jpg" %}" alt="Picture" style="width:118;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <blockquote style="text-align:center;"><span style="">Nice massage with most professional therapist who will relive your muscle stress in a few minutes.Treatment of customers is fabulous.I would for sure recommend this to anyone. I will book again!</span><br><span style=""><br></span><strong style="">- Chris P. (San Francisco)</strong><span style=""><br></span></blockquote>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:32.828282828283%; padding:0 10px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/test_amy.jpg" %}" alt="Picture" style="width:118;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <blockquote style="text-align:center;">I booked 2 hours in advance and the masseuse came on time. The massage table was comfortable and the set up was fast. She&nbsp;put on&nbsp;soothing music and used lavender scents. It indeed created a quality spa-like experience.<br><br><strong style="">- Amy W. (San Jose)</strong><span style="">&nbsp;&nbsp;</span></blockquote>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 10px;">
+                    <div>
+                      <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
+                        <a>
+                        <img src="{% static "images/test_sarah.jpg" %}" alt="Picture" style="width:118;max-width:100%">
+                        </a>
+                        <div style="display:block;font-size:90%"></div>
+                      </div>
+                    </div>
+                    <blockquote style="text-align:center;">My husband surprised me with a massage on mother's day!&nbsp;<span style="">I feel so spoiled.&nbsp;</span><span style="">The&nbsp;</span>masseuse&nbsp;was professional, courteous and&nbsp;responsive.&nbsp;<span style="">What an amazing service!</span><br><br><strong style="">-&nbsp;</strong><span style=""><strong>Sarah</strong></span><strong style="">&nbsp;L. (Oakland)</strong><span style=""><br></span></blockquote>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+        <hr class="styled-hr" style="width:100%;">
+        <div style="height: 30px; overflow: hidden; width: 100%;"></div>
+      </div>
+      <h2 class="wsite-content-title" style="text-align:center;"><font size="5">Couldn't Wait to Experience?</font></h2>
+      <div style="text-align:center;">
+        <div style="height: 20px; overflow: hidden;"></div>
+        <a class="wsite-button wsite-button-large wsite-button-normal" href="{% url 'services' %}">
+        <span class="wsite-button-inner">Book Massage Now</span>
+        </a>
+        <div style="height: 30px; overflow: hidden;"></div>
+      </div>
+      <div class="wsite-spacer" style="height:25px;"></div>
+    </div>
+  </div>
+  <!-- end container -->
+</div>
+<!-- end main-wrap -->
+
+{% endblock %}

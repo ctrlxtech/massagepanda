@@ -183,7 +183,7 @@ def placeOrder(request, data):
         except:
             pass
 
-    serviceId = data.get('service_id')
+    serviceId = data.get('serviceId')
     if serviceId is None or not serviceId:
         context = {'status': 'failure', 'error': 'serviceId is not available'}
         return JsonResponse(context)
@@ -236,6 +236,7 @@ def placeOrder(request, data):
     sendSMS(nums, message_body, False)
 
     context = {'status': 'success'}
+    return render(request, 'services/success.html', context)
     return JsonResponse(context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -581,6 +582,9 @@ def login_view(request):
         return HttpResponse("You have logged in, " + request.user.username)
     return render(request, 'manager/login.html')
 
+def loginFromForm(request):
+    return userLogin(request, request.POST) 
+
 def loginFromJson(request):
     data = json.loads(request.body)
     return userLogin(request, data)
@@ -605,6 +609,7 @@ def userLogin(request, data):
             context['error'] = "user is inactive!"
     else:
         context['error'] = "can't found user"
+    return redirect('index')
     return JsonResponse(context)
 
 def logout_view(request):
@@ -613,6 +618,7 @@ def logout_view(request):
         del request.session['login']
     except KeyError:
         pass 
+    return redirect('index')
     return HttpResponse("logout succeccfully")
 
 def register_view(request):
@@ -620,6 +626,9 @@ def register_view(request):
 
 def tregister_view(request):
     return render(request, 'manager/tregister.html')
+
+def createCustomerFromForm(request):
+    return createCustomer(request.POST)
 
 def createCustomerFromJson(request):
     data = json.loads(request.body)

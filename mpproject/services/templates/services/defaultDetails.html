@@ -1,0 +1,105 @@
+{% load staticfiles %}
+
+<!-- massageDetails page-->
+<div id="panda_massageDetails" class="mp-pageContent container-fluid" data-mpController="massageDetailsPage">
+  <div class="panda_massageDetails-partOne">
+    <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenHide">
+      <div class="mp-breadcrumb">
+        <ol class="breadcrumb">
+          <li>
+            <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" href="{% url 'services' %}">Book Massage</a>
+          </li>
+          <li class="active mp-currentDetailsPage">
+            Swedish Massage for $79/hr
+          </li>
+        </ol>
+      </div>
+      <div class="mp-left mp-massageDetails">
+        <img class="mp-massageDetails-image" src="{% static "images/book_SwedishOneHour.png" %}"/>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
+      <div class="mp-massageDetails-panel mp-right">
+        <div class="mp-massageDetails-title">
+          Swedish Massage for 1 hour $79
+        </div>
+        <hr class="mp-fullwidth"/>
+        <p class="mp-massageDetails-description" data-massageType="deeptissue">
+          Deep tissue massage therapy is similar to Swedish massage, but the deeper pressure is beneficial in releasing chronic muscle tension.
+        </p>
+        <p class="mp-massageDetails-description" data-massageType="swedish">
+          Swedish massage therapy is the modality that comes to mind when most people think about massage. One of the primary goals of the Swedish massage technique is to relax the entire
+          body.
+        </p>
+        <p class="mp-massageDetails-description" data-massageType="couples">
+          A couples massage is a wonderfully relaxing, personal experience. During the session, two people receive massages at the same time and in the same room from two different therap
+          ists.
+        </p>
+        <p class="mp-massageDetails-info">
+          Please book your massage session at least 2 hours in advance.We will reach out to our massage therapists once you have placed your order. We will not charge your card until a th
+          erapist responds and confirms the booking.
+        </p>
+        <form id="massageDetails-form" action="{% url 'serviceCheckout' %}" method=POST onsubmit="return validate()"><div class="mp-massageDetails-form">
+        {% csrf_token %}
+          <input type="hidden" name="massageType" value="Swedish Massage" />
+          <input type="hidden" name="massageFee" value="79" />
+          <div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert" style="display:none">Please select <span class="alertInfo"></span></div>
+          <div class="btn-group mp-massageDetails-input">
+            <input class="mp-massageDetails-DatePicker" id="datepicker" placeholder="Select Date" name="massageDetailsDate" type="text" />
+          </div>
+          <div class="btn-group mp-massageDetails-input">
+            <input type="hidden" name="massageDetailsTime" id="timepicker" value=""/>
+            <button type="button" class="btn btn-default dropdown-toggle massageDetailsTime" data-toggle="dropdown" aria-expanded="false" onclick="massageDetailsTimeForList()">Select Time<span class="glyphicon glyphicon-tri
+              angle-bottom" aria-hidden="true"></span>
+            </button>
+            <!--
+              <div class="mp-timeTableDiv" style="display:none">
+              <table id="massageDetails_timeTable" class="table" >
+              </table>
+              </div>
+              -->
+            <ul id="massageDetails_timeList" class="dropdown-menu" role="menu">
+            </ul>
+          </div>
+          <div class="btn-group mp-massageDetails-input">
+            <input type="hidden" name="genderPreferred" id="genderPreferred" value=""/>
+            <button type="button" class="btn btn-default dropdown-toggle genderPreferred" data-toggle="dropdown" aria-expanded="false">Gender Preferred<span class="glyphicon glyphicon-t
+              riangle-bottom" aria-hidden="true"></span>
+            </button>
+            <ul id="massageDetails_genderPreferredList" class="dropdown-menu" role="menu">
+              <li class="mp-item">
+                <a>Either</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Male Preferred</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Female Preferred</a>
+              </li>
+            </ul>
+          </div>
+          <div class="mp-massageDetails-textarea">
+            <textarea name="parkingInfo" val="" placeholder="please provide any additional directions to your location. E.g, “ring Buzzer 32” or “first house on the left, blue door" class="form-control" rows="3" cols="50"></textarea>
+          </div>
+          <div class="checkbox mp-massageDetails-input mp-massageDetails-needTable">
+            <input name="needTable" type="checkbox"  checked><label>Need a massage table</label>
+          </div>
+          <!--
+            <div class="btn-group mp-massageDetails-input">
+                        <input placeholder="Please Enter Coupon"  name="coupon" />
+            </div>
+            -->
+          <div class="mp-checkout mp-pageHeader" data-mpPageId="panda_checkout" data-mpController="checkoutPage" >
+            <div class="mp-pageId" style="display:none">panda_massageDetails</div>
+            <input type="submit" value="Checkout" class="btn btn-success">
+          </div>
+        </div></form>
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+  </div>
+</div>

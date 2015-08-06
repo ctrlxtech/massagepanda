@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Panda</title>
+        <link rel="stylesheet" href="{% static "./css/bootstrap.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/jquery-ui.min.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/hover.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/panda.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/terms.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/largeScreen.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/smallScreen.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/sites.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "./css/main_style.css" %}" type="text/css">
+
+        {% block style %}
+        {% endblock %}
+
+        <script type="text/javascript" src="{% static "./js/jquery.js" %}">
+        </script>
+        <script type="text/javascript" src="{% static "./js/jquery.cookie.js" %}">
+        </script>
+        <script type="text/javascript" src="{% static "./js/bootstrap.js" %}">
+        </script>
+        <script type="text/javascript" src="{% static "./js/jquery.history.js" %}">
+        </script>
+        <script type="text/javascript" src="{% static "./js/pandaUtil.js" %}">
+        </script>
+        <script type="text/javascript" src="{% static "./js/phone.js" %}">
+        </script>
+        <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js">
+        </script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script type="text/javascript" src="https://js.stripe.com/v2/">
+        </script>
+
+        {% block script %}
+        {% endblock %}
+<script>
+    $(document).ready(function(){
+        pandaPhoneInit();
+
+        {% block docReady %}
+        {% endblock %}
+    });
+</script>
+    </head>
+    <body class="no-header-page  wsite-theme-light">
+<nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide">
+  <a href="{% url 'index' %}" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
+  <a href="{% url 'services' %}" class="mp-pageHeader" data-mpController="pandaBookMassagePage"  data-mpPageId="panda_bookMassage">Book Massage</a>
+  <ul class="mp-sideBar-socialLink">
+    <li> <a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink wsite-social-yelp" href="http://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"></a></li>
+    <li> <a class="mp-socialLink wsite-social-thumbtack" href="https://www.thumbtack.com/profile/services/Ytg6gI4BRZB$vQ/" target="_blank"></a></li>
+  </ul>
+</nav>
+<nav id="mp-rightSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right mp-largeScreenHide" >
+  {% if request.user.is_authenticated %}
+  <a href="" class="mp-pageHeader mp-mobileLoginTrue mp-mobileLoginName"></a>
+  <a href="{% url 'customer' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaProfilePage" data-mpPageId="panda_profile">Profile</a>
+  <a href="{% url 'logoutView' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout">Logout</a>
+  {% else %}
+  <a href="{% url 'customerLogin' %}" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
+  {% endif %}
+</nav>
+<nav id="mp-navbar" class="navbar navbar-default navbar-fixed-top cbp-spmenu-push">
+  <div class="container">
+    <div id="mp-showLeftPush" class="mp-navigation-mobileIcon mp-largeScreenHide">
+      <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+    </div>
+    <div class="mp-pageHeader mp-IconDiv" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">
+      <a href="{% url 'index' %}">
+      <img class="mp-pandaIcon" src="{% static "./images/pandaNewIcon.png" %}"/>
+      </a>
+    </div>
+    <div id="mp-showRightPush"  class="mp-navigation-mobileSetting mp-largeScreenHide">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </div>
+    <div class="mp-navigation mp-smallScreenHide">
+      <ul>
+        <li>
+          <a href="{% url 'services' %}" class="mp-pageHeader" data-mpPageId="panda_bookMassage">Book Massage</a>
+        </li>
+        <li>
+          <a href="{% url 'faq' %}" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">How It Works</a>
+        </li>
+            {% if request.user.is_authenticated %}
+        <li role="presentation" class="dropdown">
+          <a  class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                {{ request.user.first_name }}
+          <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+                <li class="profile"><a href="{% url 'customer' %}" class="mp-pageHeader" data-mpController="pandaLogoutPage" data-mpPageId="panda_profile" >Profile</a></li>
+            <li class="logout"><a href="{% url 'logoutView' %}" class="mp-pageHeader" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout" >Logout</a></li>
+          </ul>
+        </li>
+
+            {% else %}
+        <li class="mp-loginHeader" >
+          <a href="{% url 'customerLogin' %}" class="mp-pageHeader" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
+        </li>
+
+            {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- end header-wrap -->
+<div id="mp-mainContent" class="jumbotron cbp-spmenu-push"> 
+        {% block content %}
+        {% endblock %}
+</div>
+<div id="mp-footer" class="cbp-spmenu-push">
+<div id="footer-wrap">
+  <div class="container">
+    <div class="wsite-elements wsite-footer">
+      <div>
+        <div class="wsite-multicol">
+          <div class="wsite-multicol-table-wrap" style="margin:0 -10px;">
+            <table class="wsite-multicol-table">
+              <tbody class="wsite-multicol-tbody">
+                <tr class="wsite-multicol-tr">
+                  <td class="wsite-multicol-col" style="width:18.524885041289%; padding:0 10px;">
+                    <div class="paragraph" style="text-align:left;"><font size="3"><font color="#626262" style="background-color: initial;"><font color="#626262"><a href="{% url 'faq' %}" title=""><span id="selectionBoundary_1430557841526_49230635236017406" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Help Center</font><span id="selectionBoundary_1430557841526_6671315038111061" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font></font><span style="background-color: initial;">&nbsp;</span><br><a href="{% url 'services' %}" title=""><font color="#626262">Our Massages</font></a><br><a href="http://www.massagepanda.com/corporate-massage-program.html"><font color="#626262">Corporate Massage</font></a><br><a href="{% url 'giveGift' %}" title=""><font color="#626262">Give a Gift</font></a></font></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:18.426268076737%; padding:0 10px;">
+                    <div class="paragraph" style="text-align:left;"><a href="{% url 'tregister' %}" title="" style="">Apply&nbsp;as Therapist</a><br><a href="http://www.massagepanda.com/service-coverage.html" title=""><font color="#626262">Service Area</font></a><br><br><br></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:19.186329750315%; padding:0 10px;">
+                    <div class="paragraph" style="text-align:left;"><a href="http://www.massagepanda.com/blog.html" title=""><font color="#626262">Panda&nbsp;Blog</font></a><br><a href="{% url 'about' %}" title="" style=""><font color="#626262">About&nbsp;Panda</font></a><br><font color="#626262"><a href="{% url 'contactUs' %}" title=""><span id="selectionBoundary_1435051855307_4816014380194247" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Contact Us</font><span id="selectionBoundary_1435051855306_08649692195467651" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font><br><br></div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:16.737011058785%; padding:0 10px;">
+                    <div>
+                      <div id="620104726959033492" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                        <div style="display:none;"><a id="href2" target="_blank" href="http://www.2findlocal.com/b/11459831"><img class="anchorImage" alt="massagepanda in home massage" src="./home_files/2.png"></a>&nbsp;&nbsp;<a id="href3" target="_blank" href="http://go.favecentral.com/11459831"><img class="anchorImage" alt="massagepanda in home massage" src="./home_files/fc.png"></a></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="wsite-multicol-col" style="width:27.125506072874%; padding:0 10px;">
+                    <div class="paragraph" style="text-align:right;">Made with <span id="selectionBoundary_1430556979825_03155022021383047" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#e05c5c">love</font><span id="selectionBoundary_1430556979825_22052562073804438" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span> in Silicon Valley<br>1 (855) 68-PANDA &nbsp;9am-10pm<br></div>
+                    <div style="text-align:right;">
+                      <div style="height:0px;overflow:hidden"></div>
+                      <span class="wsite-social wsite-social-default"><a class="first-child wsite-social-item wsite-social-facebook" href="http://facebook.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-twitter" href="http://twitter.com/massage_panda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-pinterest" href="http://pinterest.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="last-child wsite-social-item wsite-social-mail" href="mailto:support@massagepanda.com" target="_blank"><span class="wsite-social-item-inner"></span></a></span>
+                      <div style="height:10px;overflow:hidden"></div>
+                    </div>
+                    <div>
+                      <div id="451314862283876032" align="right" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><span class="wsite-social wsite-social-default">
+                        <a class="wsite-social-item wsite-social-yelp" href="http://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"><span class="wsite-social-item-inner"></span></a>
+                        <a class="wsite-social-item wsite-social-thumbtack" href="https://www.thumbtack.com/profile/services/Ytg6gI4BRZB$vQ/" target="_blank"><span class="wsite-social-item-inner"></span></a></span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+        <hr class="styled-hr" style="width:100%;">
+        <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+      </div>
+      <div class="paragraph" style="text-align:left;"><font size="2">©2015 MassagePanda. All Rights Reserved.&nbsp;<a href="{% url 'terms' %}" title=""><font color="#626262"><u>Terms of Use</u></font></a>&nbsp;|&nbsp;<a href="{% url 'privacy' %}" title=""><font color="#626262"><u>Privacy Policy</u></font></a>.&nbsp;Copyright 2015, Ctrl X, Inc., 39105 Cedar Blvd, Newark, CA 94560</font><font size="2">. &nbsp;MASSAGEPANDA®,&nbsp;MASSAGE AT YOUR DOOR®,&nbsp;and&nbsp;FIND A PANDA®&nbsp;are trademarks of Ctrl X, Inc.&nbsp;The contents of the MassagePanda web site are for informational purposes only. None of the information on the site should be construed or used as professional medical advice or consultation.&nbsp;</font><br></div>
+    </div>
+  </div>
+  <!-- end container -->
+</div>
+</div>
+<!-- end footer-wrap -->
+

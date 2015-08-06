@@ -1,0 +1,87 @@
+{% load staticfiles %}
+<script type="text/javascript">
+  function serviceSearchFunc() {
+  var e = document.getElementById("length");
+  var length = e.options[e.selectedIndex].value;
+  e = document.getElementById("type");
+  var type = e.options[e.selectedIndex].value;
+    if (type == 1) {
+        if (length == 1) {
+                document.getElementById("submitHref").href="/store/p42/Swedish_Massage_for_1_hour.html";
+        } else if (length == 2) {
+        document.getElementById("submitHref").href="/store/p24/Swedish_Massage_for_1.5_hours.html";
+        }
+    } else if (type == 2) {
+      if (length == 1) {
+        document.getElementById("submitHref").href="/store/p43/Deep_Tissue_Massage_for_1_hour.html";
+        } else if (length == 2) {
+        document.getElementById("submitHref").href="/store/p25/Deep_Tissue_Massage_for_1.5_hours.html";
+        }
+    } else if (type == 3) {
+      if (length == 1) {
+        document.getElementById("submitHref").href="/store/p27/Couples_Massage_for_1_hour.html";
+        } else if (length == 2) {
+        document.getElementById("submitHref").href="/store/p28/Couples_Massage_for_1.5_hour.html";
+        }
+    } else if (type == 4) {
+      if (length == 1) {
+        document.getElementById("submitHref").href="/store/p40/In-Home_Sports_Massage_for_1_hour.html";
+        } else if (length == 2) {
+        document.getElementById("submitHref").href="/store/p41/In-Home_Sports_Massage_for_1.5_hours.html";
+        }
+    } else if (type == 5) {
+      
+        document.getElementById("submitHref").href="/store/p39/In-Home_Shiatsu_Massage_for_1_Hour.html";
+        
+    
+    } else {
+        document.getElementById("submitHref").href="/store/p20/Swedish_Massage_for_1_hour.html";
+    }
+        return false;
+  }
+</script>
+
+<div id="banner-wrap">
+  <div id="banner" class="wsite-background wsite-custom-background">
+    <div class="container">
+      <div id="bannertall" class="landing-banner-outer">
+        <div class="landing-banner-mid">
+          <div class="landing-banner-inner">
+            <h2><span class="wsite-text wsite-headline">
+              <span style=""><strong style=""><font size="7">Massage, At Your Door</font></strong><br><font size="5">Anywhere. Anytime. With t</font></span><span style=""><font size="5">he best therapists.&nbsp;<br></font></span><span style=""><br></span><span style=""><br><br></span>
+              </span>
+            </h2>
+          </div>
+          <!-- end banner inner -->
+        </div>
+        <!-- end banner mid -->
+      </div>
+      <!-- end banner-right -->
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+  <!-- end banner -->
+  <div style="padding-top: 30px;padding-bottom: 30px;background: rgba(0,0,0,0.6);position: relative; text-align: center;margin-top:-104px;">
+    <form id="serviceSearch" action="http://www.massagepanda.com/search.php" method="post">
+      <span class="select" style="display:inline-block;width:200px;position: relative;vertical-align: top;margin-right: -4px;">
+        <select name="type" id="type" style="">
+          <option value="1">Swedish Massage</option>
+          <option value="2">Deep Tissue Massage</option>
+          <option value="3">Couple Massage</option>
+          <option value="4">Sports Massage</option>
+          <option value="5">Shiatsu Massage</option>
+        </select>
+      </span>
+      <span class="select" style="display:inline-block;width:104px;position: relative;vertical-align: top;margin-right: -4px;">
+        <select name="length" id="length" style="">
+          <option value="1">1 Hour</option>
+          <option value="2">1.5 Hours</option>
+        </select>
+      </span>
+      <a type="submit" id="submitHref" href="http://www.massagepanda.com/#" class="wsite-button wsite-button-small wsite-button-normal" value="Book" onclick="serviceSearchFunc()" style="height: 44px;">
+      <span class="wsite-button-inner" style="float: none;">Book</span>
+      </a> 
+    </form>
+  </div>
+</div>
+<!-- end banner-wrap -->

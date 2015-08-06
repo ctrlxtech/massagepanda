@@ -1,0 +1,28 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<div id="panda_register" class="mp-pageContent container-fluid" data-mpController="pandaRegisterPage">
+    <div class="signup-card">
+        <h1>Sign-up</h1>
+        <br>
+        <form class="mp-registerForm" action="{% url 'createCustomerFromForm' %}" method=POST>
+            {% csrf_token %}
+            <div id="mp-registerForm-panelAlert" class="alert alert-danger" role="alert" style="display:none"></div>
+            <input type="text" name="email" placeholder="Email" data-serverField="true" required />
+            <input type="text" name="first_name" placeholder="First Name" data-serverField="true" required />
+            <input type="text" name="last_name" placeholder="Last Name" data-serverField="true" required  />
+            <input type="text" name="phone" placeholder="Phone Number" data-serverField="true" />
+            <input type="radio" name="gender" value="male" checked/><label for="male">Male</label>
+            <input type="radio" name="gender" value="female"/><label for="female">Female</label>
+            <input type="password" name="password" placeholder="Password" data-serverField="true" required><input type="password" name="confirmPassword" placeholder="Confirm Password" data-serverField="true" required ><input type="submit" name="registerSubmit" class="signup signup-submit" value="sign-up">
+        </form>
+        <div class="login-help">
+            <a href="{% url 'customerLogin' %}" class="mp-pageHeader" data-mpPageId="panda_login" data-mpController="pandaLoginPage">Login</a>
+        </div>
+    </div>
+	 <div class="mp-loginSuccess mp-pageHeader" data-mpPageId="panda_home" data-pageStateType="replace" style="display:none">
+    </div>
+</div>
+
+{% endblock %}

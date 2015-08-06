@@ -919,7 +919,7 @@ var massageDetailsPage = (function(){
 
 
 var defualtSetting = {
-    appBaseURL: 'static/html/',
+    appBaseURL: '../static/html/',
     initActivePage: 'panda_home'
 };
 

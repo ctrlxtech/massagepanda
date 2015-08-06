@@ -114,6 +114,15 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+elif 'MYSQL_CONFIG' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'read_default_file': os.environ['MYSQL_CONFIG'],
+            }, 
+        }
+    }
 else:
     DATABASES = {
         'default': {
@@ -121,10 +130,9 @@ else:
             'NAME': 'test',
             'USER': 'root',
             'PASSWORD': '1234',
-            'HOST': '127.0.0.1',
+            'HOST': 'localhost',
         }
     }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

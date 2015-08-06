@@ -1,0 +1,71 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="main-wrap">
+   <div class="container">
+      <div id="wsite-content" class="wsite-elements wsite-not-footer">
+         <div>
+            <div class="wsite-multicol">
+               <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                  <table class="wsite-multicol-table">
+                     <tbody class="wsite-multicol-tbody">
+                        <tr class="wsite-multicol-tr">
+                           <td class="wsite-multicol-col" style="width:21.515151515152%; padding:0 15px;">
+                              {% include "customers/profile_nav.html" %} 
+                           </td>
+                           <td class="wsite-multicol-col" style="width:78.484848484848%; padding:0 15px;">
+                              <h2 class="wsite-content-title" style="text-align:center;">GET FREE MASSAGES<br></h2>
+                              <div class="wsite-spacer" style="height:11px;"></div>
+                              <div class="paragraph" style="text-align:left;"><font size="5">Send friends a free ride using your unique code. After their first ride, you'll get a free ride too - worth up to $20.</font></div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="paragraph" style="text-align:left;"><strong><font size="4">Quick Share</font></strong><br></div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="paragraph" style="text-align:left;">Use these methods to share free rides with your friends.<br></div>
+                              <div>
+                                 <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
+                                    <a>
+                                    <img src="{% static "images/share.png" %}" alt="Picture" style="width:auto;max-width:100%">
+                                    </a>
+                                    <div style="display:block;font-size:90%"></div>
+                                 </div>
+                              </div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="wsite-spacer" style="height:35px;"></div>
+                              <div class="paragraph" style="text-align:left;"><strong>Send Your Code</strong></div>
+                              <div>
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div class="paragraph" style="text-align:left;">This is your invite code. Friends can enter it into their app for free rides. You can also copy the link and share it with others.</div>
+                              <div class="paragraph" style="text-align:left;"><strong>ubergxu</strong></div>
+                              <div class="wsite-spacer" style="height:30px;"></div>
+                              <div class="paragraph" style="text-align:left;"><font size="2">Every time a friend signs up with your invite code, they'll get their first ride free (up to $20). Once they've tried Uber, you'll also receive a free ride (up to $20), which will be applied to your account automatically.</font></div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <div class="wsite-spacer" style="height:50px;"></div>
+      </div>
+   </div>
+   <!-- end container -->
+</div>
+<!-- end main-wrap -->
+{% endblock %}
+

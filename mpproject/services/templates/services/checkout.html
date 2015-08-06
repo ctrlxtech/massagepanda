@@ -1,0 +1,134 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+{% block script %}
+<script type="text/javascript" src="{% static "./js/my-stripe.js" %}"></script>
+{% endblock %}
+
+{% block docReady %}
+var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
+shippingInfo.popover();
+var returnPolicy = $('#panda_checkout').find('.mp-returnPolicy');
+returnPolicy.popover();
+
+{% endblock %}
+
+{% block content %}
+
+<div id="panda_checkout" class="mp-pageContent container-fluid" data-mpController="checkoutPage">
+    <div class="btn-group btn-group-justified mp-checkout-mobileTab mp-largeScreenHide" role="group">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn mp-toOrder btn-default">
+                Order Summary
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn mp-toShipping btn-default">
+                Shipping & Payment
+            </button>
+        </div>
+    </div>
+    <div class="mp-paymentForm">
+        <form id="payment-form" class="form-inline" action="{% url 'placeOrderFromPost' %}" method=POST >
+            {% csrf_token %}
+            <input type="hidden" name="referCode" data-serverField="true"/>
+            <input type="hidden" name="serviceNeedTable" data-serverField="true"/>
+            <textarea style="display:none" name="serviceParkingInfo" data-serverField="true" value=""></textarea>
+            <input type="hidden" name="serviceId" data-serverField="true" value="1" />
+            <input type="hidden" name="serviceDate" data-serverField="true" value="{{ serviceDate }}" />
+            <input type="hidden" name="serviceTime" data-serverField="true" value="{{ serviceTime }}" />
+            <input type="hidden" name="serviceGenderPreferred" data-serverField="true" value="{{ gender }}" />
+            <input type="hidden" name="serviceQuantity" data-serverField="true"/>
+            <input type="hidden" name="serviceMassageType" data-serverField="true"/>
+            <input type="hidden" name="serviceMassageLength" data-serverField="true"/>
+            <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
+                <div class="mp-checkoutSection mp-checkoutSection-left  mp-smallScreenHide">
+                    <div class="alert alert-danger mp-checkoutAlertDanger" role="alert" style="display:none">
+                        <span class="payment-errors"></span>
+                    </div>
+                    <h2>Secure Checkout</h2>
+                    <div>
+                        <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}"/>
+                    </div><h2>Shipping Information</h2>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="First Name" class="form-control  mp-fieldRequired mp-halfwidth" name="first-name" data-serverField="true" required/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Last Name" class="form-control mp-fieldRequired mp-halfwidth" name="last-name" data-serverField="true" required/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Email" class="form-control mp-fieldRequired mp-halfwidth" name="email" data-serverField="true" required/>
+                    </div>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Phone" class="form-control mp-fieldRequired mp-halfwidth" name="phone" data-serverField="true" required/>
+                    </div>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Address Line 1" class="form-control mp-fieldRequired mp-halfwidth" name="al1" data-serverField="true" required />	
+                    </div>
+					  <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Address Line 2" class="form-control mp-fieldRequired mp-halfwidth" name="al2" data-serverField="true"/>	
+                    </div>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="City" class="form-control mp-fieldRequired mp-halfwidth" name="city" data-serverField="true" required/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                        {% include "payment/state_list.html" %}
+                    </div>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" value="United States" class="form-control mp-fieldRequired mp-halfwidth" name="country" data-serverField="true" readonly/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                       <input type="text" placeholder="Zip" class="form-control mp-fieldRequired mp-halfwidth" name="zipcode" data-serverField="true" required/>
+                    </div>
+					<h2>Billing Information</h2>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="Name on Card" class="form-control mp-fieldRequired mp-halfwidth mp-mobile-fullWidth" name="name" data-stripe="name" data-serverField="true" required/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                       <input type="text" placeholder="1234 5678 9012 3456" class="form-control mp-fieldRequired mp-halfwidth mp-mobile-fullWidth" name="number" size="20" data-stripe="number" data-serverField="true" required/>
+                    </div>
+                    <div class="form-group mp-form-inlineGroup">
+                        <input type="text" placeholder="MM" class="form-control mp-fieldRequired mp-tinywidth mp-mobile-tinywidth" name="exp-month" size="2" data-stripe="exp-month" required/><input type="text" placeholder="YYYY" class="form-control mp-fieldRequired mp-smallwidth mp-mobile-smallwidth" name="exp-year" size="4" data-stripe="exp-year" required/>
+                    </div>
+					 <div class="form-group mp-form-inlineGroup">
+                       <input type="text" placeholder="CVC" class="form-control mp-fieldRequired mp-tinywidth mp-mobile-tinywidth" name="cvc" size="4" data-stripe="cvc" required/><input type="text" placeholder="Zip / Postal" class="form-control mp-fieldRequired mp-smallwidth mp-mobile-smallwidth" name="address-zip" data-stripe="address-zip" data-serverField="true" required/>
+                    </div>
+                    <div id="mp-completeOrder" class="mp-checkout mp-checkoutShort">
+                        <button type="submit" class="btn btn-success">
+                            Complete Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
+                <div class="mp-checkoutSection mp-checkoutSection-right">
+                    <div class="mp-checkout-summary">
+                        <h2>Order Summary <span class="mp-summary-amount">(Subtotal : ${{ massageFee }})</span></h2>
+                        <ul class="list-group">
+                            <li class="list-group-item  mp-summary-title">{{ massageType }}</li>
+                            <li class="list-group-item  mp-summary-date">Date : {{ serviceDate }}</li>
+                            <li class="list-group-item  mp-summary-time">Time : {{ serviceTime }}</li>
+                            <li class="list-group-item  mp-summary-genderPrefer">Gender Preferred : {{ gender }}</li>
+                        </ul>
+                    </div>
+					<div class="form-group">
+                      <input type="text" placeholder="Enter Coupon Code" class="form-control" name="serviceCoupon" data-serverField="true"/>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="checkoutNote" val="" placeholder="Note to Seller (Optional)" class="form-control mp-fieldRequired mp-checkoutNote" rows="3" cols="50" data-serverField="true"></textarea>
+                    </div>
+                    <div class="mp-returnInfoDiv">
+                        <a href="#" class="mp-returnInfo mp-shippingInfo" title="Shipping Info" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="We will not charge your card until a therapist responds and confirms the booking.You can change appointment time within 15 minutes after your booking has been confirmed by our therapist.">Shipping Info</a>
+                        <a href="#" class="mp-returnInfo mp-returnPolicy" title="Return Policy" data-container="body" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Since www.massagepanda.com is offering non-tangible irrevocable services we do not issue refunds once the order is accomplished and the booking is confirmed. As a customer you are responsible for understanding this upon purchasing any item at our site. Please note that our bonuses are offered on behalf of our respected partners and are not an issue for a refund or chargeback. However, we realize that exceptional circumstance can take place with regard to the character of the service we supply. Therefore, we DO honor requests for the refund on the following reasons: Non-delivery of the service: due to some traffic issues of our service provider or other reasons you might not receive the service delivery from us. In this case we recommend contacting us for assistance. Claims for non-delivery must be submitted to our Billing department in writing within 7 days from the order placing date. Otherwise the service will be considered delivered and received; Service not-as-described: such issues should be reported to our Customer Support Department within 7 days from the date of the purchase. Clear evidence must be provided proving that the purchased service is not as it is described on the website. Complaints which are based merely on the customer’s false expectations or wishes are not honored. Our Customer Support Team is always eager to assist you and deliver highly professional support in a timely manner. Thank you for purchasing our services.Contact Us :Online Form: www.massagepanda.com/contact Phone: 1-855-68-PANDA. Please give it 12-24 hours for our Support Team to get back to you on the problem.Requests for a refund are accepted at www.massagepanda.com/refund within the period of 1 week after the order is placed. You should accompany this request with detailed and grounded reasons why you apply for a refund. Please make sure your request does not contradict our Terms and Conditions. A refund is issued to you upon receipt of a Waiver of Copyright signed by you.">Return Policy</a>
+                    </div>
+                    <div class="mp-checkout mp-largeScreenHide">
+                        <button type="button" class="btn mp-toShipping btn-success">
+                            Continue To Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,73 +1,328 @@
-{% extends 'index/base.html' %}
+{% extends 'index/wbase.html' %}
 
 {% load staticfiles %}
 {% block content %}
-        <div id="mp-mainContent" class="jumbotron">
+<style type="text/css">#wsite-com-product-images .wsite-imageaspectratio-image-height, .wsite-com-category-product-image-height.wsite-imageaspectratio-image-height, .wsite-product .wsite-imageaspectratio-image-height, .wsite-com-category-product-featured-image-height.wsite-imageaspectratio-image-height { margin-bottom: 75% !important } .wsite-com-category-subcategory-image-height.wsite-imageaspectratio-image-height { margin-bottom: 100% !important } .wsite-com-category-product-group .wsite-com-column { width: 50.00% !important } .wsite-com-category-product-featured-group .wsite-com-column { width: 25.00% !important } .wsite-com-category-subcategory-group .wsite-com-column { width: 33.33% !important } </style>
 
-<!-- Book Massage Page-->
-<div id="panda_bookMassage" class="mp-pageContent container-fluid">
-    <div class="container panda-bookMassage-partOne">
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-left mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                <input type="hidden" name="panda-massageType" value="swedish"/>
-				<img class="mp-massageTypePreview-image" src="{% static "./images/book_SwedishOneHour.png" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Swedish Massage for 1 hour</span>
-                    <span class="mp-massageTypePreview-price">$79</span>
+<div id="main-wrap">
+  <div class="container">
+    <div id="wsite-content">
+      <div id="wsite-com-store">
+        <div id="wsite-com-store-inner">
+          <div class="wsite-com-content ">
+            <div class="wsite-com-category-subcategory-group wsite-com-column-group"></div>
+            <div style="clear:both"></div>
+            <div id="wsite-com-product-list">
+              <div id="wsite-com-category-product-group" class="wsite-com-category-product-group clearfix">
+                <div class="wsite-com-category-product wsite-com-column" data-id="42" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:100.5%;top:0%;left:-0.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Swedish Massage for 1 Hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price single-sale-price">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $99.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $79.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-right mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                <input type="hidden" name="panda-massageType" value="deeptissue"/>
-			    <img class="mp-massageTypePreview-image" src="{% static "./images/book_DeepTissueOneHour.png" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Deep Tissue Massage for 1 hour</span>
-                    <span class="mp-massageTypePreview-price">$79</span>
+                <div class="wsite-com-category-product wsite-com-column" data-id="43" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_DeepTissueOneHour.png" %}" style="width:100.5%;top:0%;left:-0.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Deep Tissue Massage for 1 Hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price single-sale-price">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $99.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $79.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-left mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                <input type="hidden" name="panda-massageType" value="swedish"/>
-				<img class="mp-massageTypePreview-image" src="{% static "./images/book_SwedishOneHalfHour.png" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Swedish Massage for 1.5 hours</span>
-                    <span class="mp-massageTypePreview-price">$109</span>
+                <div class="wsite-com-category-product wsite-com-column" data-id="24" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHalfHour.png" %}" style="width:100.5%;top:0%;left:-0.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Swedish Massage for 1.5 hours
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $109.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $109.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-right mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                <input type="hidden" name="panda-massageType" value="deeptissue"/>
-				<img class="mp-massageTypePreview-image" src="{% static "./images/book_DeepTissueOneHalfHour.png" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Deep Tissue Massage for 1.5 hours</span>
-                    <span class="mp-massageTypePreview-price">$109</span>
+                <div class="wsite-com-category-product wsite-com-column" data-id="25" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_DeepTissueOneHalfHour.png" %}" style="width:101.25%;top:0%;left:-0.63%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Deep Tissue Massage for 1.5 hours
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $109.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $109.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-left mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                <input type="hidden" name="panda-massageType" value="couples"/>
-			    <img class="mp-massageTypePreview-image" src="{% static "./images/book_CouplesSwedishOneHour.jpg" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Couples - Swedish Massage for 1 hour</span>
-                    <span class="mp-massageTypePreview-price">$149</span>
+                <div class="wsite-com-category-product wsite-com-column" data-id="27" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_CouplesSwedishOneHour.jpg" %}" style="width:120%;top:0%;left:-10%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Couples Massage for 1 hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $149.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $149.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6">
-            <div class="mp-massageTypePreview mp-right mp-bookMassagePreview mp-pageHeader" data-mpController="massageDetailsPage" data-mpPageId="panda_massageDetails" data-mpPageType="other">
-                 <input type="hidden" name="panda-massageType" value="couples"/>
-			    <img class="mp-massageTypePreview-image" src="{% static "./images/book_CouplesDeepTissueOneHour.jpg" %}"/>
-                <div class="mp-massageTypePreview-text mp-bookMassagePreview-text">
-                    <span class="mp-massageTypePreview-name">Couples - Deep Tissue Massage for 1 hour</span>
-                    <span class="mp-massageTypePreview-price">$149</span>
+                <div class="wsite-com-category-product wsite-com-column" data-id="28" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_CouplesDeepTissueOneHour.jpg" %}" style="width:100%;top:-2.08%;left:0%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Couples Massage for 1.5 hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $199.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $199.00
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <div class="wsite-com-category-product wsite-com-column" data-id="39" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:114%;top:0%;left:-7%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Shiatsu Massage for 1 Hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $99.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $99.00
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wsite-com-category-product wsite-com-column" data-id="40" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:112.5%;top:0%;left:-6.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Sports Massage for 1 hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $79.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $79.00
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wsite-com-category-product wsite-com-column" data-id="41" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:112.5%;top:0%;left:-6.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Sports Massage for 1.5 hours
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price ">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $109.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $109.00
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wsite-com-category-product wsite-com-column" data-id="44" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:100%;top:-49.5%;left:0%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        Additional Service Fee in San Francisco
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price single-sale-price">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $10.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $0.00
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wsite-com-category-product wsite-com-column" data-id="45" style="height: 429px;">
+                  <div class="wsite-com-category-product-wrap">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'serviceDetails' %}">
+                      <div style="position:relative">
+                        <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
+                          <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">
+                          </div>
+                          <div class="wsite-com-category-product-image-wrap wsite-imageaspectratio-image-wrap">
+                            <img class="wsite-com-category-product-image wsite-imageaspectratio-image" src="{%static "images/book_SwedishOneHour.png" %}" style="width:112.5%;top:0%;left:-6.25%">
+                          </div>
+                        </div>
+                        <div class="wsite-com-category-product-cover"></div>
+                      </div>
+                      <div class="wsite-com-category-product-name wsite-com-link-text">
+                        In-Home Sports Massage for 1 hour
+                      </div>
+                    </a>
+                    <div class="wsite-com-product-price single-sale-price">
+                      <div class="wsite-com-category-product-price wsite-com-price">
+                        $99.00
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        $79.00
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div id="wsite-com-product-list-paging" class="clearfix">
+            </div>
+          </div>
         </div>
+        <div style="clear:both"></div>
+      </div>
     </div>
+  </div>
+  <!-- end container -->
 </div>
-</div>
+<!-- end main-wrap -->
+
 {% endblock content %}

@@ -1,5 +1,11 @@
 {% extends "index/wbase.html" %}
 {% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static "./css/checkout.css" %}" type="text/css">
+
+{% endblock %}
+
 {% block script %}
 <script type="text/javascript" src="{% static "./js/my-stripe.js" %}"></script>
 {% endblock %}
@@ -49,6 +55,14 @@ returnPolicy.popover();
                     <div>
                         <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}"/>
                     </div><h2>Shipping Information</h2>
+                    {% for address in request.user.customer.address_set.all %}
+                    <div class="border">
+                      <input type="radio" name="savedAddress"
+                      {% if forloop.counter0 == 0 %} checked="checked" {% endif %}>
+                        {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
+                    </div>
+                    {% endfor %}
+                                        <br>
                     <div class="form-group mp-form-inlineGroup">
                         <input type="text" placeholder="First Name" class="form-control  mp-fieldRequired mp-halfwidth" name="first-name" data-serverField="true" required/>
                     </div>
@@ -80,6 +94,18 @@ returnPolicy.popover();
                        <input type="text" placeholder="Zip" class="form-control mp-fieldRequired mp-halfwidth" name="zipcode" data-serverField="true" required/>
                     </div>
 					<h2>Billing Information</h2>
+                                        <div class="border">
+                                        <input type="radio" name="savedAddress"
+                                            {% if forloop.counter0 == 0 %} checked="checked" {% endif %}>
+                                        {% if stripeCustomer %}
+                                        {% for data in stripeCustomer.sources.data %}
+                                        {{ data.brand }}
+                                        ••••{{ data.last4 }}
+                                        {{ data.exp_month}}/{{ data.exp_year }}
+                                        {% endfor %}
+                                        {% endif %}
+                                        </div>
+                                        <br>
                     <div class="form-group mp-form-inlineGroup">
                         <input type="text" placeholder="Name on Card" class="form-control mp-fieldRequired mp-halfwidth mp-mobile-fullWidth" name="name" data-stripe="name" data-serverField="true" required/>
                     </div>

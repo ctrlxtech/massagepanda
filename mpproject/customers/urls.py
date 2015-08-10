@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^login$', TemplateView.as_view(template_name='customers/login.html'), name='customerLogin'),
     url(r'^register$', TemplateView.as_view(template_name='customers/register.html'), name='customerRegister'),
     url(r'^refer$', views.referPage, name='refer'),
+    url(r'^history$', views.historyPage, name='history'),
     url(r'^payment$', views.paymentPage, name='customerPayment'),
 ]

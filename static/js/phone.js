@@ -17,6 +17,7 @@ function pandaPhoneInit() {
         classie.toggle(menuLeft, 'cbp-spmenu-open');
 
     };
+/*
     showRightPush.onclick = function() {
         if ($('#mp-leftSideNav').hasClass('cbp-spmenu-open')) {
             classie.toggle(navBar, 'cbp-spmenu-push-toright');
@@ -28,11 +29,13 @@ function pandaPhoneInit() {
         classie.toggle(menuRight, 'cbp-spmenu-open');
 
     };
-    $('#mp-leftSideNav').on('click', function() {
-        $('#mp-showLeftPush').trigger('click');
-    });
     $('#mp-rightSideNav').on('click', function() {
         $('#mp-showRightPush').trigger('click');
+    });
+
+*/
+    $('#mp-leftSideNav').on('click', function() {
+        $('#mp-showLeftPush').trigger('click');
     });
 
 }

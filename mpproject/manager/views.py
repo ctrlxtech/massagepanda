@@ -51,11 +51,30 @@ def referralTest(request):
     else:
         return HttpResponse("No code found")
 
+@user_passes_test(lambda u: u.is_superuser)
+def sendEmail(request):
+    staff_list = Staff.objects.order_by('first_name')
+    context = {'staff_list': staff_list}
+    return render(request, 'manager/email.html', context)
+
 @login_required
 def sendMyEmail(request):
     subject, from_email, to = 'Your Coupon!', settings.SERVER_EMAIL, 'yuechen1989@gmail.com'
     text_content = 'This is an email containing your coupon.'
-    html_content = get_template('manager/hello.html').render()
+    html_content = get_template('manager/helloEmail.html').render()
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return HttpResponse("Email sent!") 
+
+@user_passes_test(lambda u: u.is_superuser)
+def sendFeedbackEmail(request):
+    staff = Staff.objects.get(pk=request.POST.get('therapist'))
+    from_email = settings.SERVER_EMAIL
+    to = request.POST.get('to')
+    subject = 'How do you like ' + staff.first_name + ' - Your Feedback is Important to Us'
+    text_content = 'We really appreciate your feedback!'
+    html_content = get_template('manager/feedbackEmail.html').render()
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -113,7 +132,6 @@ def test(request):
 
 @login_required(login_url="/manager/login")
 def customerProfile(request):
-    customerId = request.GET.get('id')
     user = request.user
     try:
         customer = Customer.objects.get(user=user)

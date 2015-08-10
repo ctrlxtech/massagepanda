@@ -43,13 +43,13 @@
  #icontent_container ul li{ list-style:none; }
  a { color: #2ecc71; }
  a:hover { color: #2ecc71; text-decoration: underline; }
- h2 { font-size: 30px; padding: .5em 0 .2em 0; line-height: 30px; font-family: 'Lustria', serif; font-weight: normal; color: #393939; letter-spacing: 1px; }
+ h2 { font-size: 29px; padding: .5em 0 .2em 0; line-height: 30px; font-family: 'Oxygen', serif; font-weight: 300; color: #393939; letter-spacing: 1px; }
  div.paragraph { font-size: 17px; line-height: 1.5; padding: .5em 0; }
  p { font-size: 17px; line-height: 1.5; padding: .5em 0; }
  blockquote { background: none; font-family: 'Oxygen', sans-serif; font-size: 17px; line-height: 28px; padding: 1em; margin: 2em 0; border-left: 0px !important; }
  div#content {min-height:400px;}
  .select:before{ content: '\25bc'; position: absolute; pointer-events: none; color: #82888a; padding-top:0.7em; width: 2em; text-align: center; transform: scale(0.64, 0.50); right: 0; -webkit-transform: scale(0.64, 0.50); -moz-transform: scale(0.64, 0.50); -ms-transform: scale(0.64, 0.50); -o-transform: scale(0.64, 0.50); -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.64, M12=0, M21=0, M22=0.50, SizingMethod='auto expand')"; filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.64, M12=0, M21=0, M22=0.50, SizingMethod='auto expand'); }
- #banner-wrap select{ height: 44px; border: 1px solid #c4c4c4; color: #565a5c; background-color: #fff; padding: 8px 10px; display: block; -webkit-appearance: none; }
+ #banner-wrap select{ height: 44px; border: 1px solid #c4c4c4; color: #565a5c; background-color: #fff; padding: 8px 10px; display: block; -webkit-appearance: none; font: normal normal normal 17px/normal Arial;}
  #banner-wrap .wsite-button-inner{ line-height: 44px; height: 44px; padding: 0px 40px 0px 40px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; }
  .discovery-card { height: 344px; background-color: #f5f5f5; background-size: cover; background-position: center; position: relative; }
  .lo-container { display: table; position: relative; height: 100%; width:100%; }

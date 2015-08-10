@@ -1,0 +1,196 @@
+{% load staticfiles %}
+
+  <div>
+    <div class="wsite-multicol">
+      <div class="wsite-multicol-table-wrap" style="margin:0 -0px;">
+        <table class="wsite-multicol-table">
+          <tbody class="wsite-multicol-tbody">
+            <tr class="wsite-multicol-tr">
+              <td class="wsite-multicol-col" style="width:5.8744993324431%; padding:0 0px;">
+                <div>
+                  <div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
+                    <a id="detailDrop" data-toggle="collapse" href="#collapseExample{{ record.id }}" aria-expanded="false" aria-controls="collapseExample{{ record.id }}">
+                    <img id="arrowImg" alt="Picture" style="width:auto;max-width:100%" src="{% static "images/arrow.png" %}">
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="wsite-multicol-col" style="width:15.086782376502%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">07/01/15</font></div>
+              </td>
+              <td class="wsite-multicol-col" style="width:17.822776047075%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">San Francisco</font></div>
+              </td>
+              <td class="wsite-multicol-col" style="width:16.658105742372%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">{{ record.service.service_type }}</font></div>
+              </td>
+              <td class="wsite-multicol-col" style="width:11.83976335555%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">{{ record.service.service_time }}mins</font></div>
+              </td>
+              <td class="wsite-multicol-col" style="width:17.772780474402%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">Jennifer</font></div>
+              </td>
+              <td class="wsite-multicol-col" style="width:14.945292671656%; padding:0 0px;">
+                <div class="paragraph" style="text-align:left;"><font size="3">US${{ record.amount|div:100 }}</font></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+    <hr class="styled-hr" style="width:100%;">
+    <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+  </div>
+ <div class="collapse" id="collapseExample{{ record.id }}">
+  <div>
+    <div class="wsite-multicol">
+      <div class="wsite-multicol-table-wrap" style="margin:0 -10px;">
+        <table class="wsite-multicol-table">
+          <tbody class="wsite-multicol-tbody">
+            <tr class="wsite-multicol-tr">
+              <td class="wsite-multicol-col" style="width:26.06122051973%; padding:0 10px;">
+                <div>
+                  <div class="wsite-image wsite-image-border-none " style="padding-top:10px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
+                    <a>
+                    <img src="{% static "images/therapist.png" %}" alt="Picture" style="width:auto;max-width:100%">
+                    </a>
+                    <div style="display:block;font-size:90%"></div>
+                  </div>
+                </div>
+                <div class="paragraph" style="text-align:center;">Jennifer served you &nbsp;&nbsp;</div>
+                <div>
+                  <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
+                    <a>
+                    <img src="./order_files/_8111424_orig.png" alt="Picture" style="width:auto;max-width:100%">
+                    </a>
+                    <div style="display:block;font-size:90%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="wsite-image wsite-image-border-none " style="padding-top:5px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:center">
+                    <a>
+                    <img src="./order_files/_6025440_orig.png" alt="Picture" style="width:auto;max-width:100%">
+                    </a>
+                    <div style="display:block;font-size:90%"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="wsite-multicol-col" style="width:36.769543802589%; padding:0 10px;">
+                <div class="paragraph" style="text-align:center;"><strong><font size="5">US$117.18</font></strong><br><font size="3">Paid with Visa ending ****2485</font></div>
+                <div>
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                  <hr class="styled-hr" style="width:100%;">
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                </div>
+                <div class="paragraph" style="text-align:center;"><font size="3">Wednesday, July 1 2015 12:43 PM</font></div>
+                <div>
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                  <hr class="styled-hr" style="width:100%;">
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                </div>
+                <div>
+                  <div class="wsite-multicol">
+                    <div class="wsite-multicol-table-wrap" style="margin:0 -5px;">
+                      <table class="wsite-multicol-table">
+                        <tbody class="wsite-multicol-tbody">
+                          <tr class="wsite-multicol-tr">
+                            <td class="wsite-multicol-col" style="width:38.007380073801%; padding:0 5px;">
+                              <div class="paragraph" style="text-align:left;"><font size="3">07/01 13:03</font><br><font size="3">07/02 17:57</font><br><font size="3">07/02 19:31</font></div>
+                            </td>
+                            <td class="wsite-multicol-col" style="width:61.992619926199%; padding:0 5px;">
+                              <div class="paragraph" style="text-align:left;"><font size="3">Order Confirmed</font><br><font size="3">Therapist Arrived</font><br><font size="3">Session Ended</font></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="wsite-multicol-col" style="width:37.16923567768%; padding:0 10px;">
+                <div class="paragraph" style="text-align:center;"><strong><font size="3">Order Details</font></strong><br></div>
+                <div>
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                  <hr class="styled-hr" style="width:100%;">
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                </div>
+                <div>
+                  <div class="wsite-multicol">
+                    <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                      <table class="wsite-multicol-table">
+                        <tbody class="wsite-multicol-tbody">
+                          <tr class="wsite-multicol-tr">
+                            <td class="wsite-multicol-col" style="width:69.791666666667%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:left;"><font size="3">1 x In-Home Deep Tissue Massage for 1.5 hours</font><br><font size="3">Coupon - <font color="#da4444">TWENTYOFF</font></font><br></div>
+                            </td>
+                            <td class="wsite-multicol-col" style="width:30.208333333333%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:right;"><font size="3">$109.00</font><br><font size="3"><font color="#da4444">-$21.80</font><br></font><br></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                  <hr class="styled-hr" style="width:100%;">
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                </div>
+                <div>
+                  <div class="wsite-multicol">
+                    <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                      <table class="wsite-multicol-table">
+                        <tbody class="wsite-multicol-tbody">
+                          <tr class="wsite-multicol-tr">
+                            <td class="wsite-multicol-col" style="width:69.791666666667%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:left;"><font size="3">Subtotal<span style="">    </span><br>Taxes<span style=""> </span></font><br></div>
+                            </td>
+                            <td class="wsite-multicol-col" style="width:30.208333333333%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:right;"><font size="3">$109.00<br>$8.18</font><br></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                  <hr class="styled-hr" style="width:100%;">
+                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                </div>
+                <div>
+                  <div class="wsite-multicol">
+                    <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">
+                      <table class="wsite-multicol-table">
+                        <tbody class="wsite-multicol-tbody">
+                          <tr class="wsite-multicol-tr">
+                            <td class="wsite-multicol-col" style="width:71.875%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:left;"><font size="3">Total</font></div>
+                            </td>
+                            <td class="wsite-multicol-col" style="width:28.125%; padding:0 15px;">
+                              <div class="paragraph" style="text-align:right;"><span style="">$117.18</span></div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+    <hr class="styled-hr" style="width:100%;">
+    <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+  </div>
+ </div>

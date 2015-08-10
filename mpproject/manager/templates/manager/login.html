@@ -107,7 +107,7 @@
 </script>
 
 
-<form id="login-form" action="{% url 'welcome' %}" method="POST">
+<form id="login-form" action="{% url 'userLoginFromForm' %}" method="POST">
 {% csrf_token %}
  <label>Email: </label><input type="text" name="username"><br>
 <label>Password: </label><input type="password" id="pass1" name="password"><br>

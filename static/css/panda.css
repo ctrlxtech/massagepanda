@@ -22,10 +22,11 @@ body {
 }
 
 nav#mp-navbar {
-    box-shadow: 0px 3px 5px #D3D3D3;
-    background: -webkit-linear-gradient( rgb(250, 250, 250), rgb(236, 236, 236)) repeat scroll 0% 0% !important;
-  background: -moz-linear-gradient( rgb(250, 250, 250), rgb(236, 236, 236)) repeat scroll 0% 0% !important;
-  background: linear-gradient( rgb(250, 250, 250), rgb(236, 236, 236)) repeat scroll 0% 0% !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    border-bottom: 2px solid #eeeeee;
+    background: -webkit-linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
+    background: -moz-linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
+    background: linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
 }
 
 nav#mp-navbar .mp-navigation>ul>li.dropdown>ul.dropdown-menu{
@@ -37,7 +38,7 @@ nav#mp-navbar .mp-navigation>ul>li.dropdown.open>ul.dropdown-menu{
 }
 
 .jumbotron {
-    background-color: #FAFAFA !important;
+    background-color: #FFFFFF !important;
     margin-bottom: 0px !important;
 	padding-bottom: 10px !important;
 }
@@ -59,8 +60,8 @@ hr {
 }
 
 .mp-pandaIcon {
-   width: 200px;
-  height: 50px;
+   /*width: 200px;
+  height: 50px;*/
     margin-top: 5px;
 }
 
@@ -809,7 +810,7 @@ overflow: hidden;
 .signup {
   text-align: center;
   font-size: 16px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Oxygen', sans-serif;
   font-weight: 700;
   height: 36px;
   padding: 0 8px;
@@ -914,7 +915,7 @@ overflow: hidden;
 .login {
   text-align: center;
   font-size: 14px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Oxygen', sans-serif;
   font-weight: 700;
   height: 36px;
   padding: 0 8px;

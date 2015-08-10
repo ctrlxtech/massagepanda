@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.conf import settings
+import stripe
 
 from services.models import Service
 
@@ -20,6 +22,14 @@ def checkout(request):
     serviceTime = request.POST.get("massageDetailsTime")
     genderPrefer = request.POST.get("genderPreferred")
 
+    stripe.api_key = settings.STRIPE_KEY
+    stripeCustomer = ""
+    try:
+        stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
+    except:
+        pass
+
     context = {'massageType': massageType, 'massageFee': massageFee,
-        'serviceDate': serviceDate, 'serviceTime': serviceTime, 'gender': genderPrefer}
+        'serviceDate': serviceDate, 'serviceTime': serviceTime, 
+        'gender': genderPrefer, 'stripeCustomer': stripeCustomer}
     return render(request, 'services/checkout.html', context)

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+<title>Send Email</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
+<script type="text/javascript" src="{% static "js/email.js" %}"></script>
+</head>
+
+<body>
+<form id="feedbackEmailForm" method='POST'>
+{% csrf_token %}
+
+{% if staff_list %}
+<select id="therapist" name="therapist">
+{% for staff in staff_list %}
+<option value="{{ staff.id }}">{{ staff.first_name }} {{ staff.last_name }}</option>
+{% endfor %}
+</select>
+{% endif %}
+<input type="text" placeholder="Email" name="to">
+<input type="submit" value="send">
+</form>
+
+<font color='red'>
+<div style="padding-top:20px">
+Response message:
+<div id="myDiv">
+</div>
+</div>
+</font>
+
+<iframe src="{% url 'feedbackEmail' %}" frameborder="0" scrolling="no" id="iframe" onload='javascript:resizeIframe(this);'></iframe>
+</body>
+</html>

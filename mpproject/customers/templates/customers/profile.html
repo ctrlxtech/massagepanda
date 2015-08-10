@@ -35,18 +35,18 @@
                                           <div class="inner">
                                              <div class="wsite-form-field wsite-name-field">
                                                 <div class="wsite-form-input-container wsite-form-left">
-                                                   <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="First Name">
+                                                   <input class="wsite-form-input" type="text" name="name_first" value="{{ request.user.first_name }}" placeholder="First Name">
                                                 </div>
                                                 <div class="wsite-form-input-container wsite-form-right">
-                                                   <input class="wsite-form-input" type="text" name="name_last" value="" placeholder="Last Name">
+                                                   <input class="wsite-form-input" type="text" name="name_last" value="{{ request.user.last_name }}" placeholder="Last Name">
                                                 </div>
                                              </div>
                                              <div class="wsite-form-field">
                                                 <div class="wsite-form-input-container wsite-form-left">
-                                                   <input class="wsite-form-input" type="text" name="email" value="" placeholder="Email">
+                                                   <input class="wsite-form-input" type="text" name="email" value="{{ request.user.email }}" placeholder="Email">
                                                 </div>
                                                 <div class="wsite-form-input-container wsite-form-right">
-                                                   <input class="wsite-form-input" type="text" name="home_phone" value="" placeholder="Phone">
+                                                   <input class="wsite-form-input" type="text" name="home_phone" value="{{ request.user.customer.phone }}" placeholder="Phone">
                                                 </div>
                                              </div>
                                           </div>
@@ -62,7 +62,7 @@
                               <div>
                                  <div id="160172961544217299" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
                                     <div class="wsite-com-checkout-section" style="padding-bottom:0px;">
-                                       {% include "customers/shipping.html" %}
+                                       {% include "customers/profileShipping.html" %}
                                     </div>
                                     <div style="display:block;font-size:90%"></div>
                                  </div>

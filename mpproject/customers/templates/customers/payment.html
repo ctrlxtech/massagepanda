@@ -58,10 +58,13 @@
                         <div class="wsite-multicol-table-wrap" style="margin:0 -5px;">
                           <table class="wsite-multicol-table">
                             <tbody class="wsite-multicol-tbody">
+{% if stripeCustomer %}
+{% for data in stripeCustomer.sources.data %}
                               <tr class="wsite-multicol-tr">
-                                <td class="wsite-multicol-col" style="width:7.010582010582%; padding:0 5px;">
+                                <td class="wsite-multicol-col" style="width:7%; padding:0 5px;">
                                   <div>
                                     <div class="wsite-image wsite-image-border-hairline " style="padding-top:10px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
+{{ data.brand }}
                                       <a>
                                       <img src="{% static "images/visa.png" %}" alt="Picture" style="width:auto;max-width:100%">
                                       </a>
@@ -69,13 +72,13 @@
                                     </div>
                                   </div>
                                 </td>
-                                <td class="wsite-multicol-col" style="width:10.067230437601%; padding:0 5px;">
-                                  <div class="paragraph" style="text-align:left;">•••• 1234<br></div>
+                                <td class="wsite-multicol-col" style="width:12%; padding:0 5px;">
+                                  <div class="paragraph" style="text-align:left;">••••{{ data.last4 }}<br></div>
                                 </td>
-                                <td class="wsite-multicol-col" style="width:82.922187551817%; padding:0 5px;">
+                                <td class="wsite-multicol-col" style="width:81%; padding:0 5px;">
                                   <div>
                                     <div class="wsite-image wsite-image-border-none " style="padding-top:5px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:center">
-                                      <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="Expiration">
+                                      <input class="wsite-form-input" type="text" name="name_first" value="{{ data.exp_month}}/{{ data.exp_year }}" placeholder="Expiration">
                                       <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="CVV">
                                       <a href="#">Cancel</a>
                                       <a href="#">Save</a>
@@ -84,6 +87,10 @@
                                   </div>
                                 </td>
                               </tr>
+{% endfor %}
+{% else %}
+no payment found
+{% endif %}
                             </tbody>
                           </table>
                         </div>

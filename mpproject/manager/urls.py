@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from manager import views
+from django.views.generic import TemplateView
+
 urlpatterns = [
     url(r'^$', views.index, name='manager'),
     url(r'^send$', views.send, name='sendSMS'),
@@ -17,7 +19,10 @@ urlpatterns = [
     url(r'^applyConfig$', views.applyConfig, name='applyConfig'),
     url(r'^receiveSMS', views.receiveSMS, name='receiveSMS'),
     url(r'^getContactList', views.getContactList, name='getContactList'),
+    url(r'^sendEmail$', views.sendEmail, name='sendEmail'),
+    url(r'^feedbackEmail$', TemplateView.as_view(template_name='manager/feedbackEmail.html'), name='feedbackEmail'),
     url(r'^sendMyEmail$', views.sendMyEmail, name='sendMyEmail'),
+    url(r'^sendFeedbackEmail$', views.sendFeedbackEmail, name='sendFeedbackEmail'),
     url(r'^assignTherapist$', views.assignTherapist, name='assignTherapist'),
     
     url(r'^payment', views.payment, name='mpayment'),

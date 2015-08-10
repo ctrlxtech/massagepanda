@@ -16,6 +16,11 @@
         <link rel="stylesheet" href="{% static "./css/smallScreen.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/sites.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/main_style.css" %}" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+<link href='//fonts.googleapis.com/css?family=Lustria&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+
+<link href='//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+<link href='//fonts.googleapis.com/css?family=Raleway:400,300,200,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 
         {% block style %}
         {% endblock %}
@@ -53,6 +58,14 @@
 <nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide">
   <a href="{% url 'index' %}" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
   <a href="{% url 'services' %}" class="mp-pageHeader" data-mpController="pandaBookMassagePage"  data-mpPageId="panda_bookMassage">Book Massage</a>
+    <!--
+  {% if request.user.is_authenticated %}
+  <a href="{% url 'customer' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaProfilePage" data-mpPageId="panda_profile">Profile</a>
+  <a href="{% url 'logoutView' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout">Logout</a>
+  {% else %}
+  <a href="{% url 'customerLogin' %}" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
+  {% endif %}
+  -->
   <ul class="mp-sideBar-socialLink">
     <li> <a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a> </li>
     <li> <a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a> </li>
@@ -62,15 +75,6 @@
     <li> <a class="mp-socialLink wsite-social-yelp" href="http://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"></a></li>
     <li> <a class="mp-socialLink wsite-social-thumbtack" href="https://www.thumbtack.com/profile/services/Ytg6gI4BRZB$vQ/" target="_blank"></a></li>
   </ul>
-</nav>
-<nav id="mp-rightSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right mp-largeScreenHide" >
-  {% if request.user.is_authenticated %}
-  <a href="" class="mp-pageHeader mp-mobileLoginTrue mp-mobileLoginName"></a>
-  <a href="{% url 'customer' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaProfilePage" data-mpPageId="panda_profile">Profile</a>
-  <a href="{% url 'logoutView' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaLogoutPage" data-mpPageId="panda_logout">Logout</a>
-  {% else %}
-  <a href="{% url 'customerLogin' %}" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
-  {% endif %}
 </nav>
 <nav id="mp-navbar" class="navbar navbar-default navbar-fixed-top cbp-spmenu-push">
   <div class="container">
@@ -82,9 +86,13 @@
       <img class="mp-pandaIcon" src="{% static "./images/pandaNewIcon.png" %}"/>
       </a>
     </div>
+    <!--
     <div id="mp-showRightPush"  class="mp-navigation-mobileSetting mp-largeScreenHide">
-      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+  {% if request.user.is_authenticated %}
+  <a href="{% url 'customer' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaProfilePage" data-mpPageId="panda_profile">{{ request.user.first_name }}</a>
+  {% endif %}
     </div>
+    -->
     <div class="mp-navigation mp-smallScreenHide">
       <ul>
         <li>

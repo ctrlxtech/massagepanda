@@ -64,9 +64,11 @@
                                 <td class="wsite-multicol-col" style="width:7%; padding:0 5px;">
                                   <div>
                                     <div class="wsite-image wsite-image-border-hairline " style="padding-top:10px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
-{{ data.brand }}
+
                                       <a>
-                                      <img src="{% static "images/visa.png" %}" alt="Picture" style="width:auto;max-width:100%">
+                                      {% with "images/"|addCardImageSrc:data.brand|add:".png" as creditImage %}
+                                      <img src="{% static creditImage %}" alt="Picture" style="width:auto;max-width:100%">
+                                      {% endwith %}
                                       </a>
                                       <div style="display:block;font-size:90%"></div>
                                     </div>
@@ -78,10 +80,8 @@
                                 <td class="wsite-multicol-col" style="width:81%; padding:0 5px;">
                                   <div>
                                     <div class="wsite-image wsite-image-border-none " style="padding-top:5px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:center">
-                                      <input class="wsite-form-input" type="text" name="name_first" value="{{ data.exp_month}}/{{ data.exp_year }}" placeholder="Expiration">
+                                      <input class="wsite-form-input" type="text" name="name_first" value="{{ data.exp_month}}/{{ data.exp_year }}" placeholder="Expiration" readonly>
                                       <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="CVV">
-                                      <a href="#">Cancel</a>
-                                      <a href="#">Save</a>
                                       <div style="display:block;font-size:90%"></div>
                                     </div>
                                   </div>

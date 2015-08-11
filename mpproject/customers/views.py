@@ -34,6 +34,16 @@ def div(value, arg):
     except: pass
     return ''
 
+@register.filter
+def addCardImageSrc(value, arg):
+    try:
+        arg = str(arg)
+        arg = arg.replace(" ", "").lower()
+        return str(value) + arg
+    except:
+        pass
+    return ""
+
 @login_required(login_url="/customers/login")
 def historyPage(request):
     context = {"customer": "Kevin"}

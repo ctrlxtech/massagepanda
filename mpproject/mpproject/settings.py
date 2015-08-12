@@ -136,7 +136,7 @@ else:
             'NAME': 'test',
             'USER': 'root',
             'PASSWORD': '1234',
-            'HOST': 'localhost',
+            'HOST': '52.8.5.153',
         }
     }
 

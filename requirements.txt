@@ -2,3 +2,4 @@ Django==1.8.0
 MySQL-python==1.2.5
 stripe==1.22.2
 wheel==0.24.0
+Pillow==2.6.1

@@ -22,6 +22,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template import Context, Template
 
 from referral.views import referralCodeGenerator
 
@@ -53,8 +54,8 @@ def referralTest(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def sendEmail(request):
-    staff_list = Staff.objects.order_by('first_name')
-    context = {'staff_list': staff_list}
+    order_list = Order.objects.filter(ordertherapist__id__isnull=False)
+    context = {'order_list': order_list}
     return render(request, 'manager/email.html', context)
 
 @login_required
@@ -69,12 +70,16 @@ def sendMyEmail(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def sendFeedbackEmail(request):
-    staff = Staff.objects.get(pk=request.POST.get('therapist'))
+    order = Order.objects.get(pk=request.POST.get('order'))
+    staffid_list = order.ordertherapist_set.all()
     from_email = settings.SERVER_EMAIL
     to = request.POST.get('to')
-    subject = 'How do you like ' + staff.first_name + ' - Your Feedback is Important to Us'
+    subject = 'How do you like ' + staffid_list[0].staff.first_name 
+    if len(staffid_list) > 1:
+        subject += staffid_list[1].staff.first_name 
+    subject += ' - Your Feedback is Important to Us'
     text_content = 'We really appreciate your feedback!'
-    html_content = get_template('manager/feedbackEmail.html').render()
+    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'staffid_list': staffid_list}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

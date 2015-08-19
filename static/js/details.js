@@ -1,14 +1,18 @@
-    var $this = $("#panda_massageDetails");
+window.addEventListener("DOMContentLoaded", function () {
+  $('#datepicker').val('');
+  $('#timepicker').val('');
+  $('#genderPreferred').val('');
+});
 
-    //private function
-    function processSelection(e){
-        var value = $(this).text();
-        var $parentDiv = $(this).closest('div.mp-massageDetails-input');
-        $parentDiv.find('input').val(value);
-        console.log($parentDiv.find('input').val());
-        $parentDiv.find('button').html(value + '<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true">');
-        e.preventDefault();
-    };
+//private function
+function processSelection(e){
+    var value = $(this).text();
+    var $parentDiv = $(this).closest('div.mp-massageDetails-input');
+    $parentDiv.find('input').val(value);
+    console.log($parentDiv.find('input').val());
+    $parentDiv.find('button').html(value + '<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true">');
+    e.preventDefault();
+};
 
 var pandaUtil = {
         getParameterByName: function(name) {
@@ -46,9 +50,10 @@ function setupTimeDropdown($timeList) {
 };
 
 function massageDetailsTimeForList() {
-    $time = $this.find('button.massageDetailsTime');
-    var $parentInputDiv = $time.closest('.mp-massageDetails-input');
-    var $massageDetailsForm = $time.closest('.mp-massageDetails-form');
+    var page = $("#panda_massageDetails");
+    var time = page.find('button.massageDetailsTime');
+    var $parentInputDiv = time.closest('.mp-massageDetails-input');
+    var $massageDetailsForm = time.closest('.mp-massageDetails-form');
     var $timeList = $parentInputDiv.find('#massageDetails_timeList');
     if ($parentInputDiv.hasClass('open')) {
         $timeList.find('li').removeClass('timeListHide');

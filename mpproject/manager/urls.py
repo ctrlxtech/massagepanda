@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^receiveSMS', views.receiveSMS, name='receiveSMS'),
     url(r'^getContactList', views.getContactList, name='getContactList'),
     url(r'^sendEmail$', views.sendEmail, name='sendEmail'),
-    url(r'^feedbackEmail$', TemplateView.as_view(template_name='manager/feedbackEmail.html'), name='feedbackEmail'),
     url(r'^sendMyEmail$', views.sendMyEmail, name='sendMyEmail'),
     url(r'^sendFeedbackEmail$', views.sendFeedbackEmail, name='sendFeedbackEmail'),
     url(r'^assignTherapist$', views.assignTherapist, name='assignTherapist'),

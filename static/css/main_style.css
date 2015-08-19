@@ -12,9 +12,9 @@
  #mc_embed_signup input.email {
   display: block;
   padding: 8px 0;
-  margin: 0 4% 10px 0;
+  margin: 0 2% 10px 0;
   text-indent: 5px;
-  width: 58%;
+  width: 40%;
   min-width: 130px;
  } 
  #mc_embed_signup .button {
@@ -43,8 +43,8 @@
  #icontent_container ul li{ list-style:none; }
  a { color: #2ecc71; }
  a:hover { color: #2ecc71; text-decoration: underline; }
- h2 { font-size: 29px; padding: .5em 0 .2em 0; line-height: 30px; font-family: 'Oxygen', serif; font-weight: 300; color: #393939; letter-spacing: 1px; }
- div.paragraph { font-size: 17px; line-height: 1.5; padding: .5em 0; }
+ h2 { font-size: 27px; padding: 0 0 .2em 0; line-height: 30px; font-family: 'Oxygen', serif; font-weight: 300; color: #393939; letter-spacing: 1px; }
+ div.paragraph { font-size: 17px; line-height: 33px; padding: .5em 0; }
  p { font-size: 17px; line-height: 1.5; padding: .5em 0; }
  blockquote { background: none; font-family: 'Oxygen', sans-serif; font-size: 17px; line-height: 28px; padding: 1em; margin: 2em 0; border-left: 0px !important; }
  div#content {min-height:400px;}
@@ -167,7 +167,7 @@
  .splash-page #content-section { text-align: center; padding: 50px 75px; }
  #content-section h2 { color: #fff; font-size: 38px; line-height: 40px; font-family: 'Lustria', serif; padding: 0px 0px 51px; background: url(theme/splash-heading-bg-v1.png?1436952285) no-repeat bottom center; text-align: center !important; }
  #content-section .paragraph { color: #8e8e8e; font-size: 20px; line-height: 28px; padding: 38px 0 50px; font-weight: 300; font-family: 'Oxygen', sans-serif; text-align: center !important; }
- #main-wrap .container { min-height:400px; padding-top: 80px; }
+ #main-wrap .container { min-height:400px; padding-top: 50px; }
  #main-wrap .container h2 { margin-bottom: 6px; }
  #main-wrap .container div.paragraph {}
  #main-wrap .container p {}
@@ -181,7 +181,7 @@
  #footer-wrap { text-align:right; background: #f3f3f4; padding: 44px 0; color: #6d6d6d; }
  #footer-wrap .container {}
  #footer-wrap .container h2 { color: #4a4a4a; font-size: 18px; line-height: 24px; font-family: 'Oxygen', sans-serif; font-weight: 700; }
- #footer-wrap .container div.paragraph { color: #6d6d6d; line-height: 24px; font-family: 'Oxygen', sans-serif; font-weight: 300; }
+ #footer-wrap .container div.paragraph { color: #6d6d6d; line-height: 33px; font-family: 'Oxygen', sans-serif; font-weight: 300; }
  #footer-wrap .container p { color: #6d6d6d; line-height: 24px; font-family: 'Oxygen', sans-serif; font-weight: 300; }
  #footer-wrap .container a { color: #2ecc71; text-decoration: none; }
  #footer-wrap .container a:hover { color: #2ecc71; text-decoration: underline; }
@@ -195,7 +195,7 @@
  #wsite-com-product-images { border: 1px solid #d9d9d9; }
  #wsite-com-product-social-sharing a, #wsite-com-product-social-sharing a:hover { width: 20px; height: 23px; margin: 0 0 0 15px; background: url(../images/footer_socialIcons.png) no-repeat; }
  .wsite-com-product-option-label { height: 34px; }
- .wsite-imageaspectratio-image { position: absolute; top: 0 !important; }
+ .wsite-imageaspectratio-image { position: absolute; top: 0 !important; width: 114% !important; left: -7% !important; }
  .wsite-com-category-product-image-wrap, .wsite-com-category-product-featured-image-wrap, .wsite-com-category-subcategory-image-wrap { border: 1px solid #D9D9D9; }
  #wsite-com-product-social-sharing a.wsite-com-product-social-rss { background: url(../images/footer_socialIcons.png) no-repeat -178px 0px; }
  #wsite-com-product-social-sharing a.wsite-com-product-social-rss:hover { background-position: -178px -23px; }
@@ -284,4 +284,34 @@ body.wsite-background {background-attachment: fixed !important;}.wsite-backgroun
   font-weight: 300 !important;
   color: #e05c5c !important;
   line-height: 40px !important;
+}
+
+.banner-title{
+    font-size: 48px;
+}
+
+.banner-text{
+    font-size: 24px;
+}
+
+.banner-mask{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: rgba(0,0,0,0.6);
+    position: relative;
+    text-align: center;
+    margin-top: -104px;
+}
+
+.m-three-col {
+    width: 33.333333333333%;
+}
+
+hr.store-hr {
+    display: none;
+    width: 100%;
+    margin: 0px;
+    border-color: #ddd;
+    border-style: solid;
+    border-top: none;
 }

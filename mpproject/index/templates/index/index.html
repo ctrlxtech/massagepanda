@@ -1,6 +1,10 @@
 ﻿{% extends "index/wbase.html" %}
 {% load staticfiles %}
 
+{% block script %}
+<script type="text/javascript" src="{% static "./js/index.js" %}"></script>
+{% endblock %}
+
 {% block content %}
   
 {% include 'index/wbanner.html' %}
@@ -10,7 +14,7 @@
     <div id="wsite-content" class="wsite-elements wsite-not-footer">
       <div>
         <div id="530265105377007353" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
-          <h2 class="wsite-content-title" style="text-align:center;margin-top: -20px;"><strong><font color="#626262"><span id="selectionBoundary_1434616231536_4588271945249289" class="rangySelectionBoundary" style="line-height: 0; display: none;"></span>Featured services<span id="selectionBoundary_1434616231535_2634860430844128" class="rangySelectionBoundary" style="line-height: 0; display: none;"></span></font></strong></h2>
+          <h2 class="wsite-content-title" style="text-align:center;margin-top: 0px;"><strong><font color="#626262"><span id="selectionBoundary_1434616231536_4588271945249289" class="rangySelectionBoundary" style="line-height: 0; display: none;"></span>Featured services<span id="selectionBoundary_1434616231535_2634860430844128" class="rangySelectionBoundary" style="line-height: 0; display: none;"></span></font></strong></h2>
         </div>
       </div>
       <div>
@@ -22,24 +26,24 @@
                   <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
-                        <a href="{% url 'serviceDetails' %}">
+                        <a href="{% url 'swedishOneHourDetail' %}">
                         <img src="{% static "images/massage_illus_1.jpg" %}" alt="Picture" style="width:461;max-width:100%">
                         </a>
                         <div style="display:block;font-size:90%"></div>
                       </div>
                     </div>
-                    <div class="paragraph" style="text-align:center;"><font color="#2ecc71" size="5"><a href="http://www.massagepanda.com/store/p42/In-Home_Swedish_Massage_for_1_hour.html">In-Home Swedish Massage for 1 Hour</a></font></div>
+                    <div class="paragraph" style="text-align:center;"><a href="{% url 'swedishOneHourDetail' %}" class="banner-text" title="Swedish Massage">In-Home Swedish Massage for 1 Hour</a></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
-                        <a href="{% url 'serviceDetails' %}">
+                        <a href="{% url 'deepTissueOneHourDetail' %}">
                         <img src="{% static "images/massage_illus_2.jpg" %}" alt="Picture" style="width:465;max-width:100%">
                         </a>
                         <div style="display:block;font-size:90%"></div>
                       </div>
                     </div>
-                    <div class="paragraph" style="text-align:center;"><font size="5"><a href="http://www.massagepanda.com/store/p43/In-Home_Deep_Tissue_Massage_for_1_Hour.html" title="">In-Home Deep Tissue Massage for 1 Hour</a></font></div>
+                    <div class="paragraph" style="text-align:center;"><a href="{% url 'deepTissueOneHourDetail' %}" class="banner-text" title="Deep Tissue Massage">In-Home Deep Tissue Massage for 1 Hour</a></div>
                   </td>
                 </tr>
               </tbody>
@@ -67,7 +71,7 @@
             <table class="wsite-multicol-table">
               <tbody class="wsite-multicol-tbody">
                 <tr class="wsite-multicol-tr">
-                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div id="755860824386653169" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
                         <div class="discovery-card" style="background-image:url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/275.jpg&#39;);">
@@ -85,7 +89,7 @@
                       </div>
                     </div>
                   </td>
-                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div id="695686707556529475" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
                         <div class="discovery-card rm-padding-sm row-space-4 darken-on-hover " style="background-image: url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/stanford_meitu_1.jpg&#39;);">
@@ -103,7 +107,7 @@
                       </div>
                     </div>
                   </td>
-                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div id="438115153693118998" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
                         <div class="discovery-card rm-padding-sm row-space-4 darken-on-hover " style="background-image: url(&#39;http://www.weebly.com/editor/uploads/4/4/9/9/44993235/custom_themes/512627711783106298/files/oakland_b_meitu_1.jpg&#39;);">
@@ -130,7 +134,7 @@
       <div class="wsite-spacer" style="height:24px;"></div>
       <div style="text-align:center;">
         <div style="height: 10px; overflow: hidden;"></div>
-        <a class="wsite-button wsite-button-small wsite-button-normal" href="http://www.massagepanda.com/service-coverage.html">
+        <a class="wsite-button wsite-button-small wsite-button-normal" href="{% url 'locationCoverage' %}">
         <span class="wsite-button-inner">See All Locations</span>
         </a>
         <div style="height: 10px; overflow: hidden;"></div>
@@ -156,7 +160,7 @@
           <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted)
             {var div = document.getElementById(&#39;textDiv&#39;);div.textContent = &#39;Thank you for signing up!&#39;;var text = div.textContent;}"></iframe>
           <div id="mc_embed_signup">
-            <form action="https://docs.google.com/a/massagepanda.com/forms/d/190RTYSIWfRQNFrNvsKjfkGxIJ7S_A4VnlIA2TXWzlYw/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;">
+            <form action="https://docs.google.com/a/massagepanda.com/forms/d/190RTYSIWfRQNFrNvsKjfkGxIJ7S_A4VnlIA2TXWzlYw/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;" style="padding: 10px 0 10px 3%;">
               <div id="mc_embed_signup_scroll">
                 <div class="ss-form-question errorbox-good" role="listitem">
                   <div dir="ltr" class="ss-item ss-item-required ss-text">
@@ -195,7 +199,7 @@
             <table class="wsite-multicol-table">
               <tbody class="wsite-multicol-tbody">
                 <tr class="wsite-multicol-tr">
-                  <td class="wsite-multicol-col" style="width:33.81192106418%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
                         <a>
@@ -207,7 +211,7 @@
                     <h2 class="wsite-content-title" style="text-align:center;"><span style="">The Best Therapists</span><br></h2>
                     <div class="paragraph" style="text-align:center;"><span style="">State licensed,&nbsp;insured,&nbsp;</span><br><span style="">&nbsp;</span><span style="">background checked,</span><br><span style="">and personally vetted</span></div>
                   </td>
-                  <td class="wsite-multicol-col" style="width:32.297954449365%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
                         <a>
@@ -219,7 +223,7 @@
                     <h2 class="wsite-content-title" style="text-align:center;"><span style="">Deliver To You</span></h2>
                     <div class="paragraph" style="text-align:center;"><span style="">Same-day, in-home,&nbsp;</span><br><span style="">7 days a week,&nbsp;&nbsp;9am to 11pm,&nbsp;</span><br><span style="">massage table, sheets, and oil</span></div>
                   </td>
-                  <td class="wsite-multicol-col" style="width:33.890124486455%; padding:0 15px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-thin " style="padding-top:10px;padding-bottom:15px;margin-left:0;margin-right:0;text-align:center">
                         <a>
@@ -258,7 +262,7 @@
             <table class="wsite-multicol-table">
               <tbody class="wsite-multicol-tbody">
                 <tr class="wsite-multicol-tr">
-                  <td class="wsite-multicol-col" style="width:33.838383838384%; padding:0 10px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 10px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
                         <a>
@@ -269,7 +273,7 @@
                     </div>
                     <blockquote style="text-align:center;"><span style="">Nice massage with most professional therapist who will relive your muscle stress in a few minutes.Treatment of customers is fabulous.I would for sure recommend this to anyone. I will book again!</span><br><span style=""><br></span><strong style="">- Chris P. (San Francisco)</strong><span style=""><br></span></blockquote>
                   </td>
-                  <td class="wsite-multicol-col" style="width:32.828282828283%; padding:0 10px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 10px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
                         <a>
@@ -280,7 +284,7 @@
                     </div>
                     <blockquote style="text-align:center;">I booked 2 hours in advance and the masseuse came on time. The massage table was comfortable and the set up was fast. She&nbsp;put on&nbsp;soothing music and used lavender scents. It indeed created a quality spa-like experience.<br><br><strong style="">- Amy W. (San Jose)</strong><span style="">&nbsp;&nbsp;</span></blockquote>
                   </td>
-                  <td class="wsite-multicol-col" style="width:33.333333333333%; padding:0 10px;">
+                  <td class="wsite-multicol-col m-three-col" style="padding:0 10px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:0;margin-left:0;margin-right:0;text-align:center">
                         <a>

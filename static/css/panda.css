@@ -37,6 +37,11 @@ nav#mp-navbar .mp-navigation>ul>li.dropdown.open>ul.dropdown-menu{
 	display:block;
 }
 
+nav#mp-navbar .mp-navigation>ul>li.dropdown>ul.dropdown-menu li{
+	margin-right: 0px;
+}
+
+
 .jumbotron {
     background-color: #FFFFFF !important;
     margin-bottom: 0px !important;
@@ -77,6 +82,7 @@ div.mp-pageContent {
     padding-right: 50px;
     padding-bottom: 25px;
     padding-left: 50px;
+    width: 960px;
 }
 
 .panda-home-partOne {
@@ -159,7 +165,7 @@ div.mp-pageContent {
 
 .breadcrumb {
     background: none !important;
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
 
 .breadcrumb li{
@@ -174,10 +180,12 @@ div.mp-pageContent {
 .mp-massageDetails-title {
     color: rgb(102, 102, 102);
     font-family: "Oxygen";
-    font-size: 32px;
+    font-size: 27px;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
-	line-height: 36px;
+    line-height: 30px;
+    margin-bottom: 6px;
+    padding-bottom: 0.2em;
 }
 
 #massageDetails_timeTable{
@@ -245,7 +253,7 @@ div.mp-pageContent {
 }
 
 .mp-massageDetails-description, .mp-massageDetails-info {
-    font-size: 20px;
+    font-size: 17px !important;
     line-height: 32px;
     color: #535353;
     font-weight: 300;
@@ -590,7 +598,7 @@ input[type = checkbox] {
 /**copy css from paiPanda to panda to reduce loading time **/
 #mp-footer {
     background: #F3F3F4 none repeat scroll;
-    padding: 20px 0;
+    /*padding: 20px 0;*/
     color: #6d6d6d;
     width: 100%;
     text-align: center;

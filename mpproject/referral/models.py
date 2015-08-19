@@ -9,8 +9,7 @@ class CustomerReferralCode(models.Model):
 
 class CustomerReferralHistory(models.Model):
     code = models.ForeignKey(CustomerReferralCode)
-    referral = models.ForeignKey(Customer)
-    order = models.ForeignKey(Order)
+    order = models.OneToOneField(Order)
     STATUS_CHOICES = (
         ('P', 'Pending'),
         ('S', 'Success'),

@@ -6,9 +6,11 @@ from django.core.validators import RegexValidator
 class Staff(models.Model):
     first_name = models.CharField(max_length = 200)
     last_name = models.CharField(max_length = 200)
-    title = models.PositiveIntegerField() 
+    title = models.PositiveIntegerField()
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(max_length = 16, validators=[phone_regex], unique=True) # validators should be a list
+    rate = models.PositiveIntegerField(blank=True, null=True)
+    rate_count = models.PositiveIntegerField(blank=True, null=True)
     
     GENDER_CHOICES = (
         ('M', 'Male'),
@@ -52,6 +54,8 @@ class Therapist(models.Model):
     emergency_contact_name = models.CharField(max_length = 50)
     emergency_contact_phone = models.CharField(max_length = 16, validators=[phone_regex])
     supplementary = models.CharField(max_length = 500, blank=True, null=True)
+    rate = models.PositiveIntegerField(blank=True, null=True)
+    rate_count = models.PositiveIntegerField(blank=True, null=True)
 
 class InSMS(models.Model):
     staff = models.ForeignKey(Staff, null=True)

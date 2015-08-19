@@ -15,6 +15,30 @@ var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
 shippingInfo.popover();
 var returnPolicy = $('#panda_checkout').find('.mp-returnPolicy');
 returnPolicy.popover();
+$('.mp-toOrder').click(function(){
+    $('.mp-checkout-mobileTab').find('button.mp-toShipping').removeClass('active');
+    $('.mp-checkout-mobileTab').find('button.mp-toOrder').addClass('active');
+    var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+    var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+    if ($sectionRight.hasClass('mp-smallScreenHide')) {
+        $sectionLeft.addClass('mp-smallScreenHide');
+        $sectionRight.removeClass('mp-smallScreenHide');
+    };
+
+    window.scrollTo(0, 0);
+});
+$('.mp-toShipping').click(function(){
+    $('.mp-checkout-mobileTab').find('button.mp-toShipping').addClass('active');
+    $('.mp-checkout-mobileTab').find('button.mp-toOrder').removeClass('active');
+    var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+    var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+    if ($sectionLeft.hasClass('mp-smallScreenHide')) {
+        $sectionLeft.removeClass('mp-smallScreenHide');
+        $sectionRight.addClass('mp-smallScreenHide');
+    };
+
+    window.scrollTo(0, 0);
+});
 
 {% endblock %}
 
@@ -54,7 +78,8 @@ returnPolicy.popover();
                     <h2>Secure Checkout</h2>
                     <div>
                         <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}"/>
-                    </div><h2>Shipping Information</h2>
+                    </div>
+                    <h2>Shipping Information</h2>
                     {% for address in request.user.customer.address_set.all %}
                     <div class="border">
                       <input type="radio" name="savedAddress"
@@ -93,19 +118,19 @@ returnPolicy.popover();
 					 <div class="form-group mp-form-inlineGroup">
                        <input type="text" placeholder="Zip" class="form-control mp-fieldRequired mp-halfwidth" name="zipcode" data-serverField="true" required/>
                     </div>
-					<h2>Billing Information</h2>
-                                        <div class="border">
-                                        <input type="radio" name="savedAddress"
-                                            {% if forloop.counter0 == 0 %} checked="checked" {% endif %}>
-                                        {% if stripeCustomer %}
-                                        {% for data in stripeCustomer.sources.data %}
-                                        {{ data.brand }}
-                                        ••••{{ data.last4 }}
-                                        {{ data.exp_month}}/{{ data.exp_year }}
-                                        {% endfor %}
-                                        {% endif %}
-                                        </div>
-                                        <br>
+                    <h2>Billing Information</h2>
+                    {% if stripeCustomer %}
+                    <div class="border">
+                    {% for data in stripeCustomer.sources.data %}
+                    <input type="radio" name="savedPayment"
+                        {% if forloop.counter0 == 0 %} checked="checked" {% endif %}>
+                    {{ data.brand }}
+                    ••••{{ data.last4 }}
+                    {{ data.exp_month}}/{{ data.exp_year }}
+                    {% endfor %}
+                    </div>
+                    {% endif %}
+                    <br>
                     <div class="form-group mp-form-inlineGroup">
                         <input type="text" placeholder="Name on Card" class="form-control mp-fieldRequired mp-halfwidth mp-mobile-fullWidth" name="name" data-stripe="name" data-serverField="true" required/>
                     </div>
@@ -128,12 +153,19 @@ returnPolicy.popover();
             <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
                 <div class="mp-checkoutSection mp-checkoutSection-right">
                     <div class="mp-checkout-summary">
-                        <h2>Order Summary <span class="mp-summary-amount">(Subtotal : ${{ massageFee }})</span></h2>
+                        <h2>Order Summary</h2>
                         <ul class="list-group">
-                            <li class="list-group-item  mp-summary-title">{{ massageType }}</li>
                             <li class="list-group-item  mp-summary-date">Date : {{ serviceDate }}</li>
                             <li class="list-group-item  mp-summary-time">Time : {{ serviceTime }}</li>
                             <li class="list-group-item  mp-summary-genderPrefer">Gender Preferred : {{ gender }}</li>
+                            <li class="list-group-item  mp-summary-title">{{ service.service_type }} : <span class="mp-summary-amount">${{ service.service_fee|div:1 }}</span></li>
+                            <li class="list-group-item  mp-summary-title">Tax : <span class="mp-summary-amount">${{ tax|div:1 }}</span></li>
+                            {% if needTable %}
+                            <li class="list-group-item">Table Needed : <span class="mp-summary-amount">$10.00</span></li>
+                            <li class="list-group-item">Total : <span class="mp-summary-amount">${{ service.service_fee|add:tax|add:10|div:1 }}</span></li>
+                            {% else %}
+                            <li class="list-group-item">Total : <span class="mp-summary-amount">${{ service.service_fee|add:tax|div:1 }}</span></li>
+                            {% endif %}
                         </ul>
                     </div>
 					<div class="form-group">

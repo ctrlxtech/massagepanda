@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <title>MassagePanda Service Coverage</title>
+
+    <script type="text/javascript" src="http://www.scribblemaps.com/api/js/"></script>
+        <script type="text/javascript" src="http://widgets.scribblemaps.com/sm/assets/scripts/layers.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+        <script>
+                (function (i, s, o, g, r, a, m) {
+                        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                                (i[r].q = i[r].q || []).push(arguments)
+                        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-2931231-29', 'scribblemaps.com');
+                ga('create', 'UA-2931231-30', 'auto', { 'name': 'rollup' });
+
+                ga('send', 'pageview');
+                ga('rollup.send', 'pageview');
+        </script>
+
+        <style type="text/css">
+                body, html {
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
+                        margin: 0;
+                        padding: 0;
+                }
+
+                #smAdContent {
+                        position: absolute; 
+                        left: 5px; 
+                        bottom: 25px; 
+                        background-color: #CCCCCC; 
+                        overflow: hidden; 
+                        z-index: 2; 
+                        line-height: normal;
+                }
+
+                .adFooter {
+                        background-color: #666666;
+                        height: 14px;
+                        position: relative;
+                }
+
+                .mapTitle {
+                        position: absolute;
+                        bottom: 1px;
+                        text-align: center;
+            white-space: nowrap;
+                        left: 70px;
+            right: 110px;
+            overflow: hidden;
+                        z-index: 100000;
+                        color: #666666;
+                }
+
+                .mapTitle a {
+                        color: #666666;
+                        text-decoration: none;
+                        font-weight: bold;
+                        font-size: 11px;
+                        font-family: Arial, Verdana;
+                }
+
+                .mapTitle a:hover {
+                        text-decoration: underline;
+                }
+
+                #smHidingLabel {
+                        color: #FFFFFF;
+                        position: absolute;
+                        top: 0;
+                        right: 10px;
+                        font-size: 10px;
+                        line-height: normal;
+                        font-family: Arial, Verdana;
+                        padding: 0;
+                        margin: 0;
+                }
+
+        #shareButton {
+            position: absolute;
+            bottom: 3px;
+            z-index: 100000;
+            left: 45px;
+            height: 15px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #shareButton .button {
+            cursor: pointer;
+            margin-right: 3px;
+            float: left;
+            width: 15px;
+            height: 15px;
+            background: url(../assets/share.png);
+            border-radius: 2px;
+        }
+
+        #shareButton .button:hover {
+            background-position: 0 -15px;
+        }
+
+        .shareLinkWrapper {
+            position: relative;
+        }
+
+        .shareButtons {
+            width: 81px;
+            position: absolute;
+            left: 0px;
+            top: 0;
+        }
+
+        .shareButtons .button {
+            background: url(../assets/shareicons_large.png);
+            width: 27px;
+            cursor: pointer;
+            float: left;
+            height: 27px;
+        }
+
+        .shareButtons .button.twitter {
+            background-position: -26px;
+        }
+
+         .shareButtons .button.email {
+            background-position: -52px;
+        }
+
+
+        #sharePanel {
+            padding: 10px;
+            height: 120px;
+        }
+
+        #sharePanel .sm_label {
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+
+        #shareLink {
+            margin-left: 81px;
+            width: 128px;
+        }
+
+        #embedCode {
+            width: 210px;
+        }
+
+        #sharePanel input {
+            padding: 5px;
+            border: 1px solid #CCCCCC;
+            height: 15px;
+        }
+
+        #sharePanel button {
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 215px;
+        }
+
+        @media(max-width: 300px) {
+            .mapTitle {
+                display: none;
+            }
+        }
+        </style>
+        <script  type="text/javascript">
+                function gup(name, href) {
+                        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                        var regexS = "[\\?&]" + name + "=([^&#]*)";
+                        var regex = new RegExp(regexS);
+                        var results = regex.exec((href || window.location.href));
+                        if (results == null)
+                                return "";
+                        else
+                                return results[1];
+                }
+
+                var d = gup("d") == "true" ? true : false;
+                var mt = gup("mt") == "true" ? true : false;
+                var z = gup("z") == "true" ? true : false;
+                var l = gup("l") == "true" ? true : false;
+                var sc = gup("sc") == "true" ? true : false;
+                var s = gup("s") == "true" ? true : false;
+                var ti = gup("ti") == "true" ? true : false;
+                var t = gup("t") == "d" ? "d" : "l";
+                var mc = gup("mc") == "true" ? true : false;
+                var ol = gup("ol") == "true" ? true : false;
+
+                var vz = (gup("vz") == "" || !gup("vz")) ? null : gup("vz");
+                var vlat = (gup("lat") == "" || !gup("lat")) ? null : gup("lat");
+                var vlng = (gup("lng") == "" || !gup("lng")) ? null : gup("lng");
+                var vtype = (gup("type") == "" || !gup("type")) ? null : gup("type");
+
+                window.twitterShare = function () {
+                    sm.ui.menuDirective(scribblemaps.MenuType.TWITTER);
+                }
+                
+                window.facebookShare = function () {
+                    sm.ui.menuDirective(scribblemaps.MenuType.FACEBOOK);
+                }
+
+                window.emailShare = function () {
+                    sm.ui.menuDirective(scribblemaps.MenuType.SEND_TO_FRIEND);
+                }
+
+                var sharePanel;
+                window.showShareScreen = function () {
+                    if (!sharePanel) {
+                        sharePanel = document.getElementById("sharePanel");
+                        document.getElementById("sharePanel").style.display = "block";
+                    }
+                    
+            sm.ui.showCustomPanel(sharePanel,true)
+                }
+
+                window.emailMap = function () {
+                    sm.ui.menuDirective(scribblemaps.MenuType.SEND_TO_FRIEND);
+                }
+
+                window.selectShareLink = function () {
+                    setTimeout(function () {
+                        document.getElementById("shareLink").select();
+                    }, 0);
+                }
+
+                window.selectEmbedCode = function () {
+                    setTimeout(function () {
+                        document.getElementById("embedCode").select();
+                    }, 0);
+                }
+
+                var sm;
+
+                window.onload = function () {
+                        var opts = {};
+                        opts.zoomControl = z;
+                        opts.mapTypeControl = mt;
+                        opts.searchControl = sc;
+                        opts.drag = d;
+                        opts.overlayList = ol;
+                        opts.legendControl = l;
+
+                        opts.startZoom = 3;
+                        opts.startMapType = "satellite";
+                        opts.startCenter = [36.879620605027014, -40.78125];
+
+                        var load = {};
+                        load.id = gup("id");
+
+                        sm = new ScribbleMapViewer("ScribbleMap", opts);
+                        sm.map.load(load);
+
+                        sm.map.addListener("basetype_changed", function (event) {
+                                var gid = getGroupId(sm.map.getType());
+                                var types = [];
+
+                                if (gid == "base" || !gid) {
+                                        types = [
+                                                {
+                                                        id: "hybrid",
+                                                        label: "Hybrid"
+                                                },
+                                                {
+                                                        id: "road",
+                                                        label: "Road"
+                                                },
+                                                {
+                                                        id: "satellite",
+                                                        label: "Satellite"
+                                                },
+                                                {
+                                                        id: "terrain",
+                                                        label: "Terrain"
+                                                }
+                                        ];
+                                } else {
+                                        if (smLayers[gid]) {
+                                                for (var i = 0; i < smLayers[gid].length; i++) {
+                                                        types.push({
+                                                                label: smLayers[gid][i].label,
+                                                                id: smLayers[gid][i].id
+                                                        });
+                                                }
+                                        }
+                                }
+
+                                sm.ui.setMapTypes(types);
+                        });
+
+                        sm.map.addListener(scribblemaps.MapEvent.MAP_LOADED, function () {
+                                if (vz) {
+                                        sm.view.setZoom(+vz);
+                                }
+
+                                if ((vlat && vlng)) {
+                                        sm.view.setCenter([+vlat, +vlng]);
+                                }
+
+                                if (vtype) {
+                                        sm.map.setType(vtype);
+                                }
+
+                                if (s) {
+                                    document.getElementById("shareButton").style.display = "block";
+                                }
+                        });
+
+                        sm.addListener("ready", function () {
+                                createLayers(sm);
+                        });
+
+                        sm.settings.noPasswordSkip(true);
+                        sm.settings.disableChangesHalt();
+                        sm.ui.styleControl(scribblemaps.ControlType.SEARCH, { top: "10px", width: "200px" });
+
+                        if (ol) {
+                                if (sc) {
+                                        sm.ui.styleControl(scribblemaps.ControlType.OVERLAY_LIST, { top: "45px", width: "195px" });
+                                } else {
+                                        sm.ui.styleControl(scribblemaps.ControlType.OVERLAY_LIST, { top: "10px", width: "195px" });
+                                }
+                        }
+
+                        if (!mc) {
+                                sm.clustering.disable();
+                        }
+
+                        if (!mt) {
+                                sm.ui.styleControl(scribblemaps.ControlType.LEGEND, { bottom: "40px" });
+                        }
+
+                        if (!z) {
+                                sm.settings.disableZoom();
+                        }
+
+                        if (!d) {
+                                sm.ui.setTool("select");
+                        }
+
+                        if (t == "d") {
+                                sm.ui.setTheme("dark");
+                        }
+
+                        if (!ti) {
+                            document.getElementsByClassName("mapTitle")[0].style.display = "none";
+                        }
+                        //countDown();
+                }
+
+                function hashChange(event) {
+                    var search = event.newURL.split("#")[1];
+                    var kvp = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}', function (key, value) { return key === "" ? value : decodeURIComponent(value) }) : {}
+
+                    console.log(kvp);
+                }
+
+                if (!('onhashchange' in window)) {
+                    var oldHref = location.href;
+                    setInterval(function () {
+                        var newHref = location.href;
+                        if (oldHref !== newHref) {
+                            var _oldHref = oldHref;
+                            oldHref = newHref;
+                            hashChange.call(window, {
+                                'type': 'hashchange',
+                                'newURL': newHref,
+                                'oldURL': _oldHref
+                            });
+                        }
+                    }, 100);
+                } else if (window.addEventListener) {
+                    window.addEventListener("hashchange", hashChange, false);
+                }
+                else if (window.attachEvent) {
+                    window.attachEvent("onhashchange", hashChange);
+                }
+        </script>
+
+</head>
+<body>
+        <div id="ScribbleMap" style="width: 100%; height: 100%"></div>
+        <div class="mapTitle"><a href="http://www.scribblemaps.com/maps/view/MassagePanda_Service_Coverage/jxIAoFdahj" target="_blank">MassagePanda Service Coverage</a></div>
+        <div id="shareButton">
+        <div class="button" onclick="showShareScreen()"></div>
+        </div>
+    <div id="sharePanel" style="display: none">
+
+        <div class="sm_label">Share Link</div>
+        <div class="shareLinkWrapper">
+            <input type="text" readonly="true" onfocus="selectShareLink()" onmousedown="selectShareLink()" id="shareLink" value="http://www.scribblemaps.com/maps/view/MassagePanda_Service_Coverage/jxIAoFdahj"/>
+            <div class="shareButtons">
+                <div class="button facebook" onclick="facebookShare()"></div>
+                <div class="button twitter" onclick="twitterShare()"></div>
+                <div class="button email" onclick="emailMap()"></div>
+            </div>
+        </div>
+
+        <div class="sm_label">Embed Code</div>
+        <input type="text" readonly="true" onfocus="selectEmbedCode()" onmousedown="selectEmbedCode()" id="embedCode" value='<iframe src="http://widgets.scribblemaps.com/sm/?d=true&z=true&l=true&id=jxIAoFdahj" width="720" height="550" frameborder="0" title="MassagePanda Service Coverage" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'/>
+    </div>
+
+    <div id="smAdContent" style="display: none; z-index: 5000; ">
+                <!-- <a href="http://www.mapyourlist.com/"  style="border: none; width: 180px; height: 150px;" target="_blank"><img style="border: none; width: 180px; height: 150px;" src="http://www.mapyourlist.com/resources/ad_180x150.png" /></a> -->
+                <div class="adFooter">
+                        <div id="smHidingLabel">Ads Hiding In...15</div>
+                </div>
+        </div>
+</body>
+</html>

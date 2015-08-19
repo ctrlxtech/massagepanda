@@ -19,7 +19,7 @@ genderPreferredList.on("click", "a", processSelection);
 {% endblock %}
 
 {% block content %}
-{% if service %}
+
 <!-- massageDetails page-->
 <div id="panda_massageDetails" class="mp-pageContent container-fluid" data-mpController="massageDetailsPage">
   <div class="panda_massageDetails-partOne">
@@ -29,35 +29,32 @@ genderPreferredList.on("click", "a", processSelection);
           <li>
             <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" href="{% url 'services' %}">Book Massage</a>
           </li>
-          <li class="active mp-currentDetailsPage">{{ service.service_type }} for {{ service.service_time }} Hour{{ service.service_time|pluralize }}</li>
+          <li class="active mp-currentDetailsPage">
+            Deep Tissue Massage for $79/hr
+          </li>
         </ol>
       </div>
       <div class="mp-left mp-massageDetails">
-        <img class="mp-massageDetails-image" src="{% get_static_prefix %}images/{{ service.images.all.0.image }}"/>
+        <img class="mp-massageDetails-image" src="{% static "images/book_DeepTissueOneHour.png" %}"/>
       </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
       <div class="mp-massageDetails-panel mp-right">
         <div class="mp-massageDetails-title">
-          {{ service.service_type }} for {{ service.service_time }} Hour{{ service.service_time|pluralize }}
+          Deep Tissue Massage for 1 hour $79
         </div>
-        <div id="wsite-com-product-price-area" class="wsite-com-product-show-price-range-on-sale">
-          <div class="wsite-com-product-price-container">
-            <!-- take advantage of div filter to force precision -->
-            <span class="wsite-com-product-price-amount">${{ service.service_fee|div:1 }}</span>
-          </div>
-        </div>
-        <p class="mp-massageDetails-description">
-          {{ service.service_detail }}
+        <hr class="mp-fullwidth"/>
+        <p class="mp-massageDetails-description" data-massageType="deeptissue">
+          Deep tissue massage therapy is similar to Swedish massage, but the deeper pressure is beneficial in releasing chronic muscle tension.
         </p>
         <p class="mp-massageDetails-info">
-          Please book your massage session at least 2 hours in advance.We will reach out to our massage therapists once you have placed your order. We <strong>will not</strong> charge your card until a th
+          Please book your massage session at least 2 hours in advance.We will reach out to our massage therapists once you have placed your order. We will not charge your card until a th
           erapist responds and confirms the booking.
         </p>
         <form id="massageDetails-form" action="{% url 'serviceCheckout' %}" method=POST onsubmit="return validate()">
         <div class="mp-massageDetails-form">
         {% csrf_token %}
-          <input type="hidden" name="serviceId" value="{{ service.id }}" />
+          <input type="hidden" name="serviceId" value="3" />
           <div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert" style="display:none">Please select <span class="alertInfo"></span></div>
           <div class="btn-group mp-massageDetails-input">
             <input class="mp-massageDetails-DatePicker" id="datepicker" placeholder="Select Date" name="massageDetailsDate" type="text" />
@@ -101,7 +98,7 @@ genderPreferredList.on("click", "a", processSelection);
             <textarea name="parkingInfo" val="" placeholder="please provide any additional directions to your location. E.g, “ring Buzzer 32” or “first house on the left, blue door" class="form-control" rows="3" cols="50"></textarea>
           </div>
           <div class="checkbox mp-massageDetails-input mp-massageDetails-needTable">
-            <input name="needTable" type="checkbox" checked><label>Need a massage table</label>
+            <input name="needTable" type="checkbox"  checked><label>Need a massage table</label>
           </div>
           <!--
             <div class="btn-group mp-massageDetails-input">
@@ -119,8 +116,4 @@ genderPreferredList.on("click", "a", processSelection);
     </div>
   </div>
 </div>
-{% else %}
-{% include 'services/defaultDetails.html' %}
-{% endif %}
-
 {% endblock %}

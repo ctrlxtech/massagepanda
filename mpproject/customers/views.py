@@ -29,7 +29,6 @@ def div(value, arg):
         value = int(value)
         arg = int(arg)
         if arg:
-                
             return '{0:.02f}'.format(float(value) / arg)
     except: pass
     return ''

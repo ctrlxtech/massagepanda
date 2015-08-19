@@ -39,7 +39,8 @@
           Please book your massage session at least 2 hours in advance.We will reach out to our massage therapists once you have placed your order. We will not charge your card until a th
           erapist responds and confirms the booking.
         </p>
-        <form id="massageDetails-form" action="{% url 'serviceCheckout' %}" method=POST onsubmit="return validate()"><div class="mp-massageDetails-form">
+        <form id="massageDetails-form" action="{% url 'serviceCheckout' %}" method=POST onsubmit="return validate()">
+        <div class="mp-massageDetails-form">
         {% csrf_token %}
           <input type="hidden" name="massageType" value="Swedish Massage" />
           <input type="hidden" name="massageFee" value="79" />
@@ -97,7 +98,8 @@
             <div class="mp-pageId" style="display:none">panda_massageDetails</div>
             <input type="submit" value="Checkout" class="btn btn-success">
           </div>
-        </div></form>
+        </div>
+        </form>
         <div style="clear:both;"></div>
       </div>
     </div>

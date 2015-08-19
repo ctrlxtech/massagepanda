@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import stripe
 
@@ -11,25 +12,32 @@ def services(request):
     return render(request, 'services/store.html', context)
 
 def details(request):
-    service_list = Service.objects.order_by('service_type')
-    context = {'service_list': service_list}
+    context = {}
+    try:
+      service = Service.objects.get(pk=request.POST.get('serviceId'))
+      context['service'] = service
+    except:
+      pass
     return render(request, 'services/details.html', context)
 
 def checkout(request):
-    massageType = request.POST.get("massageType")
-    massageFee = request.POST.get("massageFee")
-    serviceDate = request.POST.get("massageDetailsDate")
-    serviceTime = request.POST.get("massageDetailsTime")
-    genderPrefer = request.POST.get("genderPreferred")
-
-    stripe.api_key = settings.STRIPE_KEY
+    try:
+      needTable = request.POST.get("needTable")
+      service = Service.objects.get(pk=request.POST.get("serviceId"))
+      tax = service.service_fee * 0.1
+      serviceDate = request.POST.get("massageDetailsDate")
+      serviceTime = request.POST.get("massageDetailsTime")
+      genderPrefer = request.POST.get("genderPreferred")
+    except:
+      return render(request, 'services/checkout.html')
+    
     stripeCustomer = ""
     try:
-        stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
+      stripe.api_key = settings.STRIPE_KEY
+      stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
     except:
-        pass
+      pass
 
-    context = {'massageType': massageType, 'massageFee': massageFee,
-        'serviceDate': serviceDate, 'serviceTime': serviceTime, 
-        'gender': genderPrefer, 'stripeCustomer': stripeCustomer}
+    context = {'service': service, 'serviceDate': serviceDate, 'serviceTime': serviceTime,
+        'gender': genderPrefer, 'needTable': needTable, 'tax': tax, 'stripeCustomer': stripeCustomer}
     return render(request, 'services/checkout.html', context)

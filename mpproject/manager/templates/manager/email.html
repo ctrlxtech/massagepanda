@@ -12,14 +12,16 @@
 <form id="feedbackEmailForm" method='POST'>
 {% csrf_token %}
 
-{% if staff_list %}
-<select id="therapist" name="therapist">
-{% for staff in staff_list %}
-<option value="{{ staff.id }}">{{ staff.first_name }} {{ staff.last_name }}</option>
+{% if order_list %}
+<select id="order" name="order">
+{% for order in order_list %}
+<option value="{{ order.id }}" email="{{ order.email }}">
+{{ order.recipient }}: {{ order.service_datetime }} | {{ order.service.service_type }} for {{ order.service.service_time }} Hour{{ service.service_time|pluralize }}
+</option>
 {% endfor %}
 </select>
 {% endif %}
-<input type="text" placeholder="Email" name="to">
+<input type="text" placeholder="Email" name="to" id="to">
 <input type="submit" value="send">
 </form>
 

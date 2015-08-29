@@ -23,15 +23,15 @@ genderPreferredList.on("click", "a", processSelection);
 <!-- massageDetails page-->
 <div id="panda_massageDetails" class="mp-pageContent container-fluid" data-mpController="massageDetailsPage">
   <div class="panda_massageDetails-partOne">
-    <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenHide">
-      <div class="mp-breadcrumb">
+      <div class="mp-breadcrumb mp-smallScreenHide">
         <ol class="breadcrumb">
           <li>
             <a class="mp-pageHeader" data-mpPageId="panda_bookMassage" href="{% url 'services' %}">Book Massage</a>
           </li>
-          <li class="active mp-currentDetailsPage">{{ service.service_type }} for {{ service.service_time }} Hour{{ service.service_time|pluralize }}</li>
+          <li class="active mp-currentDetailsPage">In-Home {{ service.service_type }} for {{ service.service_time|stripZero }} Hour{{ service.service_time|pluralize }}</li>
         </ol>
       </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenHide">
       <div class="mp-left mp-massageDetails">
         <img class="mp-massageDetails-image" src="{% get_static_prefix %}images/{{ service.images.all.0.image }}"/>
       </div>
@@ -39,12 +39,23 @@ genderPreferredList.on("click", "a", processSelection);
     <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding">
       <div class="mp-massageDetails-panel mp-right">
         <div class="mp-massageDetails-title">
-          {{ service.service_type }} for {{ service.service_time }} Hour{{ service.service_time|pluralize }}
+          In-Home {{ service.service_type }} for {{ service.service_time|stripZero }} Hour{{ service.service_time|pluralize }}
         </div>
         <div id="wsite-com-product-price-area" class="wsite-com-product-show-price-range-on-sale">
           <div class="wsite-com-product-price-container">
             <!-- take advantage of div filter to force precision -->
+            {% if service.service_sale %}
+            <div id="wsite-com-product-price" class="wsite-com-product-price-container">
+              <span class="wsite-com-product-price-currency-prefix">$</span><!--
+              --><span class="wsite-com-product-price-amount">{{ service.service_fee|div:1 }}</span><!--
+              --><span class="wsite-com-product-price-currency-suffix"></span>
+            </div>
+            <div id="wsite-com-product-price-range" class="wsite-com-product-price-container">
+              <span class="wsite-com-product-price-amount">${{ service.service_sale|div:1 }}</span>
+            </div>
+            {% else %}
             <span class="wsite-com-product-price-amount">${{ service.service_fee|div:1 }}</span>
+            {% endif %}
           </div>
         </div>
         <p class="mp-massageDetails-description">
@@ -96,6 +107,9 @@ genderPreferredList.on("click", "a", processSelection);
                 <a>Female Preferred</a>
               </li>
             </ul>
+          </div>
+          <div class="mp-massageDetails-input">
+            <input type="text" placeholder="Zipcode" id="zipcode" name="zipcode" value=""></input>
           </div>
           <div class="mp-massageDetails-textarea">
             <textarea name="parkingInfo" val="" placeholder="please provide any additional directions to your location. E.g, “ring Buzzer 32” or “first house on the left, blue door" class="form-control" rows="3" cols="50"></textarea>

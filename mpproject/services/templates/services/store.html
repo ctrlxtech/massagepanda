@@ -47,13 +47,22 @@ $(".wsite-com-category-product-link").on("click", function(e) {
                         <div class="wsite-com-category-product-cover"></div>
                       </div>
                       <div class="wsite-com-category-product-name wsite-com-link-text" serviceId="{{ service.id }}">
-                        {{ service.service_type }} for {{ service.service_time }} Hour{{ service.service_time|pluralize }}
+                        In-Home {{ service.service_type }} for {{ service.service_time|stripZero }} Hour{{ service.service_time|pluralize }}
                       </div>
                     </a>
                     <div class="wsite-com-product-price single-sale-price">
+                    {% if service.service_sale %}
+                      <div class="wsite-com-price wsite-com-category-product-price ">
+                        ${{ service.service_fee|div:1 }}
+                      </div>
+                      <div class="wsite-com-category-product-price wsite-com-sale-price">
+                        ${{ service.service_sale|div:1 }}
+                      </div>
+                    {% else %}
                       <div class="wsite-com-category-product-price wsite-com-sale-price">
                         ${{ service.service_fee|div:1 }}
                       </div>
+                    {% endif %}
                     </div>
                   </div>
                 </div>

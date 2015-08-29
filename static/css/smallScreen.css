@@ -8,12 +8,13 @@
 }	
 .mp-smallScreenPadding{
 	padding: 0px !important;
+    width: 100% !important;
 }	
 .mp-smallScreenHide{
 	display:none !important;
 }
 .container-fluid{
-	padding: 0px !important;
+	padding: 5px !important;
 }
 
 #footer-wrap{
@@ -105,6 +106,35 @@ hr.store-hr {
 
 div.mp-pageContent {
     width: 100% !important;
+}
+
+div#panda_checkout {
+    margin-bottom: 0px !important;
+}
+
+#panda_checkout .mp-checkout {
+    text-align: center;
+     margin-bottom: 0px;
+}
+
+#panda_checkout .wsite-button {
+    display: block !important;
+}
+
+#panda_checkout .wsite-button-inner{
+    float:none;
+}
+
+#panda_checkout h2 {
+    font-size: 20px !important;
+}
+
+.mp-checkout-billing-info .mp-form-exp {
+    width: 21% !important;
+}
+
+.mp-checkout-billing-info .mp-form-cvv {
+    width: 14% !important;
 }
 
 /*
@@ -389,6 +419,7 @@ padding: 10px;
 .mp-massageDetails-form {
     width: 100%;
     margin: 0 auto;
+    padding-top: 15px;
 }
 
 .mp-massageDetails-input.mp-massageDetails-needTable input {
@@ -404,7 +435,8 @@ padding: 10px;
 #payment-form .mp-checkoutSection{
 	width:100%;
 	min-width : 320px;
-	margin: 0 auto; 
+	margin: 0 auto;
+    padding: 0 5px; 
 }
 
 .mp-checkout.mp-checkoutShort .btn {

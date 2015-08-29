@@ -14,9 +14,13 @@ $(document).ready(function() {
     // get the form data
     // there are many ways to get this data using jQuery (you can use the class or id also)
     var csrfToken = $.cookie('csrftoken');
+    var orderIds = new Array();
+    $('input[name=orderId]:checked').each(function() {
+      orderIds.push($(this).val())
+    });
+
     var formData = {
-        'to'               : $('input[name=to]').val(),
-        'order'               : $('#order').val(),
+        'orderIds'               : orderIds,
     };
     $.ajax({
         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -47,5 +51,17 @@ $(document).ready(function() {
   });
   
   updateEmail();
+
+  $('#select-all-orders').click(function(event) {  //on click
+      if(this.checked) { // check select status
+          $('.orderCheckbox').each(function() { //loop through each checkbox
+              this.checked = true;  //select all checkboxes with class "checkbox1"
+          });
+      }else{
+          $('.orderCheckbox').each(function() { //loop through each checkbox
+              this.checked = false; //deselect all checkboxes with class "checkbox1"
+          });
+      }
+  });
 });
 

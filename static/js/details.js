@@ -95,6 +95,7 @@ function validate() {
   var date = $('#datepicker').val();
   var time = $('#timepicker').val();
   var gender = $('#genderPreferred').val();
+  var zipcode = $('#zipcode').val();
   var $panelAlert = $('#mp-massageDetails-panelAlert');
   $panelAlert.css('display', 'none');
   if (!date) {
@@ -112,4 +113,10 @@ function validate() {
       $panelAlert.css('display', 'block');
       return false;
   };
+  if (!zipcode) {
+      $panelAlert.text('Please provide your zipcode!');
+      $panelAlert.css('display', 'block');
+      return false;
+  };
+
 }

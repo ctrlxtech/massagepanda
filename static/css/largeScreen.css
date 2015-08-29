@@ -93,7 +93,7 @@
 .mp-left {
    width : 80%;
    margin : 30px auto;
-   float:right;  
+   float:left;  
 }
 .mp-right {
    width : 80%;
@@ -178,20 +178,21 @@
 /** begin massage details page **/
 .mp-massageDetails-panel.mp-right{
 	top:80px;
-	width:90%;
+	width:100%;
 }
 .mp-massageDetails {
     height: auto;
-    width: 80%;
+    width: 93%;
     border-radius: 10px;
     margin: 30px auto;
 }
 .mp-massageDetails-form {
-    width: 70%;
+    width: 80%;
     min-width: 320px;
+    padding-top: 15px;
 }
 .mp-massageDetails-image {
-    border-radius: 15px;
+    border-radius: 10px;
     overflow: hidden;
 	 height:auto;
     width: 100%;
@@ -210,12 +211,12 @@
 	margin: 0 auto; 
 }
 .mp-checkoutSection.mp-checkoutSection-left {
-  width: 80%;
+  /*width: 80%;
    height: 800px;
-  float: right;
+  float: right;*/
 }
 .mp-checkoutSection.mp-checkoutSection-right {
-width: 80%;
+    /*width: 80%;*/
   max-width: 400px;
   float: left;
 }

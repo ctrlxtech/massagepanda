@@ -68,6 +68,8 @@ class Address(models.Model):
 
     customer = models.ForeignKey(Customer, blank = False)
     name = models.CharField("Name", max_length = 45)
+    phone = models.CharField(max_length = 16, validators=[Customer.phone_regex])
+    email = models.EmailField(max_length=254)
     address_line1 = models.CharField("Address line 1", max_length = 45)
     address_line2 = models.CharField("Address line 2", max_length = 45, blank = True)
     zipcode = models.CharField("Zip Code", max_length = 10)

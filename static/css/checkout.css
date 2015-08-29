@@ -1,9 +1,190 @@
+div#panda_checkout {
+    margin-bottom: 20px;
+}
+
 .border {
-    border-radius: 25px;
-    border: 2px solid;
-    padding: 20px; 
-    width: 200px;
-    height: 150px; 
-    margin: 1em;
+    /*border-radius: 25px;
+    border: 2px solid;*/
+    margin: 10px;
     display: inline-block;
+}
+
+.mp-payment-selector {
+    display: block;
+    float: left;
+    position: relative;
+    /* height: 20px; */
+    padding: 10px 18px;
+    border: 1px solid #e3e5e7;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin-bottom: 35px;
+    margin-top: 25px;
+}
+
+.mp-checkout-payment-info {
+    float: left;
+    width: 100%;
+}
+
+.mp-checkout-billing-info {
+    float: left;
+    width: 100%;
+}
+
+.mp-payment-selector label {
+    /*display: block !important;*/
+    width: 22px !important;
+    height: 22px !important;
+    padding: 0 !important;
+    line-height: 20px !important;
+    text-indent: 0 !important;
+    border: 1px solid #e3e5e7;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 50%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.mp-payment-selector input[type="radio"]:checked+label span {
+    background-color: #2a8fe7;
+    box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.3);
+}
+
+.mp-payment-selector input[type="radio"]+label span {
+    display: inline-block;
+    width: 10px !important;
+    height: 10px !important;
+    margin: 5px 0 0 5px;
+    padding: 0 !important;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.mp-checkoutSection .mp-store-shipping-info-label{
+    margin: 0 0 16px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #e3e5e7;
+}
+
+.mp-checkoutSection .inner {
+    overflow: hidden;
+    zoom: 1;
+}
+
+.mp-checkout-payment-info .mp-form-field {
+    margin-bottom: 7px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.mp-checkout-payment-info .mp-form-left{
+    float: left;
+    width: 49%;
+}
+
+.mp-checkout-payment-info .mp-form-right{
+    float: right;
+    width: 49%;
+}
+
+.mp-checkout-payment-info .mp-form-country{
+    float: left;
+    width: 39%;
+}
+
+.mp-checkout-payment-info .mp-form-address{
+    float: right;
+    width: 59%;
+}
+
+.mp-checkout-billing-info .mp-form-field {
+    margin-bottom: 7px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.mp-form-field div.mp-form-input-container .mp-form-input {
+    box-sizing: border-box;
+    moz-box-sizing: border-box;
+    ms-box-sizing: border-box;
+    o-box-sizing: border-box;
+    webkit-box-sizing: border-box;
+    width: 100% !important;
+    padding: 4px 10px !important;
+}
+
+.mp-checkoutSection .mp-form-field select {
+    -webkit-appearance: menulist-button;
+    border: 1px solid #ccc;
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+    height: 38px;
+    padding: 4px 10px !important;
+}
+
+.mp-checkoutSection .mp-form-field option {
+    font-weight: normal;
+    display: block;
+    padding: 0px 2px 1px;
+    white-space: pre;
+    min-height: 1.2em;
+}
+
+.mp-checkoutSection .mp-form-field input {
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+    height: 38px;
+}
+
+.mp-checkout-payment-info .mp-form-zip{
+    float: left;
+    width: 21%;
+}
+
+.mp-checkout-payment-info .mp-form-city{
+    float: left;
+    width: 38%;
+    margin-left: 2%;
+}
+
+.mp-checkout-payment-info .mp-form-state-select{
+    float: right;
+    width: 37%;
+}
+
+
+.mp-checkout-billing-info .mp-form-billing-name{
+    float: left;
+    width: 61%;
+}
+
+.mp-checkout-billing-info .mp-form-billing-zip{
+    float: right;
+    width: 37%;
+}
+
+.mp-checkout-billing-info .mp-form-card{
+    float: left;
+    width: 61%;
+}
+
+.mp-checkout-billing-info .mp-form-exp{
+    float: left;
+    width: 15%;
+    margin-left: 2%;
+}
+
+.mp-checkout-billing-info .mp-form-cvv{
+    float: left;
+    width: 20%;
+    margin-left: 2%;
 }

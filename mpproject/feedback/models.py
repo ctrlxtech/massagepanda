@@ -11,5 +11,8 @@ class Feedback(models.Model):
         ('4', 'Good'),
         ('5', 'Very Good'),
     )
-    rating = models.CharField(max_length=1, choices=RATING_SCALE)
-    comment = models.CharField(max_length=1000)
+    rating = models.CharField(max_length=1, choices=RATING_SCALE, null=True, blank=True)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
+    code = models.CharField(max_length=40, db_index=True)
+    request_count = models.DecimalField(max_digits=1, decimal_places=0, default=0)
+    rated = models.BooleanField()

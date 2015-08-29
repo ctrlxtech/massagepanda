@@ -69,11 +69,13 @@ def sendMyEmail(request):
     return HttpResponse("Email sent!") 
 
 @user_passes_test(lambda u: u.is_superuser)
-def sendFeedbackEmail(request):
-    order = Order.objects.get(pk=request.POST.get('order'))
+def sendFeedbackEmails(request):
+    orders = request.POST.getlist('orderIds')
+    return HttpResponse("Email sent!") 
+
+def sendFeedbackEmail(order, to):
     staffid_list = order.ordertherapist_set.all()
     from_email = settings.SERVER_EMAIL
-    to = request.POST.get('to')
     subject = 'How do you like ' + staffid_list[0].staff.first_name 
     if len(staffid_list) > 1:
         subject += staffid_list[1].staff.first_name 
@@ -83,7 +85,6 @@ def sendFeedbackEmail(request):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-    return HttpResponse("Email sent!") 
 
 def sendWelcomeEmail(to, first_name, code):
     subject = "Welcome!"
@@ -328,7 +329,6 @@ def lookupOrderTherapist(d, key):
 @register.filter
 def staffNumLookup(d, key):
     return Staff.objects.get(pk=key).phone_number
-
 
 def mcharge(request):
     orderId = request.POST.get('orderId')
@@ -600,90 +600,11 @@ def getUserLogsByNum(request):
     context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list, 'num': number}
     return render(request, 'manager/userlogs.html', context)
 
-def login_view(request):
-    if request.session.get('login', False) or request.user.is_authenticated():
-        return HttpResponse("You have logged in, " + request.user.username)
-    return render(request, 'manager/login.html')
-
-def loginFromForm(request):
-    return userLogin(request, request.POST) 
-
-def loginFromJson(request):
-    data = json.loads(request.body)
-    return userLogin(request, data)
- 
-def userLogin(request, data):
-    context = {'status': 'failure'}
-    userID = request.POST.get('userID')
-    fbToken = request.POST.get('fbToken')
-    if fbToken and userID:
-        request.session['login'] = True
-        return HttpResponse("token: " + fbToken + " userID: " + userID)
-    username = data.get('username')
-    password = data.get('password')
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            request.session['login'] = True
-            context['status'] = 'success'
-            context['firstName'] = user.first_name
-        else:
-            context['error'] = "user is inactive!"
-    else:
-        context['error'] = "can't found user"
-    return redirect('index')
-    return JsonResponse(context)
-
-def logout_view(request):
-    logout(request)
-    try:
-        del request.session['login']
-    except KeyError:
-        pass 
-    return redirect('index')
-    return HttpResponse("logout succeccfully")
-
 def register_view(request):
     return render(request, 'manager/register.html')
 
 def tregister_view(request):
     return render(request, 'manager/tregister.html')
-
-def createCustomerFromForm(request):
-    return createCustomer(request.POST)
-
-def createCustomerFromJson(request):
-    data = json.loads(request.body)
-    return createCustomer(data)
-
-@transaction.atomic
-def createCustomer(data):
-    email = data.get('email')
-    phone = data.get('phone')
-    password = data.get('password')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
-    gender = data.get('gender')
-    user = User.objects.create_user(email, email, password,
-        first_name=first_name, last_name=last_name)
-    full_name = first_name + " " + last_name
-    stripe.api_key = settings.STRIPE_KEY
-
-    stripe_cus = stripe.Customer.create(
-        description=full_name,
-        email=email
-    )
-    customer = Customer(user=user, stripe_customer_id=stripe_cus['id'], gender=gender, phone=phone)
-    customer.save()
-
-    code = referralCodeGenerator()
-    customerReferralCode = CustomerReferralCode(customer=customer, code=code)
-    customerReferralCode.save()
-
-    sendWelcomeEmail(email, first_name, code)
-    context = {'status': 'success', 'firstName': first_name}
-    return JsonResponse(context) 
 
 @transaction.atomic
 def createTherapist(request):

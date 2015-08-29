@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from services.models import Service
 from payment.models import Order
 from django.contrib.auth.decorators import user_passes_test
+from django.conf import settings
 import stripe
 # Create your views here.
 # Set your secret key: remember to change this to your live secret key in production
@@ -21,8 +22,12 @@ def index(request):
 def buy(request):
     serviceId = request.POST.get("serviceId")
     ser = Service.objects.get(pk=serviceId)
-    service_fee = ser.service_fee
-    tax = service_fee * 0.09
+    service_fee = 0
+    if ser.service_sale:
+        service_fee = ser.service_sale
+    else:
+      service_fee = ser.service_fee
+    tax = service_fee * settings.TAX
     total = service_fee + tax
     context = {"date": request.POST.get("Date"), "time": request.POST.get("Time"),
         "gender": request.POST.get("Gender"), "quantity": request.POST.get("Quantity"),

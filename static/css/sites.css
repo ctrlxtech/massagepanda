@@ -3972,7 +3972,7 @@ body.wsite-theme-dark .policy-popover
 #wsite-com-checkout-payment-order
 {
         border: 1px solid #e3e5e7;
-        margin-left: 18px;
+        /*margin-left: 18px;*/
         padding: 0px 30px 20px 30px;
 }
 .wsite-com-checkout-payment-title

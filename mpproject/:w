@@ -8,10 +8,45 @@
 
 {% block script %}
 <script type="text/javascript" src="{% static "./js/my-stripe.js" %}"></script>
-<script type="text/javascript" src="{% static "./js/checkout.js" %}"></script>
 {% endblock %}
 
 {% block docReady %}
+var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
+shippingInfo.popover();
+var returnPolicy = $('#panda_checkout').find('.mp-returnPolicy');
+returnPolicy.popover();
+$('.mp-toOrder').click(function(){
+    $('.mp-checkout-mobileTab').find('button.mp-toShipping').removeClass('active');
+    $('.mp-checkout-mobileTab').find('button.mp-toOrder').addClass('active');
+    var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+    var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+    if ($sectionRight.hasClass('mp-smallScreenHide')) {
+        $sectionLeft.addClass('mp-smallScreenHide');
+        $sectionRight.removeClass('mp-smallScreenHide');
+    };
+
+    window.scrollTo(0, 0);
+});
+$('.mp-toShipping').click(function(){
+    $('.mp-checkout-mobileTab').find('button.mp-toShipping').addClass('active');
+    $('.mp-checkout-mobileTab').find('button.mp-toOrder').removeClass('active');
+    var $sectionRight = $('#payment-form').find('.mp-checkoutSection-right');
+    var $sectionLeft = $('#payment-form').find('.mp-checkoutSection-left');
+    if ($sectionLeft.hasClass('mp-smallScreenHide')) {
+        $sectionLeft.removeClass('mp-smallScreenHide');
+        $sectionRight.addClass('mp-smallScreenHide');
+    };
+
+    window.scrollTo(0, 0);
+});
+$('input:radio[name="savedAddress"]').change(function(){
+  if (this.checked && this.value == 'newAddressSelector') {
+    $("#new-address-div").show();
+  } else {
+    $("#new-address-div").hide();
+  }
+});
+
 {% endblock %}
 
 {% block content %}
@@ -35,7 +70,7 @@
             <input type="hidden" name="referCode" data-serverField="true"/>
             <input type="hidden" name="serviceNeedTable" data-serverField="true"/>
             <textarea style="display:none" name="serviceParkingInfo" data-serverField="true" value=""></textarea>
-            <input type="hidden" name="serviceId" id="serviceId" data-serverField="true" value="1" />
+            <input type="hidden" name="serviceId" data-serverField="true" value="1" />
             <input type="hidden" name="serviceDate" data-serverField="true" value="{{ serviceDate }}" />
             <input type="hidden" name="serviceTime" data-serverField="true" value="{{ serviceTime }}" />
             <input type="hidden" name="serviceGenderPreferred" data-serverField="true" value="{{ gender }}" />
@@ -55,20 +90,7 @@
                     </div>
 					<div class="mp-checkout-payment-info">
 						<h2 class="mp-store-shipping-info-label">Shipping Information</h2>
-                                                {% with noSavedAddress=request.user.customer.address_set|length_is:"0" %}
-						{% if not noSavedAddress %}
-                                                    {% for address in request.user.customer.address_set.all %}
-                                                        <div class="border">
-                                                          <input type="radio" name="savedAddress" value="{{ address.id }}" {% if forloop.counter0 == 0 %}checked="checked" {% endif %}/>
-                                                            {{ address.name }}, {{ address.email }}, {{ address.phone }}, {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
-                                                        </div>
-                                                    {% endfor %}
-                                                        <div class="border">
-                                                        <input type="radio" value="new-address-selector" name="savedAddress" /><label>New Address</label></input>
-                                                        </div>
-                                                        <br>
-                                                {% endif %}
-                    <div id="new-address-div" {% if not noSavedAddress %} style="display:none" {% endif %}>
+						{% if request.user.customer.address_set|length_is:"0" %}
 						<div id="mp-checkout-payment-personal">
 						<div class="inner">
 							<div class="mp-form-field mp-name-field">
@@ -105,7 +127,7 @@
 							
 							<div class="mp-form-field mp-form-zip-city-state">
 								<div class="mp-form-input-container mp-form-zip">
-									<input class="mp-form-input" type="text" name="zipcode" value="{{ zipcode }}" placeholder="ZIP" data-serverField="true" readonly/>
+									<input class="mp-form-input" type="text" name="zipcode" value="" placeholder="ZIP" data-serverField="true" required/>
 								</div>
 							
 								<div class="mp-form-input-container mp-form-city">
@@ -115,9 +137,9 @@
 								<div id="mp-com-checkout-payment-shipping-state">
 									<div class="mp-form-radio-container mp-form-state-select" style="display: block;">
 										<select data-placeholder="State" placeholder="State" name="state" data-country-code="US" style="display: inline-block;">
-											{% for key,value in state_list %}
-											<option value="{{ key }}"{% if key == "CA" %} selected{% endif %}>{{ value }}</option>
-											{% endfor %}
+{% for key,value in state_list %}
+<option value="{{ key }}"{% if key == "CA" %} selected{% endif %}>{{ value }}</option>
+{% endfor %}
 										</select>
 									</div>
 								</div>
@@ -125,27 +147,29 @@
 							</div>
 						</div>
 						</div>
-					</div>
-                                                {% endwith %}
+						{% else %}
+                                                    {% include 'services/savedAddressForm.html' %}
+
+                                                {% endif %}
 					</div>
 					<div style="height: 30px; overflow: hidden; width: 100%;"></div>
 					<div class="mp-checkout-billing-info">
 						<h2 class="mp-store-shipping-info-label">Billing Information</h2>
 						{% if stripeCustomer %}
 						<div class="border">
-						  {% for data in stripeCustomer.sources.data %}
-					  	  <input type="radio" name="savedPayment"{% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
-						  {{ data.brand }}
-						  ••••{{ data.last4 }}
-						  {{ data.exp_month}}/{{ data.exp_year }}
-						  {% endfor %}
+						{% for data in stripeCustomer.sources.data %}
+						<input type="radio" name="savedPayment"{% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
+						{{ data.brand }}
+						••••{{ data.last4 }}
+						{{ data.exp_month}}/{{ data.exp_year }}
+						{% endfor %}
 						</div>
 						<div class="border">
-						  <input type="radio" name="savedPayment" value="new-payment-selector"><label>New Payment</label></input>
+						<input type="radio" name="savedPayment"{% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
                                                 </div>
-						{% endif %}
+                                                {% else %}
 						<br>
-						<div class="inner" id="new-payment-div" {% if stripeCustomer %} style="display:none" {% endif %}>
+						<div class="inner">
 							<div class="mp-form-field mp-form-name-zip-row">
 								<div class="mp-form-input-container mp-form-billing-name">
 									<input class="mp-form-input" type="text" value="" placeholder="Name on Card" name="name" data-stripe="name" data-serverField="true" required/>
@@ -169,8 +193,9 @@
 								</div>
 							</div>
 						</div>
+						{% endif %}
 						<div id="mp-completeOrder" class="mp-checkout mp-checkoutShort">
-                            <button type="submit" class="btn btn-success">Complete Order</button>
+                                                        <button type="submit" class="btn btn-success">Complete Order</button>
 						</div>
 					</div>
 				</div>
@@ -190,7 +215,7 @@
 									<br> Date: {{ serviceDate }} 
 									<br> Time: {{ serviceTime }} 
 									<br> Gender Preferred: {{ gender }}
-									<br> Table Needed: {% if needTable %}Yes(<span class="item-price"><font color="red">$10.00</font></span>){% else %}No{% endif %}
+									<br> Table Needed: {% if needTable %}Yes{% else %}No{% endif %}
 									</span>
 								
 									<span class="item-coupons">
@@ -208,7 +233,7 @@
 								        {% endif %}
 								</td>
 							</tr>
-							{% if inSF %}
+							{% if needTable %}
 							<tr>
 								<td class="item-text">
 									<span class="item-title">Additional Service Fee in San Francisco</span>
@@ -268,6 +293,7 @@
 							<tr class="wsite-tax-row" style="display: table-row;">
 								<td colspan="2" class="wsite-title">Taxes</td>
 								<td class="wsite-price-right">
+									
 									<div id="wsite-com-checkout-breakdown-taxes">
 										<span class="wsite-price-wrap">
 											$<span class="wsite-price">{{ tax|div:1 }}</span>
@@ -276,23 +302,26 @@
 
 								</td>
 							</tr>
-							<tr id="wsite-discount-row" class="" style="display:none;">
-							  <td colspan="2" class="wsite-title">Discount</td>
-							  <td class="wsite-price-right">
-						              <div class="mp-discounts">
-                                                                <span class="mp-coupon-description">
-                                                                  -$<span id="wsite-discount-price"></span>
-                                                                </span>
-                                                              </div>
-                                                          </td>
-                                                        </tr>
+							
 							<tr class="wsite-pad-row"><td></td></tr>
 							<tr class="wsite-total-row">
 								<td colspan="2">Total</td>
 								<td class="wsite-price-right">
 									
 								<span id="wsite-com-checkout-payment-total-price">
-                                                                  $<span class="wsite-price">{{ total|div:1 }}</span>
+								{% if needTable %}
+                                                                    {% if service.service_sale %}
+									$<span class="wsite-price">{{ service.service_sale|add:tax|add:10|div:1 }}</span>
+                                                                    {% else %}
+									$<span class="wsite-price">{{ service.service_fee|add:tax|add:10|div:1 }}</span>
+                                                                    {% endif %}
+								{% else %}
+                                                                    {% if service.service_sale %}
+									$<span class="wsite-price">{{ service.service_sale|add:tax|div:1 }}</span>
+                                                                    {% else %}
+									$<span class="wsite-price">{{ service.service_fee|add:tax|div:1 }}</span>
+                                                                    {% endif %}
+								{% endif %}
 								</span>
 
 								</td>
@@ -300,16 +329,12 @@
 						</tfoot>
 						</table>
 					</div>
-                      <div id="mp-coupon-input" class="form-group" style="padding-top: 10px;">
-                      <input type="text" placeholder="Enter Coupon Here" class="form-control" style="margin-left: 0; width: auto; display: inline-block; margin-right: 10px;" name="serviceCoupon" data-serverField="true"/>
-                      <a href="" id="apply-coupon" style="display:none;">Apply</a>
-					  <span id="apply-coupon-text" class="mp-smallScreenHide">Have Promo Code?</span>
-                      <div id="mp-coupon-panelAlert" class="alert alert-danger" role="alert" style="display:none"></div>
-                      </div>
-                      <div id="wsite-applied-coupon" style="display:none">
-                        Coupon applied: <span id="wsite-applied-coupon-code"></span>
-                        <div class="mp-remove-button remove" id="delete-coupon"></div>
-                      </div>
+					<div class="form-group">
+                      <input type="text" placeholder="Enter Coupon Code" class="form-control" name="serviceCoupon" data-serverField="true"/>
+                    </div>
+                    <div class="form-group"  style="display:none;">
+                        <textarea name="checkoutNote" val="" placeholder="Note to Seller (Optional)" class="form-control mp-fieldRequired mp-checkoutNote" rows="3" cols="50" data-serverField="true"></textarea>
+                    </div>
 					<div id="wsite-com-policy-links">
 					<ul id="wsite-com-checkout-links">
 						<li>

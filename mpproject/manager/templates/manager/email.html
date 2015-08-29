@@ -13,15 +13,18 @@
 {% csrf_token %}
 
 {% if order_list %}
-<select id="order" name="order">
+<ul id="adminList" class="chk-container">
+<h3><input type="checkbox" id="select-all-orders"/> Select All Orders</h3>
+
 {% for order in order_list %}
-<option value="{{ order.id }}" email="{{ order.email }}">
+<input type="checkbox" class="orderCheckbox" name="orderId" value="{{ order.id }}" email="{{ order.email }}">
 {{ order.recipient }}: {{ order.service_datetime }} | {{ order.service.service_type }} for {{ order.service.service_time }} Hour{{ service.service_time|pluralize }}
-</option>
+</input>
+<input type="text" placeholder="Email" name="to" value="{{ order.email }}">
+<br>
 {% endfor %}
-</select>
+</ul>
 {% endif %}
-<input type="text" placeholder="Email" name="to" id="to">
 <input type="submit" value="send">
 </form>
 

@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>Send Email</title>
+<link rel="stylesheet" href="{% static "./css/email.css" %}" type="text/css">
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
 <script type="text/javascript" src="{% static "js/email.js" %}"></script>
@@ -13,17 +14,31 @@
 {% csrf_token %}
 
 {% if order_list %}
-<ul id="adminList" class="chk-container">
-<h3><input type="checkbox" id="select-all-orders"/> Select All Orders</h3>
+<table style="width:100%">
+  <tr>
+    <th><input type="checkbox" id="select-all-orders"/>All</th>
+    <th>Customer Name</th> 
+    <th>Service Date</th>
+    <th>Service Type</th>
+    <th>Service Time</th>
+    <th>Therapist(s)</th>
+    <th>Customer Email</th>
+    <th>Sent</th>
+  </tr>
 
 {% for order in order_list %}
-<input type="checkbox" class="orderCheckbox" name="orderId" value="{{ order.id }}" email="{{ order.email }}">
-{{ order.recipient }}: {{ order.service_datetime }} | {{ order.service.service_type }} for {{ order.service.service_time }} Hour{{ service.service_time|pluralize }}
-</input>
-<input type="text" placeholder="Email" name="to" value="{{ order.email }}">
-<br>
+<tr>
+<td><input type="checkbox" class="orderCheckbox" name="orderId" value="{{ order.id }}" email="{{ order.email }}" /></td>
+<td>{{ order.recipient }}</td>
+<td>{{ order.service_datetime }}</td>
+<td>{{ order.service.service_type }}</td>
+<td>{{ order.service.service_time }} Hour{{ service.service_time|pluralize }}</td>
+<td>{{ order.ordertherapist_set.all.0.staff.first_name }}</td>
+<td><input type="text" placeholder="Email" name="to" value="{{ order.email }}" readonly/></td>
+<td>{{ order.feedback.request_count }}</td>
+</tr>
 {% endfor %}
-</ul>
+</table>
 {% endif %}
 <input type="submit" value="send">
 </form>

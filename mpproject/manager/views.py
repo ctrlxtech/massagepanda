@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.defaulttags import register
 
 from django.http import HttpResponse, JsonResponse
+from feedback.models import Feedback
 from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardSMS, ForwardNumber, SMSTemplate
 from payment.models import Order, OrderTherapist
 from services.models import Service
@@ -70,21 +71,32 @@ def sendMyEmail(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def sendFeedbackEmails(request):
-    orders = request.POST.getlist('orderIds')
+    orderIds = request.POST.getlist('orderIds')
+    for orderId in orderIds:
+        sendFeedbackEmail(orderId)
     return HttpResponse("Email sent!") 
 
-def sendFeedbackEmail(order, to):
-    staffid_list = order.ordertherapist_set.all()
+def sendFeedbackEmail(orderId):
+    #staffid_list = Order.ordertherapist_set.all()
+    order = Order.objects.get(pk=orderId)
+
+    ot = order.ordertherapist_set.all()
     from_email = settings.SERVER_EMAIL
-    subject = 'How do you like ' + staffid_list[0].staff.first_name 
-    if len(staffid_list) > 1:
-        subject += staffid_list[1].staff.first_name 
+    subject = 'How do you like ' + ot[0].staff.first_name 
+    if len(ot) > 1:
+        subject += ' and ' + ot[1].staff.first_name
     subject += ' - Your Feedback is Important to Us'
     text_content = 'We really appreciate your feedback!'
-    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'staffid_list': staffid_list}))
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'staffid_list': ot, 'host': "http://ec2-52-8-5-153.us-west-1.compute.amazonaws.com"}))
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [Order.objects.get(pk=orderId).email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+    f = order.feedback
+    f.request_count += 1
+    f.save()
+
+    return
 
 def sendWelcomeEmail(to, first_name, code):
     subject = "Welcome!"

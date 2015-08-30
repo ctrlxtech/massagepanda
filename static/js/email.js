@@ -29,7 +29,7 @@ $(document).ready(function() {
         {
             request.setRequestHeader("X-CSRFToken", csrfToken);
         },
-        url         : 'sendFeedbackEmail', // the url where we want to POST
+        url         : 'sendFeedbackEmails', // the url where we want to POST
         dataType    : 'json', // what type of data do we expect back from the server
         data: formData,
         encode          : true,

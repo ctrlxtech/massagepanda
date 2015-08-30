@@ -19,6 +19,10 @@ class Staff(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profile_photo = models.ImageField(null=True, blank=True);
 
+    def __unicode__(self):
+        return u'%s %s' %(self.first_name, self.last_name)
+
+
 class Area(models.Model):
     AREA_CHOICES = (
         ('SF', 'San Francisco'),

@@ -1,0 +1,54 @@
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="POST" id="addressForm" data-toggle="validator" role="form">
+{% csrf_token %}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Your new address</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="container-fluid">
+
+  <div class="form-group">
+    <div id="address-response-errors" class="alert alert-danger" style="display:none"></div>
+
+          <div class="row">
+    <div class="form-group">
+      <div class="col-md-5"><input class="form-control" type="text" id="firstName" placeholder="First Name" required></div>
+      <div class="col-md-5"><input class="form-control" type="text" id="lastName" placeholder="Last Name" required></div>
+    </div>
+          </div>
+          <div class="row">
+    <div class="form-group">
+      <div class="col-md-7"><input type="email" class="form-control" id="email" placeholder="Email" required></div>
+      <div class="col-md-5"><input type="text" class="form-control" id="phone" placeholder="Phone" required></div>
+    </div>
+          </div>
+          <div class="row">
+    <div class="form-group">
+      <div class="col-md-4"><input type="text" class="form-control" id="country" value="Unites States" placeholder="Country" readonly required></div>
+      <div class="col-md-8"><input type="text" class="form-control" id="address" placeholder="Address" required></div>
+    </div>
+          </div>
+          <div class="row">
+    <div class="form-group">
+      <div class="col-md-3"><input type="text" class="form-control" id="state" value="CA" placeholder="State" readonly required></div>
+      <div class="col-md-6"><input type="text" class="form-control" id="city" placeholder="City" required></div>
+      <div class="col-md-3"><input type="text" class="form-control" id="zipcode" placeholder="Zipcode" required></div>
+    </div>
+          </div>
+  </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary"/>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+

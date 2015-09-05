@@ -11,8 +11,41 @@
   }
 }
 
+a:hover {
+    cursor: pointer;
+}
+
 .modal-dialog {
   display: inline-block;
   text-align: left;
   vertical-align: middle;
+}
+
+.address-desc ul {
+  margin-top: 10px;
+}
+
+.address-detail {
+  width: 80%;
+  display: inline-flex;
+  margin-left: 20px;
+}
+
+.edit-div {
+  float: right;
+  margin-right: 10px;
+}
+
+.edit-div a {
+  margin-right: 10px
+}
+
+.delete-link {
+  color: #555;
+}
+
+.delimiter {
+  height: 10px;
+  overflow: hidden;
+  width: 100%;
 }

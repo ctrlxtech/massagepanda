@@ -287,15 +287,31 @@ div.mp-pageContent {
 }
 
 .btn-group.mp-massageDetails-input ul.dropdown-menu li.mp-item {
-    height: 36px;
-    line-height: 36px;
+    height: 50px;
+    /*line-height: 36px;*/
     font-size: 18px;
 }
 
 #massageDetails_timeList {
     height: 300px;
     overflow-y: scroll;
+    padding:0;
 }
+
+.mp-massageDetails-input > ul > li > a{
+    padding: 0 20px;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+.mp-massageDetails-input .divider{
+    margin:0;
+}
+
+#massageDetails_genderPreferredList {
+    padding:0;
+}
+
 
 .timeTableDisable{
 	opacity: .25;
@@ -1008,6 +1024,16 @@ overflow: hidden;
   font-size: 16px;
 }
 
+.profile-right {
+    box-shadow: -3px 0 5px -2px rgba(0,0,0,.15);
+}
 
+.profile-pic{
+    width:130px;
+    max-width:100%;
+    height:130px;
+    border-radius:50%;
+    border: 1px solid #c2c2c2;
+}
 
 

@@ -15,6 +15,22 @@
 {% endblock %}
 
 {% block content %}
+<div class="modal fade" id="addressConflictAlert">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Sorry</h4>
+      </div>
+      <div class="modal-body">
+        <p>This address has a different zipcode than what you have entered. If you really want to select this address, you can go back to the previous page to change your zipcode.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="panda_checkout" class="mp-pageContent container-fluid" data-mpController="checkoutPage">
     <div class="btn-group btn-group-justified mp-checkout-mobileTab mp-largeScreenHide" role="group">
@@ -59,14 +75,13 @@
 						{% if not noSavedAddress %}
                                                     {% for address in request.user.customer.address_set.all %}
                                                         <div class="border">
-                                                          <input type="radio" name="savedAddress" value="{{ address.id }}" {% if forloop.counter0 == 0 %}checked="checked" {% endif %}/>
+                                                          <input type="radio" name="savedAddress" zipcode="{{ address.zipcode }}" value="{{ address.id }}" {% if forloop.counter0 == 0 %}checked="checked" {% endif %}/>
                                                             {{ address.name }}, {{ address.email }}, {{ address.phone }}, {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
                                                         </div>
                                                     {% endfor %}
                                                         <div class="border">
-                                                        <input type="radio" value="new-address-selector" name="savedAddress" /><label>New Address</label></input>
+                                                        <input type="radio" value="new-address-selector" name="savedAddress"><span style="font-weight:400;"> New Address</span></input>
                                                         </div>
-                                                        <br>
                                                 {% endif %}
                     <div id="new-address-div" {% if not noSavedAddress %} style="display:none" {% endif %}>
 						<div id="mp-checkout-payment-personal">
@@ -141,10 +156,9 @@
 						  {% endfor %}
 						</div>
 						<div class="border">
-						  <input type="radio" name="savedPayment" value="new-payment-selector"><label>New Payment</label></input>
+						  <input type="radio" name="savedPayment" value="new-payment-selector"><span style="font-weight:400;"> New Payment</span></input>
                                                 </div>
 						{% endif %}
-						<br>
 						<div class="inner" id="new-payment-div" {% if stripeCustomer %} style="display:none" {% endif %}>
 							<div class="mp-form-field mp-form-name-zip-row">
 								<div class="mp-form-input-container mp-form-billing-name">

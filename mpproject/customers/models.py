@@ -16,6 +16,9 @@ class Customer(models.Model):
     # validators should be a list
     phone = models.CharField(max_length = 16, validators=[phone_regex])
 
+    def __unicode__(self):
+        return "%s, %s %s %s" % (self.user.first_name, self.user.last_name, self.gender, self.phone)
+
 class Address(models.Model):
     STATE_CHOICES = (
       ('AL', 'Alabama'),
@@ -76,6 +79,7 @@ class Address(models.Model):
     city = models.CharField(max_length = 50, blank = False)
     state = models.CharField("State", max_length = 40, blank = True, choices=STATE_CHOICES)
     country = models.CharField(max_length = 45, blank = False)
+    default = models.BooleanField(default = False)
 
     def __unicode__(self):
         return "%s, %s %s %s" % (self.name, self.address_line1, self.city, self.state)

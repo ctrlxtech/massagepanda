@@ -2,6 +2,7 @@ from django.db import transaction
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.defaulttags import register
@@ -109,6 +110,37 @@ def changePassword(request):
         context = {'status': 'failure', 'error': 'wrong password'}
     else:
         context = {'status': 'failure', 'error': 'wrong password'}
+    return JsonResponse(context)
+
+@login_required(login_url="/customer/login")
+def addNewAddress(request):
+    firstName = request.POST.get('firstName')
+    lastName = request.POST.get('lastName')
+    name = firstName.strip() + " " + lastName.strip()
+    email = request.POST.get('email')
+    phone = request.POST.get('phone')
+    address = request.POST.get('address')
+    zipcode = request.POST.get('zipcode')
+    city = request.POST.get('city')
+    state = request.POST.get('state')
+    country = request.POST.get('country')
+    try:
+        a = Address(customer=request.user.customer, name=name, email=email, phone=phone, address_line1=address, city=city, state=state, country=country, zipcode=zipcode)
+        a.save()
+        context = {'status': 'success', 'addressId': a.id, 'name': name, 'address_line1': address, 'zipcode': zipcode, 'city': city, 'state': state}
+    except:
+        context = {'status': 'failure', 'error': 'Check your inputs please'}
+    return JsonResponse(context)
+
+@login_required(login_url="/customer/login")
+def deleteAddress(request):
+    addressId = request.POST.get('addressId')
+    try:
+        a = Address.objects.get(pk=addressId)
+        a.delete()
+        context = {'status': 'success'}
+    except:
+        context = {'status': 'failure', 'error': 'Check your inputs please: ' + addressId}
     return JsonResponse(context)
 
 @login_required(login_url="/customer/login")

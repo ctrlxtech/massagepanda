@@ -1,4 +1,5 @@
 $( window ).load(function() {
+
 var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
 shippingInfo.popover();
 
@@ -28,13 +29,28 @@ $('.mp-toShipping').click(function(){
 
     window.scrollTo(0, 0);
 });
+
+var previousRd = $('input:text[name="zipcode"]').val();
+
 $('input:radio[name="savedAddress"]').change(function(){
   if (this.checked && this.value == 'new-address-selector') {
+    previousRd = $(this);
     $("#new-address-div").show();
   } else {
     $("#new-address-div").hide();
+    if ($('input:text[name="zipcode"]').val() != $(this).attr("zipcode")) {
+        $("#addressConflictAlert").modal('show');
+        previousRd.prop("checked", true);
+        if (previousRd.val() == "new-address-selector") {
+            $("#new-address-div").show();
+        }
+    } else {
+        previousRd = $(this);
+        $("#new-address-div").hide();
+    }
   }
 });
+
 $('input:radio[name="savedPayment"]').change(function(){
   if (this.checked && this.value == 'new-payment-selector') {
     $("#new-payment-div").show();

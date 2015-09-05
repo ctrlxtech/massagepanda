@@ -103,7 +103,7 @@ def placeOrder(request, data):
         service_datetime = datetime.strptime(service_datetime_string, date_format2)
 
     preferred_gender = data.get('serviceGenderPreferred')
-    token = data.get('stripeToken')
+    stripeToken = data.get('stripeToken')
     name = data.get('name')
     sName = data.get('first-name')
     sName += " " + data.get('last-name')
@@ -121,9 +121,9 @@ def placeOrder(request, data):
     address = address + ", " + sCity + ", " + sState + ", " +\
         sCountry + " " + sZipcode
 
-    o = Order(token=token, service_id=serviceId, service_datetime=service_datetime,
+    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
         preferred_gender=preferred_gender, customer=customer, amount=mamount,
-        shipping_address=address, recipient=sName, name=name, phone=phone, email=email)
+        shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
     f = Feedback(order=o, code=getFeedbackCode(o.id), rated=False)
@@ -133,7 +133,7 @@ def placeOrder(request, data):
         # update customer's stripe default card
         stripe.api_key = settings.STRIPE_KEY
         cu = stripe.Customer.retrieve(customer.stripe_customer_id)
-        cu.source = token
+        cu.source = stripeToken
         cu.save()
 
         # add shipping address for the customer

@@ -9,16 +9,24 @@ class Order(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
+    order_number = models.CharField(max_length=40, unique=True, db_index=True)
     service = models.ForeignKey(Service, default=None, null=True)
     service_datetime = models.DateTimeField()
-    preferred_gender = models.CharField(max_length = 20)
+
+    GENDER_PREFERENCES = (
+        ('0', 'Either'),
+        ('1', 'Female Preferred'),
+        ('2', 'Male Preferred'),
+    )
+
+    preferred_gender = models.CharField(max_length = 10, choices=GENDER_PREFERENCES, default='0')
     customer = models.ForeignKey(Customer, default=None, null=True)
-    token = models.CharField(max_length = 100)
+    stripe_token = models.CharField(max_length = 100)
     amount = models.IntegerField()
     
     shipping_address = models.CharField(max_length = 500)
     recipient = models.CharField(max_length = 50)
-    name = models.CharField(max_length = 50)
+    billing_name = models.CharField(max_length = 50)
     phone = models.CharField(max_length = 16, validators=[phone_regex])
     email = models.EmailField()
 

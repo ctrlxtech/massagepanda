@@ -5,8 +5,7 @@ div#panda_checkout {
 .border {
     /*border-radius: 25px;
     border: 2px solid;*/
-    margin: 10px;
-    display: inline-block;
+    margin: 10px 0;
 }
 
 .mp-payment-selector {
@@ -187,4 +186,8 @@ div#panda_checkout {
     float: left;
     width: 20%;
     margin-left: 2%;
+}
+
+input[type="radio"]{
+    margin:0;
 }

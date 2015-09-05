@@ -10,11 +10,13 @@ class OrderTherapistInline(admin.StackedInline):
 
 class FeedbackInline(admin.StackedInline):
     model = Feedback
+    readonly_fields = ('rating', 'comment', )
 
 class OrderAdmin(admin.ModelAdmin):
     list_select_related = ('service', )
     list_display = ('id', 'get_service', 'recipient', 'service_datetime', 'get_feedback')
     list_display_links = ('id', 'get_service', 'recipient', 'service_datetime')
+    readonly_fields = ('order_number', 'stripe_token')
 
     inlines = [
         OrderTherapistInline, FeedbackInline

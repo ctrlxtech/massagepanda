@@ -23,13 +23,13 @@
                   <table class="wsite-multicol-table">
                      <tbody class="wsite-multicol-tbody">
                         <tr class="wsite-multicol-tr">
-                           <td class="wsite-multicol-col" style="width:21.515151515152%; padding:0 15px;">
+                           <td class="wsite-multicol-col" style="width:20%; padding:0 15px;">
                               {% include "customers/profile_nav.html" %} 
                            </td>
-                           <td class="wsite-multicol-col" style="width:78.484848484848%; padding:0 15px;">
+                           <td class="wsite-multicol-col profile-right" style="width:80%; padding:0 15px;">
                               <h2 class="wsite-content-title" style="text-align:center;">GET FREE MASSAGES<br></h2>
                               <div class="wsite-spacer" style="height:11px;"></div>
-                              <div class="paragraph" style="text-align:left;"><font size="5">Send friends a free ride using your unique code. After their first ride, you'll get a free ride too - worth up to $20.</font></div>
+                              <div class="paragraph" style="text-align:left;"><font size="5">Send friends a discount for massage using your unique code. After their first massages, you'll get a free massage - worth up to $99.</font></div>
                               <div>
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                                  <hr class="styled-hr" style="width:100%;">
@@ -41,7 +41,7 @@
                                  <hr class="styled-hr" style="width:100%;">
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                               </div>
-                              <div class="paragraph" style="text-align:left;">Use these methods to share free rides with your friends.<br></div>
+                              <div class="paragraph" style="text-align:left;">Use these methods to share free massages with your friends.<br></div>
                               <div id="fb-root"></div>
                               <div class="fb-share-button" data-href="http://{{ request.get_host }}{% url 'index' %}" data-layout="button">
                               </div>
@@ -65,10 +65,10 @@
                                  <hr class="styled-hr" style="width:100%;">
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                               </div>
-                              <div class="paragraph" style="text-align:left;">This is your invite code. Friends can enter it into their app for free rides. You can also copy the link and share it with others.</div>
+                              <div class="paragraph" style="text-align:left;">This is your invite code. Friends can enter it into their massage bookings for the discount. You can also copy the link and share it with others.</div>
                               <div class="paragraph" style="text-align:left;"><strong>{{ request.user.customer.customerreferralcode.code }}</strong></div>
                               <div class="wsite-spacer" style="height:30px;"></div>
-                              <div class="paragraph" style="text-align:left;"><font size="2">Every time a friend signs up with your invite code, they'll get their first ride free (up to $20). Once they've tried Uber, you'll also receive a free ride (up to $20), which will be applied to your account automatically.</font></div>
+                              <div class="paragraph" style="text-align:left;"><font size="2">Every time a friend signs up with your invite code, they'll get their first massage discount (up to $20). Once they've tried MassagePanda, you'll also receive a massage credit (up to $20), which will be applied to your account automatically.</font></div>
                            </td>
                         </tr>
                      </tbody>

@@ -10,6 +10,11 @@
 {% endblock %}
 
 {% block content %}
+
+{% include 'customers/confirmationModal.html' %}
+{% include 'customers/addressModal.html' %}
+{% include 'customers/changePasswordModal.html' %}
+
 <div id="main-wrap">
    <div class="container">
       <div id="wsite-content" class="wsite-elements wsite-not-footer">
@@ -19,10 +24,10 @@
                   <table class="wsite-multicol-table">
                      <tbody class="wsite-multicol-tbody">
                         <tr class="wsite-multicol-tr">
-                           <td class="wsite-multicol-col" style="width:21.717171717172%; padding:0 15px;">
+                           <td class="wsite-multicol-col" style="width:20%; padding:0 15px;">
                                {% include "customers/profile_nav.html" %}
                            </td>
-                           <td class="wsite-multicol-col" style="width:78.282828282828%; padding:0 15px;">
+                           <td class="wsite-multicol-col profile-right" style="width:80%; padding:0 15px;">
                               <h2 class="wsite-content-title" style="text-align:center;"><font size="5">PROFILE</font></h2>
                               <div class="wsite-spacer" style="height:11px;"></div>
                               <div>
@@ -63,23 +68,11 @@
                                  </div>
                               </div>
                               <div>
-                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
-                                 <hr class="styled-hr" style="width:100%;">
-                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
-                              </div>
-                              <div>
-                                 <div id="160172961544217299" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
-                                    <div class="wsite-com-checkout-section" style="padding-bottom:0px;">
-                                       {% include "customers/profileShipping.html" %}
-                                    </div>
-                                    <div style="display:block;font-size:90%"></div>
-                                 </div>
-                              </div>
-                              <div>
                                  <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                                  <hr class="styled-hr" style="width:100%;">
                                  <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                               </div>
+
                               <div>
                                  <div class="wsite-multicol">
                                     <div class="wsite-multicol-table-wrap" style="margin:0 -0px;">
@@ -90,14 +83,17 @@
                                                    <div class="paragraph" style="text-align:left;"><font size="3">Profile Photo</font></div>
                                                 </td>
                                                 <td class="wsite-multicol-col" style="width:33.276691438363%; padding:0 0px;">
-                                                   <div>
-                                                      <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:0;margin-left:0;margin-right:10px;text-align:left">
-                                                         <a>
-                                                         <img src="{% static "./images/pandaNewIcon.png" %}" alt="Picture" style="width:auto;max-width:100%">
-                                                         </a>
-                                                         <div style="display:block;font-size:90%"></div>
-                                                      </div>
-                                                   </div>
+												   <div class="wsite-image" style="padding-top:0; padding-bottom:0; margin-left:0; margin-right:10px; text-align:left; display: inline-block;">
+														 <a>
+														 <img src="{% static "./images/default.jpeg" %}" alt="Picture" class="profile-pic" style="width:50px;height:50px;">
+														 </a>
+														 <div style="display:block;font-size:90%"></div>
+												   </div>
+												    <div class="paragraph" style="text-align:left;display: inline-block;">
+													<a data-toggle="modal" data-target="" href="#">
+													  Set Picture
+													</a>
+													</div>
                                                 </td>
                                                 <td class="wsite-multicol-col" style="width:16.642810222323%; padding:0 0px;">
                                                    <div class="paragraph" style="text-align:left;"><font size="3">Password</font></div>
@@ -106,46 +102,11 @@
                                                    <div class="paragraph" style="text-align:left;">••••••••••••<br></div>
                                                 </td>
                                                 <td class="wsite-multicol-col" style="width:16.788229226974%; padding:0 0px;">
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  change
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form method="POST" id="passwordChangeForm" data-toggle="validator" role="form">
-{% csrf_token %}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Change your password</h4>
-      </div>
-      <div class="modal-body">
-  <div class="form-group">
-    <div id="response-errors" class="alert alert-danger" style="display:none"></div>
-    <div class="form-group ">
-      <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Old Password" required>
-      <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group ">
-      <input type="password" name="newPassword" data-minlength="4" class="form-control" id="newPassword" placeholder="New Password" required>
-      <span class="help-block">Minimum of 4 characters</span>
-    </div>
-    <div class="form-group ">
-      <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#newPassword" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
-      <div class="help-block with-errors"></div>
-    </div>
-  </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+													<div class="paragraph" style="text-align:left;">
+													<a data-toggle="modal" data-target="#myModal" href="#">
+													  Change
+													</a>
+													</div>
                                                 </td>
                                              </tr>
                                           </tbody>
@@ -154,7 +115,7 @@
                                  </div>
                               </div>
                               <div>
-                                 <div style="height: 0px; overflow: hidden; width: 100%;"></div>
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                                  <hr class="styled-hr" style="width:100%;">
                                  <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                               </div>
@@ -166,11 +127,33 @@
                                  <div style="height: 10px; overflow: hidden;"></div>
                               </div>
                               <div>
+                                 <div style="height: 30px; overflow: hidden; width: 100%;"></div>
+                                 <hr class="styled-hr" style="width:100%;">
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
+                              </div>
+                              <div>
+                                  <div style="text-align:left;/* width: 90%; */display: inline-block;"><strong>Shipping Address</strong></div>
+                                  <div class="wsite-image wsite-image-border-none " style="/* padding-top:10px; */padding-bottom:10px;/* margin-left:0; *//* margin-right:0; */text-align:center;width: 50px;display: inline-block;float: right;">
+                                      <a data-toggle="modal" data-target="#addressModal" href="#">
+                                      <img src="/static/images/plus.png" alt="Picture" style="width:auto;max-width:100%">
+                                      </a>
+                                  </div>
+                              </div>
+			      <div>
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                                  <hr class="styled-hr" style="width:100%;">
-                                 <div style="height: 20px; overflow: hidden; width: 100%;"></div>
+                                 <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                               </div>
-                              <div class="paragraph" style="text-align:left;"><strong>Connected Accounts</strong></div>
+                              <div>
+                                 <div id="160172961544217299" align="left" style="width: 100%; overflow-y: hidden;" class="wcustomhtml">
+                                    <div id="address-section" style="padding-bottom:0px;">
+                                       {% include "customers/profileShipping.html" %}
+                                    </div>
+                                    <div style="display:block;font-size:90%"></div>
+                                 </div>
+                              </div>
+
+                              <div class="paragraph" style="text-align:left;margin-top:20px;"><strong>Connected Accounts</strong></div>
                               <div>
                                  <div class="wsite-multicol">
                                     <div class="wsite-multicol-table-wrap" style="margin:0 -15px;">

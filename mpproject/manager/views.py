@@ -105,48 +105,14 @@ def sendWelcomeEmail(to, first_name, code):
     msg.send()
     return HttpResponse("Email sent!") 
 
-@login_required
 def test(request):
-    nums = request.POST.getlist('needToSend')
-    number = request.POST.get('num')
-    nums.append(number)
-    message_body = request.POST.get('message')
-
-    context = {'nums': nums, 'message': message_body}
+    try:
+        name = request.POST.get('name')
+        context = {'status': 'success', 'message': "Hello, " + name}
+    except:
+        context = {'status': 'failure', 'message': "Format error"}
+        
     return JsonResponse(context)
-
-
-    user = User.objects.get(pk=11)
-    user = authenticate(username=user.username, password=user.password)
-    if user is not None:
-        return HttpResponse(user.user)
-    else:
-        return HttpResponse("Can't")
-
-    if request.user.is_authenticated():
-        context += "Had been Authenticated: <br>"
-    else:
-        context += "Had not!<br>"
-    '''
-    user = authenticate(username="paul@gmail.com", password="1234")
-    if user is not None:
-        if user.is_active:
-            request.user = user
-            return login(request, user)
-            # Redirect to a success page.
-            context += "hello, " + user.username
-        else:
-            # Return a 'disabled account' error message
-            context += "User is not active"
-    else:
-        # Return an 'invalid login' error message.
-        context += "User not found"
-    if request.user.is_authenticated():
-        context += "<br> Authenticated: " + request.user.username
-    else:
-        context += "<br>Not"
-    '''
-    return HttpResponse(context)
 
 @login_required(login_url="/manager/login")
 def customerProfile(request):
@@ -203,78 +169,6 @@ def payment(request):
 
     return render(request, 'manager/payment.html', context)
 
-def placeOrderFromJson(request):
-    data = json.loads(request.body)
-    return placeOrder(request, data);
-
-def placeOrderFromPost(request):
-    data = request.POST;
-    return placeOrder(request, data);
-
-def placeOrder(request, data):
-    customer = None;
-    if request.user.is_authenticated():
-        try:
-            customer = request.user.customer
-        except:
-            pass
-
-    serviceId = data.get('serviceId')
-    if serviceId is None or not serviceId:
-        context = {'status': 'failure', 'error': 'serviceId is not available'}
-        return JsonResponse(context)
-    mamount = Service.objects.get(pk=serviceId).service_fee * 100
-    service_datetime_string = data.get('serviceDate')
-    service_datetime_string += " " + data.get('serviceTime')
-    date_format1 = '%m/%d/%Y %I:%M%p'
-    date_format2 = '%Y-%m-%d %I:%M%p'
-    service_datetime = None
-    try:
-        service_datetime = datetime.strptime(service_datetime_string, date_format1)
-    except:
-        service_datetime = datetime.strptime(service_datetime_string, date_format2)
-    
-    preferred_gender = data.get('serviceGenderPreferred')
-    token = data.get('stripeToken')
-    name = data.get('name')
-    sName = data.get('first-name')
-    sName += " " + data.get('last-name')
-    phone = data.get('phone')
-    email = data.get('email')
-    sAL1 = data.get('al1').strip()
-    sAL2 = data.get('al2')
-    address = sAL1
-    if sAL2 is not None and sAL2:
-        address = address + " " + sAL2.strip()
-    sCity = data.get('city').strip()
-    sCountry = data.get('country').strip()
-    sState = data.get('state').strip()
-    sZipcode = data.get('zipcode').strip()
-    address = address + ", " + sCity + ", " + sState + ", " +\
-        sCountry + " " + sZipcode
-
-    o = Order(token=token, service_id=serviceId, service_datetime=service_datetime,
-        preferred_gender=preferred_gender, customer=customer, amount=mamount,
-        shipping_address=address, recipient=sName, name=name, phone=phone, email=email)
-    o.save()
-    if customer is not None:
-        # update customer's stripe default card
-        stripe.api_key = settings.STRIPE_KEY
-        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
-        cu.source = token
-        cu.save()
-
-        # add shipping address for the customer
-        a = Address(customer=customer, name=sName, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
-        a.save()
-    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
-    nums = [phone]
-    sendSMS(nums, message_body, False)
-
-    context = {'status': 'success'}
-    return render(request, 'services/success.html', context)
-    return JsonResponse(context)
-
 @user_passes_test(lambda u: u.is_superuser)
 def assignTherapist(request):
     orderId = request.POST.get('pk')
@@ -301,7 +195,7 @@ def orders(request):
     charge_tl = []
     stripe.api_key = settings.STRIPE_KEY
     for order in order_list:
-        order_tl.append(stripe.Token.retrieve(order.token))
+        order_tl.append(stripe.Token.retrieve(order.stripe_token))
     '''
     for charge in charge_list:
         charge_tl.append(stripe.Charge.retrieve(charge.charge_token))
@@ -366,7 +260,7 @@ def mcharge(request):
     # The card has been declined
       return HttpResponse(str(e))
 
-    o = Order.objects.get(token=mtoken)
+    o = Order.objects.get(stripeToken=mtoken)
     o.charged = True;
     o.save();
 

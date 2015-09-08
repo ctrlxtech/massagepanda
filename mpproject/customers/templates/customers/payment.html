@@ -1,8 +1,19 @@
 {% extends "index/wbase.html" %}
 {% load staticfiles %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static "./css/payment.css" %}" type="text/css">
+{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript" src="{% static "./js/my-stripe.js" %}"></script>
+<script type="text/javascript" src="{% static "./js/payment.js" %}"></script>
+{% endblock %}
+
 {% block content %}
 
+{% include 'customers/confirmationModal.html' %}
 {% include 'customers/newPaymentModal.html' %}
 
 <div id="main-wrap">
@@ -58,7 +69,7 @@
                     <div>
                       <div class="wsite-multicol">
                         <div class="wsite-multicol-table-wrap" style="margin:0 -5px;">
-                          <table class="wsite-multicol-table">
+                          <table id="payment-table" class="wsite-multicol-table">
                             <tbody class="wsite-multicol-tbody">
 {% if stripeCustomer %}
 {% for data in stripeCustomer.sources.data %}
@@ -66,27 +77,25 @@
                                 <td class="wsite-multicol-col" style="width:7%; padding:0 5px;">
                                   <div>
                                     <div class="wsite-image wsite-image-border-hairline " style="padding-top:10px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
-
-                                      <a>
                                       {% with "images/"|addCardImageSrc:data.brand|add:".png" as creditImage %}
                                       <img src="{% static creditImage %}" alt="Picture" style="width:auto;max-width:100%">
                                       {% endwith %}
-                                      </a>
                                       <div style="display:block;font-size:90%"></div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="wsite-multicol-col" style="width:12%; padding:0 5px;">
-                                  <div class="paragraph" style="text-align:left;">••••{{ data.last4 }}<br></div>
+                                  <div class="paragraph">••••{{ data.last4 }}</div>
                                 </td>
-                                <td class="wsite-multicol-col" style="width:81%; padding:0 5px;">
-                                  <div>
-                                    <div class="wsite-image wsite-image-border-none " style="padding-top:5px;padding-bottom:5px;margin-left:0;margin-right:0;text-align:center">
-                                      <input class="wsite-form-input" type="text" name="name_first" value="{{ data.exp_month}}/{{ data.exp_year }}" placeholder="Expiration" readonly>
-                                      <input class="wsite-form-input" type="text" name="name_first" value="" placeholder="CVV">
-                                      <div style="display:block;font-size:90%"></div>
-                                    </div>
-                                  </div>
+                                <td class="wsite-multicol-col" style="width:30%; padding:0 5px;">
+                                   <div class="paragraph" >{{ data.exp_month}}/{{ data.exp_year }}</div>
+                                </td>
+                                <td class="wsite-multicol-col" style="width:30%; padding:0 5px;">
+                                  <div class="paragraph">{{ data.name }}</div>
+                                </td>
+                                <td class="wsite-multicol-col" style="width:10%; padding:0 5px;">
+                                   <input type="hidden" name="card-id" value="{{data.id}}">
+                                   <a class="delete-link" name="deletePaymentBtn">Delete</a>
                                 </td>
                               </tr>
 {% endfor %}

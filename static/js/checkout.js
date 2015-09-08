@@ -132,29 +132,6 @@ $('#delete-coupon').click(function(){
   return false;
 });
 
-$(".mp-form-input[name=credit_date]").keydown(function(e) {
-    date = $(this).val();
-    if (date.length == 2 && e.keyCode == 191) {
-        return;
-    }
-    if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 106 && e.keyCode <= 111) || (e.keyCode >= 186 && e.keyCode <= 222)) {
-      e.preventDefault();
-      return;
-    }
-    date = $(this).val();
-    if (date.length == 5 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
-      e.preventDefault();
-      return;
-    }
-    if (e.keyCode != 8 && date.length == 2) {
-        $(this).val(date + "/");
-        return;
-    }
-    if (date.length == 0 && e.keyCode >= 50) {
-        $(this).val('0');
-    }
-});
-
 });
 
 function showCoupon(data) {

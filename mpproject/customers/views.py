@@ -10,6 +10,7 @@ from django.template.defaulttags import register
 import stripe
 
 from customers.models import Address
+from services.views import addPaymentForCustomer
 
 # Create your views here.
 @login_required(login_url="/customer/login")
@@ -141,6 +142,42 @@ def deleteAddress(request):
         context = {'status': 'success'}
     except:
         context = {'status': 'failure', 'error': 'Check your inputs please: ' + addressId}
+    return JsonResponse(context)
+
+@login_required(login_url="/customer/login")
+@transaction.atomic
+def setDefaultAddress(request):
+    addressId = request.POST.get('addressId')
+    try:
+        addressId = int(addressId)
+        for address in request.user.customer.address_set.all():
+            if address.id != addressId:
+                address.default = False
+            else:
+                address.default = True
+
+            address.save()
+        context = {'status': 'success'}
+    except:
+        context = {'status': 'failure', 'error': 'Check your inputs please: ' + addressId}
+    return JsonResponse(context)
+
+@login_required(login_url="/customer/login")
+def addNewPayment(request):
+    stripeToken = request.POST.get('stripeToken')
+    newPayment = addPaymentForCustomer(request.user.customer, stripeToken)
+    context = {'newPayment': newPayment}
+    return JsonResponse(context)
+
+@login_required(login_url="/customer/login")
+def deletePayment(request):
+    try:
+        cardId = request.POST.get('cardId')
+        customer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
+        customer.sources.retrieve(cardId).delete()
+        context = {'status': 'success'}
+    except:
+        context = {'status': 'failure'}
     return JsonResponse(context)
 
 @login_required(login_url="/customer/login")

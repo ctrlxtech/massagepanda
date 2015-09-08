@@ -1,7 +1,7 @@
 <div class="modal fade" id="newPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form method="POST" id="newPaymentForm" data-toggle="validator" role="form">
+      <form method="POST" id="new-payment-form" data-toggle="validator" role="form">
 {% csrf_token %}
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -12,21 +12,26 @@
         <div class="container-fluid">
 
   <div class="form-group">
-    <div id="response-errors" class="alert alert-danger" style="display:none"></div>
+    <div id="payment-alert" class="alert alert-danger mp-checkoutAlertDanger" role="alert" style="display:none">
+        <span id="response-errors" class="payment-errors"></span>
+    </div>
+
 
           <div class="row">
     <div class="form-group">
-      <div class="col-md-7"><input class="form-control" type="text" name="firstName" placeholder="Name" required></div>
-      <div class="col-md-5"><input type="text" class="form-control" id="zipcode" placeholder="Zipcode" required></div>
+      <div class="col-md-7"><input type="text" class="form-control" data-stripe="name" placeholder="Name" required></div>
+      <div class="col-md-5"><input type="text" class="form-control" data-stripe="address-zip" placeholder="Zipcode" required></div>
     </div>
           </div>
           <div class="row">
     <div >
-      <div class="col-md-7"><input type="email" class="form-control" id="cardNum" placeholder="1234 5678 9012 3456" required></div>
-      <div class="col-md-3"><input type="text" class="form-control" id="Expiration" placeholder="MM/YY" required></div>
-      <div class="col-md-2"><input type="text" class="form-control" id="CVV" placeholder="CVV" required></div>
+      <div class="col-md-7"><input type="text" class="form-control" data-stripe="number" placeholder="1234 5678 9012 3456" required></div>
+      <div class="col-md-3"><input type="text" class="form-control mp-form-input" name="credit_date" placeholder="MM/YY" required></div>
+      <div class="col-md-2"><input type="text" class="form-control" data-stripe="cvc" placeholder="CVV" required></div>
     </div>
           </div>
+          <input type="hidden" data-stripe="exp-month" id="exp-month">
+          <input type="hidden" data-stripe="exp-year" id="exp-year">
   </div>
 
         </div>

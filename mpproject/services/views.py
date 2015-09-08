@@ -126,15 +126,11 @@ def placeOrder(request, data):
         shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
-    f = Feedback(order=o, code=getFeedbackCode(o.id), rated=False)
-    f.save()
+    createFeedbackForOrder(o)
 
     if customer is not None:
-        # update customer's stripe default card
-        stripe.api_key = settings.STRIPE_KEY
-        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
-        cu.source = stripeToken
-        cu.save()
+        if stripeToken:
+            addPaymentForCustomer(customer, stripeToken)
 
         # add shipping address for the customer
         a = Address(customer=customer, name=sName, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
@@ -145,7 +141,15 @@ def placeOrder(request, data):
 
     context = {'status': 'success'}
     return render(request, 'services/success.html', context)
-    return JsonResponse(context)
+
+def addPaymentForCustomer(customer, stripeToken):
+    newPayment = "error"
+    if customer is not None:
+        # update customer's stripe default card
+        stripe.api_key = settings.STRIPE_KEY
+        cu = stripe.Customer.retrieve(customer.stripe_customer_id)
+        newPayment = cu.sources.create(source=stripeToken)
+    return newPayment
 
 def applyCoupon(request):
     couponCode = request.POST.get('couponCode').upper()
@@ -167,6 +171,11 @@ def deleteCoupon(request):
     except:
         context = {'error': 'Invalid service!'}
     return JsonResponse(context)
+
+def createFeedbackForOrder(order):
+    f = Feedback(order=o, code=getFeedbackCode(o.id), rated=False)
+    f.save()
+    return
 
 def getFeedbackCode(value):
     m = hashlib.md5()

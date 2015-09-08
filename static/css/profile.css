@@ -11,10 +11,6 @@
   }
 }
 
-a:hover {
-    cursor: pointer;
-}
-
 .modal-dialog {
   display: inline-block;
   text-align: left;

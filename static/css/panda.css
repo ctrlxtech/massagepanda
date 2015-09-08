@@ -9,6 +9,10 @@ body {
     font-weight: 300;
 }
 
+a:hover {
+        cursor: pointer;
+}
+
 .page-wrap {
     width: 100%;
 }

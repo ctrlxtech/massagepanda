@@ -3,8 +3,8 @@
 <div class="border address-desc">
   <div class="address-detail">{{ address.name }}, {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}</div>
   <div class="edit-div">
-    <a>Set as default</a>
-    <a name="editAddressBtn">Edit</a>
+    <span name="defaultIndicator" {% if address.default != 1 %} style="display:none" {% endif %}>Default Address</span>
+    <a name="setDefaultBtn" {% if address.default == 1 %} style="display:none" {% endif %} >Set as default</a>
     <a class="delete-link" name="deleteAddressBtn">Delete</a>
     <input type="hidden" name="addressId" value="{{ address.id }}"/>
   </div>

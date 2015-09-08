@@ -75,7 +75,7 @@
 						{% if not noSavedAddress %}
                                                     {% for address in request.user.customer.address_set.all %}
                                                         <div class="border">
-                                                          <input type="radio" name="savedAddress" zipcode="{{ address.zipcode }}" value="{{ address.id }}" {% if forloop.counter0 == 0 %}checked="checked" {% endif %}/>
+                                                          <input type="radio" name="savedAddress" zipcode="{{ address.zipcode }}" value="{{ address.id }}" {% if address.default == 1 and address.zipcode == zipcode %}checked="checked" {% endif %}/>
                                                             {{ address.name }}, {{ address.email }}, {{ address.phone }}, {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}
                                                         </div>
                                                     {% endfor %}

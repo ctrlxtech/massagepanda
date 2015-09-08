@@ -113,16 +113,30 @@ $(document).ready(function() {
         'addressId': $(event.target).closest('.edit-div').find('input[name="addressId"]').val(),
     };
 
-
     $('#confirm').modal({ backdrop: 'static'})
         .one('click', '#delete', function() {
-            deleteAddress(csrfToken, formData);
-        });
-
+            deleteAddress(csrfToken, formData, $(event.target).closest('.address-desc'));
+    });
   });
+  $('#address-section').on('click', 'a[name="setDefaultBtn"]', function(event) {
+    event.preventDefault();
+    var csrfToken = $.cookie('csrftoken');
+
+    var formData = {
+        'addressId': $(event.target).closest('.edit-div').find('input[name="addressId"]').val(),
+    };
+
+    setDefaultAddress(csrfToken, formData);
+    $('span[name="defaultIndicator"]').hide();
+    $('a[name="setDefaultBtn"]').show();
+
+    $(event.target).closest('.edit-div').find('span[name="defaultIndicator"]').show();
+    $(event.target).closest('.edit-div').find('a[name="setDefaultBtn"]').hide();
+  });
+
 });
 
-function deleteAddress(csrfToken, formData) {
+function deleteAddress(csrfToken, formData, section) {
     $.ajax({
         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
         traditional: true,
@@ -139,6 +153,7 @@ function deleteAddress(csrfToken, formData) {
             if (data.status == 'failure') {
                 alert("Error!");
             } else {
+                section.remove();
                 alert("Address Deleted!");
             }
         },
@@ -148,10 +163,36 @@ function deleteAddress(csrfToken, formData) {
     });
 }
 
+function setDefaultAddress(csrfToken, formData) {
+    $.ajax({
+        type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+        traditional: true,
+        beforeSend: function (request)
+        {
+            request.setRequestHeader("X-CSRFToken", csrfToken);
+        },
+        url         : 'setDefaultAddress', // the url where we want to POST
+        dataType    : 'json', // what type of data do we expect back from the server
+        data: formData,
+        encode          : true,
+        // using the done promise callback
+        success: function(data) {
+            if (data.status == 'failure') {
+                alert("Error!");
+            } else {
+                alert("Address set as default!");
+            }
+        },
+        complete: function(data) {
+            //alert("complete");
+        }
+    });
+}
 
 function addToAddressList(data) {
 var addressDesc = $('<div></div>').addClass('border address-desc');
 
+addressDesc.append(createDefaultIndicator());
 addressDesc.append(createAddressDetail(data));
 addressDesc.append(createEditPanel(data.addressId));
 addressDesc.append(createDelimiterSection());
@@ -168,6 +209,12 @@ delimiterSec.append($('<div></div>').addClass('delimiter'));
 return delimiterSec;
 }
 
+function createDefaultIndicator() {
+var indicator = $('<span></span>').attr('name', defaultIndicator).text("Default Address");
+indicator.hide();
+return indicator;
+}
+
 function createAddressDetail(address) {
 var detail = $('<div></div>').addClass('address-detail');
 detail.text(address.name + ", " + address.address_line1 + " " + address.address_line2 + ", " + address.city + " " + address.state + " " + address.zipcode);
@@ -176,8 +223,7 @@ return detail;
 
 function createEditPanel(addressId) {
 var editDiv = $('<div></div>').addClass('edit-div');
-editDiv.append($('<a></a>').text('Set as default'));
-editDiv.append($('<a></a>').attr("name", "editAddressBtn").text('Edit'));
+editDiv.append($('<a></a>').attr("name", "setDefaultBtn").text('Set as default'));
 editDiv.append($('<a></a>').addClass('delete-link').attr("name", "deleteAddressBtn").text('Delete'));
 var inputId = $('<input></input>').attr({
     type: 'hidden',

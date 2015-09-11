@@ -1,5 +1,15 @@
 $( window ).load(function() {
 
+  $('#payment-form').on('submit', function(event) {                                   
+    populateExpYearAndMonth();
+    var $form = $(this);
+    // Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true);
+    Stripe.card.createToken($form, stripeResponseHandler);
+    // Prevent the form from submitting with the default action                                       
+    return false;
+  });
+
 var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
 shippingInfo.popover();
 
@@ -30,9 +40,9 @@ $('.mp-toShipping').click(function(){
     window.scrollTo(0, 0);
 });
 
-var previousRd = $('input:text[name="zipcode"]').val();
+var previousRd = $('.mp-checkout-shipping-address input[type="radio"]:checked');
 
-$('input:radio[name="savedAddress"]').change(function(){
+$('input:radio[name="savedAddress"]').change(function(event){
   if (this.checked && this.value == 'new-address-selector') {
     previousRd = $(this);
     $("#new-address-div").show();
@@ -40,9 +50,13 @@ $('input:radio[name="savedAddress"]').change(function(){
     $("#new-address-div").hide();
     if ($('input:text[name="zipcode"]').val() != $(this).attr("zipcode")) {
         $("#addressConflictAlert").modal('show');
-        previousRd.prop("checked", true);
-        if (previousRd.val() == "new-address-selector") {
+        if (previousRd.val()) {
+          previousRd.prop("checked", true);
+          if (previousRd.val() == "new-address-selector") {
             $("#new-address-div").show();
+          }
+        } else {
+          this.checked = false;
         }
     } else {
         previousRd = $(this);
@@ -74,7 +88,10 @@ $('#apply-coupon').click(function(){
     method: 'POST',
     url: 'applyCoupon',
     data: {
-        couponCode: $('input:text[name="serviceCoupon"]').val()
+        couponCode: $('input:text[name="serviceCoupon"]').val(),
+        serviceId: $('input:hidden[name="serviceId"]').val(),
+        needTable: $('input:hidden[name="needTable"]').val(),
+        zipcode: $('input:text[name="zipcode"]').val()
     },
     beforeSend: function(request)
     {
@@ -83,7 +100,8 @@ $('#apply-coupon').click(function(){
     success: function(data) {
         if (data.status == 'success') {
           $('#mp-coupon-panelAlert').hide()
-          $('#wsite-com-checkout-payment-total-price').find('.wsite-price').text(data.newPrice.toFixed(2))
+          $('#wsite-com-checkout-payment-total-price').find('.wsite-price').text(data.newPrice)
+          $('input:hidden[name="couponCode"]').val(data.couponCode)
           showCoupon(data);
         } else {
           $('#mp-coupon-panelAlert').text(data.error)
@@ -106,7 +124,10 @@ $('#delete-coupon').click(function(){
     method: 'POST',
     url: 'deleteCoupon',
     data: {
-        serviceId: $('input:hidden[name="serviceId"]').val()
+        serviceId: $('input:hidden[name="serviceId"]').val(),
+        needTable: $('input:hidden[name="needTable"]').val(),
+        zipcode: $('input:text[name="zipcode"]').val()
+
     },
     beforeSend: function(request)
     {
@@ -115,7 +136,7 @@ $('#delete-coupon').click(function(){
     success: function(data) {
         if (data.status == 'success') {
           $('#mp-coupon-panelAlert').hide()
-          $('#wsite-com-checkout-payment-total-price').find('.wsite-price').text(data.serviceFee.toFixed(2))
+          $('#wsite-com-checkout-payment-total-price').find('.wsite-price').text(data.serviceFee)
           hideCoupon(data);
         } else {
           $('#mp-coupon-panelAlert').text(data.error)
@@ -138,7 +159,7 @@ function showCoupon(data) {
   $('#wsite-applied-coupon-code').text(data.couponCode);
   $('#wsite-applied-coupon').show();
   $('#mp-coupon-input').hide();
-  $('#wsite-discount-price').text(data.discount);
+  $('#wsite-discount-price').text(data.markDown);
   $('#wsite-discount-row').show();
 }
 

@@ -126,12 +126,7 @@ $(document).ready(function() {
         'addressId': $(event.target).closest('.edit-div').find('input[name="addressId"]').val(),
     };
 
-    setDefaultAddress(csrfToken, formData);
-    $('span[name="defaultIndicator"]').hide();
-    $('a[name="setDefaultBtn"]').show();
-
-    $(event.target).closest('.edit-div').find('span[name="defaultIndicator"]').show();
-    $(event.target).closest('.edit-div').find('a[name="setDefaultBtn"]').hide();
+    setDefaultAddress(csrfToken, formData, $(event.target).closest('.edit-div'));
   });
 
 });
@@ -163,7 +158,7 @@ function deleteAddress(csrfToken, formData, section) {
     });
 }
 
-function setDefaultAddress(csrfToken, formData) {
+function setDefaultAddress(csrfToken, formData, thisDiv) {
     $.ajax({
         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
         traditional: true,
@@ -177,14 +172,18 @@ function setDefaultAddress(csrfToken, formData) {
         encode          : true,
         // using the done promise callback
         success: function(data) {
-            if (data.status == 'failure') {
-                alert("Error!");
-            } else {
+            if (data.status == 'success') {
                 alert("Address set as default!");
+                $('span[name="defaultIndicator"]').hide();
+                $('a[name="setDefaultBtn"]').show();
+                thisDiv.find('span[name="defaultIndicator"]').show();
+                thisDiv.find('a[name="setDefaultBtn"]').hide();
+            } else {
+                alert("Error!");
             }
         },
-        complete: function(data) {
-            //alert("complete");
+        error: function(data) {
+            alert("Error!");
         }
     });
 }

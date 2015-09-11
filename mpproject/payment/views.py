@@ -38,7 +38,7 @@ def charge(request):
     serviceId = request.POST.get("serviceId")
     service = Service.objects.get(pk=serviceId)
     fee = int(float(service.service_fee) * 100)
-    stripe.api_key = "sk_test_aibfico1Lcf9qydk9snpXVrI"
+    stripe.api_key = settings.STRIPE_KEY
     # Get the credit card details submitted by the form
     token = request.POST.get('stripeToken', False)
     try:

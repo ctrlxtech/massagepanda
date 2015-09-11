@@ -427,8 +427,34 @@ $('.mp-form-input[name="credit_date"]').keydown(function(e) {
         $(this).val(date + "/");
         return;
     }
-    if (date.length == 0 && e.keyCode >= 50) {
+    if (date.length == 0 && ((e.keyCode >= 50 && e.keyCode <= 57) || (e.keyCode >= 98 && e.keyCode <= 105))) {
         $(this).val('0');
+    }
+});
+
+$('.mp-form-input[name="cvc"]').keydown(function(e) {
+    date = $(this).val();
+    if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 106 && e.keyCode <= 111) || (e.keyCode >= 186 && e.keyCode <= 222)) {
+      e.preventDefault();
+      return;
+    }
+    date = $(this).val();
+    if (date.length == 3 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+      e.preventDefault();
+      return;
+    }
+});
+
+$('.mp-form-input[name="number"]').keydown(function(e) {
+    date = $(this).val();
+    if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 106 && e.keyCode <= 111) || (e.keyCode >= 186 && e.keyCode <= 222)) {
+      e.preventDefault();
+      return;
+    }
+    date = $(this).val();
+    if (date.length == 16 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+      e.preventDefault();
+      return;
     }
 });
 

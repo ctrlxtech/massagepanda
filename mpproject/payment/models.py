@@ -35,10 +35,15 @@ class Order(models.Model):
         ('1', 'Confirmed'),
         ('2', 'Shipped'),
         ('3', 'Canceled'),
-        ('4', 'Refunded'),
+        ('4', 'Charged'),
+        ('5', 'Refunded'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='0')
 
 class OrderTherapist(models.Model):
     order = models.ForeignKey(Order)
     staff = models.ForeignKey(Staff)
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=40, unique=True, db_index=True)
+    discount = models.FloatField()

@@ -17,7 +17,7 @@ class AreaInline(admin.TabularInline):
 
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'phone_number')
-    list_filter = ['gender', 'first_name', 'last_name']
+    list_filter = ['gender', ]
     search_fields = ['first_name', 'last_name']
     inlines = [AreaInline,]
 

@@ -11,14 +11,14 @@
  */
 .mp-pageHeader.mp-IconDiv {
   width: 200px;
-  height: 60px;
+  height: 68px;
   display: inline;
   float: left;
   cursor: pointer;
 } 	
 .mp-navigation {
   position: relative;
-  top: 17px;
+  top: 20px;
   float: right;
   display: inline;
 }

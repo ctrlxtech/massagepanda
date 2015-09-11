@@ -6,12 +6,15 @@ from django.template.defaulttags import register
 
 from customers.models import Address
 from feedback.models import Feedback
-from payment.models import Order, OrderTherapist
+from payment.models import Order, OrderTherapist, Coupon
 from services.models import Service
+
+from manager.views import sendSMS
 
 import hashlib
 import stripe
 import time
+from datetime import datetime
 
 # Create your views here.
 @register.filter
@@ -32,27 +35,46 @@ def details(request):
       pass
     return render(request, 'services/details.html', context)
 
+def taxService(data):
+    try:
+      service = Service.objects.get(pk=data.get("serviceId"))
+    except:
+      raise Exception("Service not found")
+
+    if service.service_sale:
+      total = service.service_sale
+    else:
+      total = service.service_fee
+
+    tax = total * settings.TAX
+    return total + tax, tax
+
+def taxAdditional(data):
+    needTable = data.get("needTable")
+    if needTable:
+      additional = 10.0;
+    else:
+      additional = 0.0;
+    zipcode = data.get('zipcode')
+    if isInSF(zipcode):
+      context['inSF'] = True
+      additional += 10
+    tax = additional * settings.TAX
+    return additional + tax, tax
+
 def checkout(request):
     context = {}
     try:
-      needTable = request.POST.get("needTable")
       service = Service.objects.get(pk=request.POST.get("serviceId"))
-    except:
-      return HttpResponse("Service not found")
-    if needTable:
-      total = 10.0;
-    else:
-      total = 0.0;
-    if service.service_sale:
-      total += service.service_sale
-    else:
-      total += service.service_fee
+      total, tax = taxService(request.POST)
+    except Exception as e:
+      return HttpResponse(e)
+
+    additional, aTax = taxAdditional(request.POST)
+    tax += aTax
+    total += additional
+    needTable = request.POST.get("needTable")
     zipcode = request.POST.get('zipcode')
-    if isInSF(zipcode):
-      context['inSF'] = True
-      total += 10
-    tax = total * settings.TAX
-    total += tax
     serviceDate = request.POST.get("massageDetailsDate")
     serviceTime = request.POST.get("massageDetailsTime")
     genderPrefer = request.POST.get("genderPreferred")
@@ -67,7 +89,7 @@ def checkout(request):
     state_list = Address.STATE_CHOICES
     context.update({'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
         'serviceTime': serviceTime, 'gender': genderPrefer, 'needTable': needTable,
-        'zipcode': zipcode, 'tax': tax, 'total': total, 'stripeCustomer': stripeCustomer})
+        'zipcode': zipcode, 'tax': '%.2f' % tax, 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render(request, 'services/checkout.html', context)
 
 def placeOrderFromJson(request):
@@ -78,30 +100,24 @@ def placeOrderFromPost(request):
     data = request.POST;
     return placeOrder(request, data);
 
-@transaction.atomic
-def placeOrder(request, data):
-    customer = None;
-    if request.user.is_authenticated():
-        try:
-            customer = request.user.customer
-        except:
-            pass
-
-    serviceId = data.get('serviceId')
-    if serviceId is None or not serviceId:
-        context = {'status': 'failure', 'error': 'serviceId is not available'}
-        return JsonResponse(context)
-    mamount = Service.objects.get(pk=serviceId).service_fee * 100
+def stringToDatetime(data):
     service_datetime_string = data.get('serviceDate')
     service_datetime_string += " " + data.get('serviceTime')
-    date_format1 = '%m/%d/%Y %I:%M%p'
-    date_format2 = '%Y-%m-%d %I:%M%p'
-    service_datetime = None
-    try:
-        service_datetime = datetime.strptime(service_datetime_string, date_format1)
-    except:
-        service_datetime = datetime.strptime(service_datetime_string, date_format2)
+    date_format = '%m/%d/%Y %I:%M%p'
+    return datetime.strptime(service_datetime_string, date_format)
 
+
+@transaction.atomic
+def placeOrder(request, data):
+    try:
+        total, tax = taxService(request.POST)
+        serviceId = data.get('serviceId')
+    except Exception as e:
+        return JsonResponse(e)
+    additional, aTax = taxAdditional(request.POST)
+    mamount = (total + additional) * 100
+
+    service_datetime = stringToDatetime(data)
     preferred_gender = data.get('serviceGenderPreferred')
     stripeToken = data.get('stripeToken')
     name = data.get('name')
@@ -120,6 +136,13 @@ def placeOrder(request, data):
     sZipcode = data.get('zipcode').strip()
     address = address + ", " + sCity + ", " + sState + ", " +\
         sCountry + " " + sZipcode
+
+    customer = None;
+    if request.user.is_authenticated():
+        try:
+            customer = request.user.customer
+        except:
+            pass
 
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
         preferred_gender=preferred_gender, customer=customer, amount=mamount,
@@ -152,28 +175,33 @@ def addPaymentForCustomer(customer, stripeToken):
     return newPayment
 
 def applyCoupon(request):
+    try:
+        total, tax = taxService(request.POST)
+    except Exception as e :
+        return JsonResponse(e)
+
+    additional, aTax = taxAdditional(request.POST)
     couponCode = request.POST.get('couponCode').upper()
-    if couponCode == 'TWENTYOFF':
-        context = {'status': 'success', 'newPrice': 60, 'discount': 20, 'couponCode': couponCode.upper()}
-    else:
-        context = {'error': 'Invalid coupon code!'}
+    discount = Coupon.objects.get(code=couponCode).discount
+    newPrice = total * discount
+    markDown = total - newPrice
+    newPrice += additional
+    context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': couponCode.upper()}
     return JsonResponse(context)
 
 def deleteCoupon(request):
-    serviceId = request.POST.get('serviceId')
     try:
-        service = Service.objects.get(pk=serviceId)
-        if service.service_sale:
-            serviceFee = Service.objects.get(pk=serviceId).service_sale
-        else:
-            serviceFee = Service.objects.get(pk=serviceId).service_fee
-        context = {'status': 'success', 'serviceFee': serviceFee}
-    except:
-        context = {'error': 'Invalid service!'}
+        total, tax = taxService(request.POST)
+    except Exception as e :
+        return JsonResponse(e)
+
+    additional, aTax = taxAdditional(request.POST)
+    total += additional
+    context = {'status': 'success', 'serviceFee': '%.2f' % total}
     return JsonResponse(context)
 
 def createFeedbackForOrder(order):
-    f = Feedback(order=o, code=getFeedbackCode(o.id), rated=False)
+    f = Feedback(order=order, code=getFeedbackCode(order.id), rated=False)
     f.save()
     return
 

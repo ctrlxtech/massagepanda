@@ -150,16 +150,12 @@ def setDefaultAddress(request):
     addressId = request.POST.get('addressId')
     try:
         addressId = int(addressId)
-        for address in request.user.customer.address_set.all():
-            if address.id != addressId:
-                address.default = False
-            else:
-                address.default = True
-
-            address.save()
+        addresses = request.user.customer.address_set.all()
+        addresses.update(default=False)
+        addresses.filter(id=addressId).update(default=True)
         context = {'status': 'success'}
     except:
-        context = {'status': 'failure', 'error': 'Check your inputs please: ' + addressId}
+        context = {'status': 'failure', 'error': 'Check your inputs please: ' + str(addressId)}
     return JsonResponse(context)
 
 @login_required(login_url="/customer/login")

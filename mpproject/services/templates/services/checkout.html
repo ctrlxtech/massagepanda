@@ -49,15 +49,12 @@
         <form id="payment-form" class="form-inline" action="{% url 'placeOrderFromPost' %}" method=POST>
             {% csrf_token %}
             <input type="hidden" name="referCode" data-serverField="true"/>
-            <input type="hidden" name="serviceNeedTable" data-serverField="true"/>
-            <textarea style="display:none" name="serviceParkingInfo" data-serverField="true" value=""></textarea>
-            <input type="hidden" name="serviceId" data-serverField="true" value="1" />
+            <input type="hidden" name="needTable" data-serverField="true" value="{{ needTable }}"/>
+            <input type="hidden" name="serviceId" data-serverField="true" value="{{ service.id }}" />
+            <input type="hidden" name="couponCode" data-serverField="true" value="" />
             <input type="hidden" name="serviceDate" data-serverField="true" value="{{ serviceDate }}" />
             <input type="hidden" name="serviceTime" data-serverField="true" value="{{ serviceTime }}" />
             <input type="hidden" name="serviceGenderPreferred" data-serverField="true" value="{{ gender }}" />
-            <input type="hidden" name="serviceQuantity" data-serverField="true"/>
-            <input type="hidden" name="serviceMassageType" data-serverField="true"/>
-            <input type="hidden" name="serviceMassageLength" data-serverField="true"/>
             <div class="col-xs-12 col-sm-12 col-md-6 mp-smallScreenPadding" style="width:55%;">
                 <div class="mp-checkoutSection mp-checkoutSection-left mp-smallScreenHide">
                     <div class="alert alert-danger mp-checkoutAlertDanger" role="alert" style="display:none">
@@ -69,7 +66,7 @@
 						<label for="mp-radio-cc"><span></span></label>
                         <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}"/>
                     </div>
-					<div class="mp-checkout-payment-info">
+					<div class="mp-checkout-shipping-address">
 						<h2 class="mp-store-shipping-info-label">Shipping Information</h2>
                                                 {% with noSavedAddress=request.user.customer.address_set|length_is:"0" %}
 						{% if not noSavedAddress %}
@@ -84,7 +81,7 @@
                                                         </div>
                                                 {% endif %}
                     <div id="new-address-div" {% if not noSavedAddress %} style="display:none" {% endif %}>
-						<div id="mp-checkout-payment-personal">
+						<div id="mp-checkout-shipping-personal">
 						<div class="inner">
 							<div class="mp-form-field mp-name-field">
 								<div class="mp-form-input-container mp-form-left">
@@ -104,7 +101,7 @@
 							</div>
 						</div>
 						</div>
-						<div id="mp-checkout-payment-shipping">
+						<div id="mp-checkout-shipping-address">
 						<div class="inner">
 							<div class="mp-form-field mp-form-country-address">
 								<div class="mp-form-radio-container mp-form-country">
@@ -151,8 +148,9 @@
 						  {% for data in stripeCustomer.sources.data %}
 					  	  <input type="radio" name="savedPayment"{% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
 						  {{ data.brand }}
-						  ••••{{ data.last4 }}
-						  {{ data.exp_month}}/{{ data.exp_year }}
+						  ••••{{ data.last4 }},
+						  {{ data.exp_month}}/{{ data.exp_year }},
+                                                  {{ data.name }}
 						  {% endfor %}
 						</div>
 						<div class="border">
@@ -175,7 +173,9 @@
 								</div>
 							
 								<div class="mp-form-input-container mp-form-exp">
-									<input class="mp-form-input" type="text" placeholder="MM/YY" value=""  name="credit_date" data-stripe="exp-year" required/>
+									<input class="mp-form-input" type="text" placeholder="MM/YY" value=""  name="credit_date" required/>
+									<input class="mp-form-input" type="hidden" id="exp-month" data-stripe="exp-month"/>
+									<input class="mp-form-input" type="hidden" id="exp-year" data-stripe="exp-year"/>
 								</div>
 							
 								<div class="mp-form-input-container mp-form-cvv">
@@ -284,7 +284,7 @@
 								<td class="wsite-price-right">
 									<div id="wsite-com-checkout-breakdown-taxes">
 										<span class="wsite-price-wrap">
-											$<span class="wsite-price">{{ tax|div:1 }}</span>
+											$<span class="wsite-price">{{ tax }}</span>
 										</span>
 									</div>
 
@@ -306,7 +306,7 @@
 								<td class="wsite-price-right">
 									
 								<span id="wsite-com-checkout-payment-total-price">
-                                                                  $<span class="wsite-price">{{ total|div:1 }}</span>
+                                                                  $<span class="wsite-price">{{ total }}</span>
 								</span>
 
 								</td>

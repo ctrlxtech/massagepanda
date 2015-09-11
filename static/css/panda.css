@@ -26,11 +26,13 @@ a:hover {
 }
 
 nav#mp-navbar {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    background: white !important;
+    box-shadow: 0px 3px 0px 2px rgba(2,3,3,0.06);
+    /*box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     border-bottom: 2px solid #eeeeee;
     background: -webkit-linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
     background: -moz-linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
-    background: linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;
+    background: linear-gradient( rgb(255, 255, 255), rgb(250, 250, 250)) repeat scroll 0% 0% !important;*/
 }
 
 nav#mp-navbar .mp-navigation>ul>li.dropdown>ul.dropdown-menu{
@@ -71,7 +73,7 @@ hr {
 .mp-pandaIcon {
    /*width: 200px;
   height: 50px;*/
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .dropdown-menu {

@@ -112,7 +112,9 @@ def test(request):
     except:
         context = {'status': 'failure', 'message': "Format error"}
         
-    return JsonResponse(context)
+    json = JsonResponse(context)
+    json['Access-Control-Allow-Origin'] = "*"
+    return json
 
 @login_required(login_url="/manager/login")
 def customerProfile(request):

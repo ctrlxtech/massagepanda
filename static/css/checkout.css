@@ -21,7 +21,7 @@ div#panda_checkout {
     margin-top: 25px;
 }
 
-.mp-checkout-payment-info {
+.mp-checkout-shipping-address {
     float: left;
     width: 100%;
 }
@@ -75,29 +75,29 @@ div#panda_checkout {
     zoom: 1;
 }
 
-.mp-checkout-payment-info .mp-form-field {
+.mp-checkout-shipping-address .mp-form-field {
     margin-bottom: 7px;
     overflow: hidden;
     width: 100%;
     max-width: 100%;
 }
 
-.mp-checkout-payment-info .mp-form-left{
+.mp-checkout-shipping-address .mp-form-left{
     float: left;
     width: 49%;
 }
 
-.mp-checkout-payment-info .mp-form-right{
+.mp-checkout-shipping-address .mp-form-right{
     float: right;
     width: 49%;
 }
 
-.mp-checkout-payment-info .mp-form-country{
+.mp-checkout-shipping-address .mp-form-country{
     float: left;
     width: 39%;
 }
 
-.mp-checkout-payment-info .mp-form-address{
+.mp-checkout-shipping-address .mp-form-address{
     float: right;
     width: 59%;
 }
@@ -144,18 +144,18 @@ div#panda_checkout {
     height: 38px;
 }
 
-.mp-checkout-payment-info .mp-form-zip{
+.mp-checkout-shipping-address .mp-form-zip{
     float: left;
     width: 21%;
 }
 
-.mp-checkout-payment-info .mp-form-city{
+.mp-checkout-shipping-address .mp-form-city{
     float: left;
     width: 38%;
     margin-left: 2%;
 }
 
-.mp-checkout-payment-info .mp-form-state-select{
+.mp-checkout-shipping-address .mp-form-state-select{
     float: right;
     width: 37%;
 }

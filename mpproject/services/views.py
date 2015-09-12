@@ -106,16 +106,14 @@ def stringToDatetime(data):
     date_format = '%m/%d/%Y %I:%M%p'
     return datetime.strptime(service_datetime_string, date_format)
 
-
 @transaction.atomic
 def placeOrder(request, data):
     try:
-        total, tax = taxService(request.POST)
+        amount, markDown = markDownPrice(data)
         serviceId = data.get('serviceId')
     except Exception as e:
         return JsonResponse(e)
-    additional, aTax = taxAdditional(request.POST)
-    mamount = (total + additional) * 100
+    amount = amount * 100
 
     service_datetime = stringToDatetime(data)
     preferred_gender = data.get('serviceGenderPreferred')
@@ -124,6 +122,9 @@ def placeOrder(request, data):
     sName = data.get('first-name')
     sName += " " + data.get('last-name')
     phone = data.get('phone')
+    if len(phone) == 10:
+        phone = "1" + phone
+
     email = data.get('email')
     sAL1 = data.get('al1').strip()
     sAL2 = data.get('al2')
@@ -145,7 +146,7 @@ def placeOrder(request, data):
             pass
 
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
-        preferred_gender=preferred_gender, customer=customer, amount=mamount,
+        preferred_gender=preferred_gender, customer=customer, amount=amount,
         shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
@@ -174,18 +175,23 @@ def addPaymentForCustomer(customer, stripeToken):
         newPayment = cu.sources.create(source=stripeToken)
     return newPayment
 
-def applyCoupon(request):
+def markDownPrice(data):
     try:
-        total, tax = taxService(request.POST)
+        total, tax = taxService(data)
     except Exception as e :
         return JsonResponse(e)
 
-    additional, aTax = taxAdditional(request.POST)
-    couponCode = request.POST.get('couponCode').upper()
+    additional, aTax = taxAdditional(data)
+    couponCode = data.get('couponCode').upper()
     discount = Coupon.objects.get(code=couponCode).discount
     newPrice = total * discount
     markDown = total - newPrice
     newPrice += additional
+    return newPrice, markDown
+   
+def applyCoupon(request):
+    newPrice, markDown = markDownPrice(request.POST)
+    couponCode = request.POST.get('couponCode').upper()
     context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': couponCode.upper()}
     return JsonResponse(context)
 

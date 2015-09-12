@@ -4,12 +4,14 @@ from customers.models import Customer
 from services.models import Service
 from manager.models import Staff
 
+import uuid
+
 # Create your models here.
 class Order(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
-    order_number = models.CharField(max_length=40, unique=True, db_index=True)
     service = models.ForeignKey(Service, default=None, null=True)
     service_datetime = models.DateTimeField()
 

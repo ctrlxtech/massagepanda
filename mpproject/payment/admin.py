@@ -18,10 +18,10 @@ class FeedbackInline(admin.StackedInline):
 
 class OrderAdmin(admin.ModelAdmin):
     list_select_related = ('service', )
-    list_display = ('order_number', 'get_service', 'recipient', 'service_datetime', 'status', 'get_feedback')
-    list_display_links = ('order_number', 'get_service', 'recipient', 'service_datetime')
-    search_fields = ['order_number', ]
-    readonly_fields = ('order_number', 'stripe_token', 'status')
+    list_display = ('id', 'get_service', 'recipient', 'service_datetime', 'status', 'get_feedback')
+    list_display_links = ('id', 'get_service', 'recipient', 'service_datetime')
+    search_fields = ['id', ]
+    readonly_fields = ('id', 'stripe_token', 'status')
 
     inlines = [
         OrderTherapistInline, FeedbackInline

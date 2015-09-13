@@ -50,6 +50,7 @@
             {% csrf_token %}
             <input type="hidden" name="referCode" data-serverField="true"/>
             <input type="hidden" name="needTable" data-serverField="true" value="{{ needTable }}"/>
+            <input type="hidden" name="parkingInfo" data-serverField="true" value="{{ parkingInfo }}"/>
             <input type="hidden" name="serviceId" data-serverField="true" value="{{ service.id }}" />
             <input type="hidden" name="couponCode" data-serverField="true" value="" />
             <input type="hidden" name="serviceDate" data-serverField="true" value="{{ serviceDate }}" />

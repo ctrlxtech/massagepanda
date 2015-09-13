@@ -3,6 +3,7 @@ from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.defaulttags import register
+from django.views.generic import View
 
 from customers.models import Address
 from feedback.models import Feedback
@@ -19,21 +20,26 @@ from datetime import datetime
 # Create your views here.
 @register.filter
 def stripZero(value):
-    return ('%f' % value).rstrip('0').rstrip('.')
+    return ('%f' % value).rstrip(".0")
 
 def services(request):
-    service_list = Service.objects.order_by('service_type')
+    service_list = Service.objects.order_by('popularity')
     context = {'service_list': service_list}
     return render(request, 'services/store.html', context)
 
 def details(request):
     context = {}
     try:
-      service = Service.objects.get(pk=request.POST.get('serviceId'))
+      service = Service.objects.get(id=request.POST.get('serviceId'))
       context['service'] = service
     except:
-      pass
+      return JsonResponse("Service not found", safe=False)
     return render(request, 'services/details.html', context)
+
+class DetailsView(View):
+    context = {}
+    def get(self, request):
+      return render(request, 'services/details.html', self.context)
 
 def taxService(data):
     try:
@@ -74,10 +80,11 @@ def checkout(request):
     tax += aTax
     total += additional
     needTable = request.POST.get("needTable")
+    parkingInfo = request.POST.get("parkingInfo")
     zipcode = request.POST.get('zipcode')
     serviceDate = request.POST.get("massageDetailsDate")
     serviceTime = request.POST.get("massageDetailsTime")
-    genderPrefer = request.POST.get("genderPreferred")
+    genderPreferred = request.POST.get("genderPreferred")
     
     stripeCustomer = ""
     try:
@@ -88,7 +95,7 @@ def checkout(request):
 
     state_list = Address.STATE_CHOICES
     context.update({'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
-        'serviceTime': serviceTime, 'gender': genderPrefer, 'needTable': needTable,
+        'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo,
         'zipcode': zipcode, 'tax': '%.2f' % tax, 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render(request, 'services/checkout.html', context)
 
@@ -112,11 +119,17 @@ def placeOrder(request, data):
         amount, markDown = markDownPrice(data)
         serviceId = data.get('serviceId')
     except Exception as e:
-        return JsonResponse(e)
+        return JsonResponse(e, safe=False)
     amount = amount * 100
 
     service_datetime = stringToDatetime(data)
-    preferred_gender = data.get('serviceGenderPreferred')
+    preferredGender = data.get('serviceGenderPreferred')
+    needTable = request.POST.get("needTable")
+    if needTable != "None":
+        needTable = True
+    else:
+        needTable = False
+    parkingInfo = request.POST.get("parkingInfo")
     stripeToken = data.get('stripeToken')
     name = data.get('name')
     sName = data.get('first-name')
@@ -146,8 +159,8 @@ def placeOrder(request, data):
             pass
 
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
-        preferred_gender=preferred_gender, customer=customer, amount=amount,
-        shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
+        preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
+        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
     createFeedbackForOrder(o)
@@ -179,11 +192,14 @@ def markDownPrice(data):
     try:
         total, tax = taxService(data)
     except Exception as e :
-        return JsonResponse(e)
+        return JsonResponse(e, safe=False)
 
     additional, aTax = taxAdditional(data)
     couponCode = data.get('couponCode').upper()
-    discount = Coupon.objects.get(code=couponCode).discount
+    try:
+        discount = Coupon.objects.get(code=couponCode).discount
+    except:
+        discount = 1
     newPrice = total * discount
     markDown = total - newPrice
     newPrice += additional
@@ -199,7 +215,7 @@ def deleteCoupon(request):
     try:
         total, tax = taxService(request.POST)
     except Exception as e :
-        return JsonResponse(e)
+        return JsonResponse(e, safe=False)
 
     additional, aTax = taxAdditional(request.POST)
     total += additional

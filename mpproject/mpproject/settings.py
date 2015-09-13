@@ -42,6 +42,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 ADMINS = (('Kevin Chen', 'yuechen1989@gmail.com'))
 MANAGERS = (('Kevin Chen', 'yuechen1989@gmail.com'))
 
@@ -59,6 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'index',
     'services',
     'payment',

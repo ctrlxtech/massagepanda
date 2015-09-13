@@ -21,7 +21,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'get_service', 'recipient', 'service_datetime', 'status', 'get_feedback')
     list_display_links = ('id', 'get_service', 'recipient', 'service_datetime')
     search_fields = ['id', ]
-    readonly_fields = ('id', 'stripe_token', 'status')
+    readonly_fields = ('id', 'need_table', 'parking_info', 'stripe_token', 'status')
 
     inlines = [
         OrderTherapistInline, FeedbackInline

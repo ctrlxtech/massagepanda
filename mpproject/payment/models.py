@@ -22,6 +22,9 @@ class Order(models.Model):
     )
 
     preferred_gender = models.CharField(max_length = 10, choices=GENDER_PREFERENCES, default='0')
+    need_table = models.BooleanField()
+    parking_info = models.CharField(max_length = 500)
+
     customer = models.ForeignKey(Customer, default=None, null=True)
     stripe_token = models.CharField(max_length = 100)
     amount = models.IntegerField()

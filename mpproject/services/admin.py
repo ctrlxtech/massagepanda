@@ -11,6 +11,8 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ('service_type', 'service_time', 'service_fee')
     list_filter = ['service_time', 'service_fee']
     search_fields = ['service_type']
-    inlines = [ServiceImageInline]
+    inlines = [
+        ServiceImageInline
+    ]
 
 admin.site.register(Service, ServiceAdmin)

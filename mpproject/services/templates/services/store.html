@@ -8,11 +8,6 @@
 {% endblock %}
 
 {% block docReady %}
-$(".wsite-com-category-product-link").on("click", function(e) {
-      $("#serviceId").val(($(this).children(".wsite-com-category-product-name").attr("serviceId")));
-      e.preventDefault();
-      $("#serviceRequestForm").submit();
-});
 {% endblock %}
 
 {% block content %}
@@ -35,7 +30,7 @@ $(".wsite-com-category-product-link").on("click", function(e) {
                 {% for service in service_list %}
                 <div class="wsite-com-category-product wsite-com-column" data-id="42" style="height: 270px;">
                   <div class="wsite-com-category-product-wrap">
-                    <a class="wsite-com-category-product-link wsite-com-link" href="">
+                    <a class="wsite-com-category-product-link wsite-com-link" href="{% url 'services' %}{{ service.link }}">
                       <div style="position:relative">
                         <div class="wsite-com-category-product-image-container wsite-imageaspectratio-image-container">
                           <div class="wsite-com-category-product-image-height wsite-imageaspectratio-image-height">

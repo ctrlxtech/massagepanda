@@ -50,7 +50,7 @@ class OrderAdmin(admin.ModelAdmin):
 
             count += 1
         except stripe.error.StripeError, e:
-            self.message_user(request, "%s can't be marked as refunded. Error: %s" % (order.order_number, e), level=messages.ERROR)
+            self.message_user(request, "%s can't be marked as refunded. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as refunded." % count)
 
@@ -59,9 +59,15 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0;
       for order in queryset:
         try:
+            if order.customer is not None:
+                stripeCustomerId = order.customer.stripe_customer_id
+            else:
+                stripeCustomerId = None
+
             ch = stripe.Charge.create(
                 amount=order.amount, # amount in cents, again
                 currency="usd",
+                customer=stripeCustomerId,
                 source=order.stripe_token,
                 description="Admin charge"
             )
@@ -72,7 +78,7 @@ class OrderAdmin(admin.ModelAdmin):
 
             count += 1
         except stripe.error.StripeError, e:
-            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.order_number, e), level=messages.ERROR)
+            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as charged." % count)
 

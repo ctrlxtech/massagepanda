@@ -83,3 +83,6 @@ class Address(models.Model):
 
     def __unicode__(self):
         return "%s, %s %s %s" % (self.name, self.address_line1, self.city, self.state)
+
+    def detail(self):
+        return "%s %s, %s, %s, %s, %s" % (self.address_line1, self.address_line2, self.city, self.state, self.country, self.zipcode)

@@ -1,13 +1,17 @@
 $( window ).load(function() {
 
   $('#payment-form').on('submit', function(event) {                                   
-    populateExpYearAndMonth();
-    var $form = $(this);
-    // Disable the submit button to prevent repeated clicks
-    $form.find('button').prop('disabled', true);
-    Stripe.card.createToken($form, stripeResponseHandler);
-    // Prevent the form from submitting with the default action                                       
-    return false;
+    if ($("#new-payment-div").css('display') == "none") {
+        return true;
+    } else{
+        populateExpYearAndMonth();
+        var $form = $(this);
+        // Disable the submit button to prevent repeated clicks
+        $form.find('button').prop('disabled', true);
+        Stripe.card.createToken($form, stripeResponseHandler);
+        // Prevent the form from submitting with the default action                                       
+        return false;
+    }
   });
 
 var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
@@ -46,32 +50,44 @@ $('input:radio[name="savedAddress"]').change(function(event){
   if (this.checked && this.value == 'new-address-selector') {
     previousRd = $(this);
     $("#new-address-div").show();
+    $("#new-address-div").find('input').attr('required', true);
   } else {
     $("#new-address-div").hide();
+    $("#new-address-div").find('input').attr('required', false);
+
     if ($('input:text[name="zipcode"]').val() != $(this).attr("zipcode")) {
         $("#addressConflictAlert").modal('show');
         if (previousRd.val()) {
           previousRd.prop("checked", true);
           if (previousRd.val() == "new-address-selector") {
             $("#new-address-div").show();
+            $("#new-address-div").find('input').attr('required', true);
           }
         } else {
           this.checked = false;
         }
     } else {
         previousRd = $(this);
-        $("#new-address-div").hide();
     }
   }
 });
+if ($("#new-address-div").css('display') == "none") {
+    $("#new-address-div").find('input').attr('required', false);
+}
 
 $('input:radio[name="savedPayment"]').change(function(){
   if (this.checked && this.value == 'new-payment-selector') {
     $("#new-payment-div").show();
+    $("#new-payment-div").find('input').attr('required', true);
   } else {
     $("#new-payment-div").hide();
+    $("#new-payment-div").find('input').attr('required', false);
   }
 });
+if ($("#new-payment-div").css('display') == "none") {
+    $("#new-payment-div").find('input').attr('required', false);
+}
+
 $('input:text[name="serviceCoupon"]').on('input', function(){
   if (this.value == '') {
     $('#apply-coupon-text').show();

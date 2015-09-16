@@ -147,7 +147,7 @@
 						{% if stripeCustomer %}
 						<div class="border">
 						  {% for data in stripeCustomer.sources.data %}
-					  	  <input type="radio" name="savedPayment"{% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
+					  	  <input type="radio" name="savedPayment" value="{{ data.id }}" {% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
 						  {{ data.brand }}
 						  ••••{{ data.last4 }},
 						  {{ data.exp_month}}/{{ data.exp_year }},

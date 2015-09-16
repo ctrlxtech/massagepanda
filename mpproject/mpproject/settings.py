@@ -24,7 +24,7 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 """
 NEXMO_KEY = "412847f0"
 SECRET_KEY = "e@u1krz3ruxw)pvmh61fryy&tk53vp14@!f$ul8)kgogv6w(66"
-STRIPE_KEY = "sk_test_jcGeofOhYGQw7BPl3UPGP0lh"
+STRIPE_KEY = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
 EMAIL_HOST_PASSWORD = "XmFb_bOXtF5oKpOowOBbhA"
 NEXMO_SECRET = "55f41401"
 """

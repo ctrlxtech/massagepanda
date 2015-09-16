@@ -9,14 +9,48 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  var submitBtn = document.getElementById("submitHref");
-  submitBtn.addEventListener("click", function () {
-    updateServiceId();
-    var form = document.getElementById("serviceSearch");
-    form.submit();
+  var searchService = document.getElementById("searchService");
+  searchService.addEventListener("click", function () {
+    updateHref(this);
   });
 });
 
+function updateHref(anchor) {
+  var e = document.getElementById("length");
+  var length = e.options[e.selectedIndex].value;
+  e = document.getElementById("type");
+  var type = e.options[e.selectedIndex].value;
+  var serviceId = document.getElementById("serviceId");
+    if (type == 1) {
+        if (length == 1) {
+          anchor.href += "In-Home_Swedish_Massage_for_1_Hour";
+        } else if (length == 2) {
+          anchor.href += "In-Home_Swedish_Massage_for_1.5_Hours";
+        }
+    } else if (type == 2) {
+      if (length == 1) {
+          anchor.href += "In-Home_Deep_Tissue_Massage_for_1_Hour";
+      } else if (length == 2) {
+          anchor.href += "In-Home_Deep_Tissue_Massage_for_1.5_Hours";
+      }
+    } else if (type == 3) {
+      if (length == 1) {
+          anchor.href += "In-Home_Couples_Massage_for_1_Hour";
+      } else if (length == 2) {
+          anchor.href += "In-Home_Couples_Massage_for_1.5_Hours";
+      }
+    } else if (type == 4) {
+      if (length == 1) {
+          anchor.href += "In-Home_Sports_Massage_for_1_Hour";
+      } else if (length == 2) {
+          anchor.href += "In-Home_Sports_Massage_for_1.5_Hours";
+      }
+    } else if (type == 5) {
+          anchor.href += "In-Home_Shiatsu_Massage_for_1_Hour";
+    } else {
+          anchor.href += "In-Home_Swedish_Massage_for_1_Hour";
+    }
+}
 function updateServiceId() {
   var e = document.getElementById("length");
   var length = e.options[e.selectedIndex].value;

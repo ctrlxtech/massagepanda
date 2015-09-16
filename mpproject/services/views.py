@@ -113,8 +113,48 @@ def stringToDatetime(data):
     date_format = '%m/%d/%Y %I:%M%p'
     return datetime.strptime(service_datetime_string, date_format)
 
+def getPhone(data):
+    phone = data.get('phone')
+    if len(phone) == 10:
+        phone = "1" + phone
+    return phone
+
 @transaction.atomic
 def placeOrder(request, data):
+    customer = None;
+    if request.user.is_authenticated():
+        try:
+            customer = request.user.customer
+        except:
+            pass
+
+    savedAddress = data.get("savedAddress")
+    savedPayment = data.get("savedPayment")
+
+    if savedPayment:
+        stripeToken = savedPayment
+        stripe.api_key = settings.STRIPE_KEY
+        stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
+        name = stripeCustomer.sources.retrieve(savedPayment).name
+    else:
+        stripeToken = data.get('stripeToken')
+        name = data.get('name')
+        if customer is not None and stripeToken:
+            addPaymentForCustomer(customer, stripeToken)
+
+    if savedAddress:
+        addressObj = Address.objects.get(pk=savedAddress)
+        address = addressObj.detail()
+        sName = addressObj.name
+        phone = addressObj.phone
+        email = addressObj.email
+    else:
+        address = getAddressDetail(customer, data)
+        sName = data.get('first-name')
+        sName += " " + data.get('last-name')
+        phone = getPhone(data)
+        email = data.get('email')
+
     try:
         amount, markDown = markDownPrice(data)
         serviceId = data.get('serviceId')
@@ -130,15 +170,27 @@ def placeOrder(request, data):
     else:
         needTable = False
     parkingInfo = request.POST.get("parkingInfo")
-    stripeToken = data.get('stripeToken')
-    name = data.get('name')
+
+    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
+        preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
+        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
+    o.save()
+    
+    createFeedbackForOrder(o)
+
+    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
+    nums = [phone]
+    sendSMS(nums, message_body, False)
+
+    context = {'status': 'success'}
+    return render(request, 'services/success.html', context)
+
+def getAddressDetail(customer, data):
+    phone = getPhone(data)
+    email = data.get('email')
+
     sName = data.get('first-name')
     sName += " " + data.get('last-name')
-    phone = data.get('phone')
-    if len(phone) == 10:
-        phone = "1" + phone
-
-    email = data.get('email')
     sAL1 = data.get('al1').strip()
     sAL2 = data.get('al2')
     address = sAL1
@@ -151,38 +203,15 @@ def placeOrder(request, data):
     address = address + ", " + sCity + ", " + sState + ", " +\
         sCountry + " " + sZipcode
 
-    customer = None;
-    if request.user.is_authenticated():
-        try:
-            customer = request.user.customer
-        except:
-            pass
-
-    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
-        preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
-        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
-    o.save()
-    
-    createFeedbackForOrder(o)
-
     if customer is not None:
-        if stripeToken:
-            addPaymentForCustomer(customer, stripeToken)
-
         # add shipping address for the customer
-        a = Address(customer=customer, name=sName, address_line1=sAL1, address_line2=sAL2, zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
+        a = Address(customer=customer, name=sName, phone=phone, email=email, address_line1=sAL1, address_line2=sAL2, 
+            zipcode=sZipcode, city=sCity, state=sState, country=sCountry)
         a.save()
-    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
-    nums = [phone]
-    sendSMS(nums, message_body, False)
-
-    context = {'status': 'success'}
-    return render(request, 'services/success.html', context)
 
 def addPaymentForCustomer(customer, stripeToken):
     newPayment = "error"
     if customer is not None:
-        # update customer's stripe default card
         stripe.api_key = settings.STRIPE_KEY
         cu = stripe.Customer.retrieve(customer.stripe_customer_id)
         newPayment = cu.sources.create(source=stripeToken)

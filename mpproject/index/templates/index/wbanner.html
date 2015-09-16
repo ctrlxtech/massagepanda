@@ -21,9 +21,8 @@
   </div>
   <!-- end banner -->
   <div id="banner-mask" class="banner-mask">
-    <form id="serviceSearch" action="{% url 'serviceDetails' %}" method="post">
-      {% csrf_token %}
-      <input id="serviceId" type="hidden" name="serviceId" />
+    <form id="serviceSearch" action="{% url 'services' %}" method="get">
+    </form>
       <span class="select select-type" style="display:inline-block;width:200px;position: relative;vertical-align: top;margin-right: -4px;">
         <select name="type" id="type" style="">
           <option value="1">Swedish Massage</option>
@@ -39,10 +38,9 @@
           <option value="2" id="oneHalfHours">1.5 Hours</option>
         </select>
       </span>
-      <a type="submit" id="submitHref" class="wsite-button wsite-button-small wsite-button-normal" value="Book" style="height: 44px;">
+      <a id="searchService" href="{% url 'services' %}" class="wsite-button wsite-button-small wsite-button-normal" value="Book" style="height: 44px;">
       <span class="wsite-button-inner" style="float: none;">Search</span>
       </a> 
-    </form>
   </div>
 </div>
 <!-- end banner-wrap -->

@@ -1,8 +1,9 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from customers import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
+    url('^', include('django.contrib.auth.urls')),
     url(r'^$', views.index, name='customer'),
     url(r'^createCustomerFromJson$', views.createCustomerFromJson, name='createCustomerFromJson'),
     url(r'^createCustomerFromForm$', views.createCustomerFromForm, name='createCustomerFromForm'),
@@ -12,6 +13,7 @@ urlpatterns = [
     url(r'^userLogin$', views.loginFromJson, name='userLogin'),
     url(r'^register$', TemplateView.as_view(template_name='customers/register.html'), name='customerRegister'),
     url(r'^changePassword$', views.changePassword, name='changePassword'),
+    url(r'^resetPassword$', views.resetPassword, name='resetPassword'),
     url(r'^addNewAddress$', views.addNewAddress, name='addNewAddress'),
     url(r'^deleteAddress$', views.deleteAddress, name='deleteAddress'),
     url(r'^setDefaultAddress$', views.setDefaultAddress, name='setDefaultAddress'),

@@ -1,6 +1,8 @@
 from django.db import transaction
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponse, JsonResponse
@@ -111,6 +113,28 @@ def changePassword(request):
         context = {'status': 'failure', 'error': 'wrong password'}
     else:
         context = {'status': 'failure', 'error': 'wrong password'}
+    return JsonResponse(context)
+
+def resetPassword(request):
+    email_template_name='registration/password_reset_email.html'
+    subject_template_name='registration/password_reset_subject.txt'
+    token_generator=default_token_generator
+    email = request.POST.get('email')
+    form = PasswordResetForm({'email': email})
+    if form.is_valid():
+        opts = {
+            'use_https': request.is_secure(),
+            'token_generator': token_generator,
+            'from_email': settings.DEFAULT_FROM_EMAIL,
+            'email_template_name': email_template_name,
+            'subject_template_name': subject_template_name,
+            'request': request,
+            'html_email_template_name': None,
+        }
+        form.save(**opts)
+        context = {'status': 'success', 'message': 'Email sent!'}
+    else:
+        context = {'status': 'failure', 'error': 'We did not find the email in our system!'}
     return JsonResponse(context)
 
 @login_required(login_url="/customer/login")

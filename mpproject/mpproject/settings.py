@@ -21,13 +21,6 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-"""
-NEXMO_KEY = "412847f0"
-SECRET_KEY = "e@u1krz3ruxw)pvmh61fryy&tk53vp14@!f$ul8)kgogv6w(66"
-STRIPE_KEY = "sk_live_4oD38m4mvOMOba8TlT2cqi3A"
-EMAIL_HOST_PASSWORD = "XmFb_bOXtF5oKpOowOBbhA"
-NEXMO_SECRET = "55f41401"
-"""
 with open('/etc/keys.json') as f:
     keys = json.load(f)
 if keys is not None:
@@ -158,6 +151,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+DEFAULT_FROM_EMAIL = "support@massagepanda.com"
 
 SERVER_EMAIL = "support@massagepanda.com"
 

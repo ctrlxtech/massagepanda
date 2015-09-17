@@ -1,7 +1,13 @@
 {% extends "index/wbase.html" %}
 {% load staticfiles %}
 
+{% block script %}
+<script type="text/javascript" src="{% static "./js/login.js" %}">
+{% endblock %}
+
 {% block content %}
+
+{% include 'customers/forgotPasswordModal.html' %}
 
 <div id="panda_login" class="mp-pageContent container-fluid" data-mpController="pandaLoginPage">
     <div class="login-card">
@@ -10,7 +16,7 @@
         <form class="mp-loginForm" action="{% url 'userLoginFromForm' %}" method=POST>
           {% csrf_token %}
           <div id="mp-loginForm-panelAlert" class="alert alert-danger" role="alert" style="display:none">Username or Password is wrong</div>
-          <input type="text" name="username" placeholder="Email" data-serverField="true" required />
+          <input type="text" name="email" placeholder="Email" data-serverField="true" required />
           <input type="password" name="password" placeholder="Password" data-serverField="true" required />
           {% if error %}
           <div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert">{{ error }}<span class="alertInfo"></span></div>
@@ -19,7 +25,7 @@
         </form>
         <div class="login-help">
         	  <a href="{% url 'customerRegister' %}" class="mp-pageHeader" data-mpPageId="panda_register" data-mpController="pandaRegisterPage">Register</a>
-            • <a href="#">Forgot Password</a>
+            • <a data-toggle="modal" data-target="#forgotPasswordModal" href="#">Forgot Password</a>
         </div>
     </div>
 	 <div class="mp-loginSuccess mp-pageHeader" data-mpPageId="panda_home" data-pageStateType="replace" style="display:none">

@@ -1,9 +1,11 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 from customers import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url('^', include('django.contrib.auth.urls')),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, {'template_name': 'customers/password_reset_confirm.html'}, name='password_reset_confirm'),
+    url(r'^reset/done/$', auth_views.password_reset_complete, {'template_name': 'customers/login.html'}, name='password_reset_complete'),
     url(r'^$', views.index, name='customer'),
     url(r'^createCustomerFromJson$', views.createCustomerFromJson, name='createCustomerFromJson'),
     url(r'^createCustomerFromForm$', views.createCustomerFromForm, name='createCustomerFromForm'),

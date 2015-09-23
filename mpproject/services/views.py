@@ -81,6 +81,16 @@ def checkout(request):
     total += additional
     needTable = request.POST.get("needTable")
     parkingInfo = request.POST.get("parkingInfo")
+    massage1 = request.POST.get("massage1")
+    if massage1:
+        parkingInfo += " |massage1: " + massage1
+    massage2 = request.POST.get("massage2")
+    if massage2:
+        parkingInfo += " |massage2: " + massage2
+    b2b = request.POST.get("backToBack")
+    if b2b:
+        parkingInfo += " |Accept back-to-back"
+
     zipcode = request.POST.get('zipcode')
     serviceDate = request.POST.get("massageDetailsDate")
     serviceTime = request.POST.get("massageDetailsTime")
@@ -170,7 +180,7 @@ def placeOrder(request, data):
     else:
         needTable = False
     parkingInfo = request.POST.get("parkingInfo")
-
+   
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
         preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
         amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)

@@ -145,11 +145,11 @@ function deleteAddress(csrfToken, formData, section) {
         encode          : true,
         // using the done promise callback
         success: function(data) {
-            if (data.status == 'failure') {
-                alert("Error!");
-            } else {
+            if (data.status == 'success') {
                 section.remove();
                 alert("Address Deleted!");
+            } else {
+                alert(data.error);
             }
         },
         complete: function(data) {
@@ -191,7 +191,7 @@ function setDefaultAddress(csrfToken, formData, thisDiv) {
 function addToAddressList(data) {
 var addressDesc = $('<div></div>').addClass('border address-desc');
 
-addressDesc.append(createDefaultIndicator());
+//addressDesc.append(createDefaultIndicator());
 addressDesc.append(createAddressDetail(data));
 addressDesc.append(createEditPanel(data.addressId));
 addressDesc.append(createDelimiterSection());
@@ -209,6 +209,7 @@ return delimiterSec;
 }
 
 function createDefaultIndicator() {
+var defaultIndicator = $('<span></span>').attr("name", "defaultIndicator").text("Default Address");
 var indicator = $('<span></span>').attr('name', defaultIndicator).text("Default Address");
 indicator.hide();
 return indicator;
@@ -216,7 +217,12 @@ return indicator;
 
 function createAddressDetail(address) {
 var detail = $('<div></div>').addClass('address-detail');
-detail.text(address.name + ", " + address.address_line1 + " " + address.address_line2 + ", " + address.city + " " + address.state + " " + address.zipcode);
+var addressStr = address.name + ", " + address.address_line1;
+if (address.address_line2) {
+    addressStr += " " + address.address_line2
+}
+addressStr += ", " + address.city + " " + address.state + " " + address.zipcode;
+detail.text(addressStr);
 return detail;
 }
 

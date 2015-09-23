@@ -23,9 +23,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
-from django.template import Context, Template
-
-from referral.views import referralCodeGenerator
+from django.template import Context
 
 from django.template.loader import get_template
 
@@ -77,22 +75,21 @@ def sendFeedbackEmails(request):
     return HttpResponse("Email sent!") 
 
 def sendFeedbackEmail(orderId):
-    #staffid_list = Order.ordertherapist_set.all()
     order = Order.objects.get(pk=orderId)
+    f = order.feedback
 
     ot = order.ordertherapist_set.all()
     from_email = settings.SERVER_EMAIL
-    subject = 'How do you like ' + ot[0].staff.first_name 
+    subject = 'How do you like ' + ot[0].therapist.user.first_name 
     if len(ot) > 1:
-        subject += ' and ' + ot[1].staff.first_name
+        subject += ' and ' + ot[1].therapist.user.first_name
     subject += ' - Your Feedback is Important to Us'
     text_content = 'We really appreciate your feedback!'
-    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'staffid_list': ot, 'host': "http://ec2-52-8-5-153.us-west-1.compute.amazonaws.com"}))
+    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'host': "http://us.massagepanda.com", 'code': f.code.hex}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [Order.objects.get(pk=orderId).email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-    f = order.feedback
     f.request_count += 1
     f.save()
 

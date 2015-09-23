@@ -2,6 +2,20 @@ window.addEventListener("DOMContentLoaded", function () {
   $('#datepicker').val('');
   $('#timepicker').val('');
   $('#genderPreferred').val('');
+  $('#massage1').val('');
+  $('#massage2').val('');
+  $(function() {
+    $("#datepicker").datepicker({
+      minDate: new Date()
+    });
+  });
+  setupTimeDropdown($("#massageDetails_timeList"));
+  var genderPreferredList = $('#massageDetails_genderPreferredList');
+  genderPreferredList.on("click", "a", processSelection);
+  var massage1List = $('#massageDetails_massage1List');
+  massage1List.on("click", "a", processSelection);
+  var massage2List = $('#massageDetails_massage2List');
+  massage2List.on("click", "a", processSelection);
 });
 
 //private function

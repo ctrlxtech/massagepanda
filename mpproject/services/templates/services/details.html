@@ -7,17 +7,6 @@
 
 {% endblock %}
 
-{% block docReady %}
-$(function() {
-  $("#datepicker").datepicker({
-    minDate: new Date()
-  });
-});
-setupTimeDropdown($("#massageDetails_timeList"));
-var genderPreferredList = $('#massageDetails_genderPreferredList');
-genderPreferredList.on("click", "a", processSelection);
-{% endblock %}
-
 {% block content %}
 {% if service %}
 <!-- massageDetails page-->
@@ -83,8 +72,7 @@ genderPreferredList.on("click", "a", processSelection);
           </div>
           <div class="btn-group mp-massageDetails-input">
             <input type="hidden" name="genderPreferred" id="genderPreferred" value=""/>
-            <button type="button" class="btn btn-default dropdown-toggle genderPreferred" data-toggle="dropdown" aria-expanded="false">Gender Preferred<span class="glyphicon glyphicon-t
-              riangle-bottom" aria-hidden="true"></span>
+            <button type="button" class="btn btn-default dropdown-toggle genderPreferred" data-toggle="dropdown" aria-expanded="false">Gender Preferred<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
             </button>
             <ul id="massageDetails_genderPreferredList" class="dropdown-menu" role="menu">
               <li class="mp-item">
@@ -102,6 +90,71 @@ genderPreferredList.on("click", "a", processSelection);
               </li>
             </ul>
           </div>
+          {% if couple %}
+          <div class="btn-group mp-massageDetails-input">
+            <input type="hidden" name="massage1" id="massage1" value=""/>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Massage 1<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+            </button>
+            <ul id="massageDetails_massage1List" class="dropdown-menu" role="menu">
+              <li class="mp-item">
+                <a>Swedish Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Deep Tissue Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Couple Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Sports Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Shiatsu Massage</a>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-group mp-massageDetails-input">
+            <input type="hidden" name="massage2" id="massage2" value=""/>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Massage 2<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+            </button>
+            <ul id="massageDetails_massage2List" class="dropdown-menu" role="menu">
+              <li class="mp-item">
+                <a>Swedish Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Deep Tissue Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Couple Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Sports Massage</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li class="mp-item">
+                <a>Shiatsu Massage</a>
+              </li>
+            </ul>
+          </div>
+          <div class="checkbox mp-massageDetails-input mp-massageDetails-needTable">
+            <input name="backToBack" type="checkbox"><label>Accept back-to-back</label>
+          </div>
+          {% endif %}
           <div class="mp-massageDetails-input">
             <input type="text" placeholder="Zipcode" id="zipcode" name="zipcode" value=""></input>
           </div>

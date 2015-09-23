@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from customers.models import Customer
 from services.models import Service
-from manager.models import Staff
+from manager.models import Therapist
 
 import uuid
 
@@ -25,7 +25,7 @@ class Order(models.Model):
     need_table = models.BooleanField()
     parking_info = models.CharField(max_length = 500)
 
-    customer = models.ForeignKey(Customer, default=None, null=True)
+    customer = models.ForeignKey(Customer, default=None, null=True, blank=True)
     stripe_token = models.CharField(max_length = 100)
     amount = models.IntegerField()
     
@@ -47,7 +47,7 @@ class Order(models.Model):
 
 class OrderTherapist(models.Model):
     order = models.ForeignKey(Order)
-    staff = models.ForeignKey(Staff)
+    therapist = models.ForeignKey(Therapist)
 
 class Coupon(models.Model):
     code = models.CharField(max_length=40, unique=True, db_index=True)

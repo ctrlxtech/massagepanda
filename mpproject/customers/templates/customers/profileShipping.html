@@ -1,12 +1,12 @@
 {% for address in request.user.customer.address_set.all %}
 
 <div class="border address-desc">
-  <div class="address-detail">{{ address.name }}, {{ address.address_line1 }} {{ address.address_line2 }}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}</div>
+  <div class="address-detail">{{ address.name }}, {{ address.address_line1 }}{% if address.address_line2 %} {{ address.address_line2 }} {% endif %}, {{ address.city }}, {{ address.state }} {{ address.zipcode }}</div>
   <div class="edit-div">
     <span name="defaultIndicator" {% if address.default != 1 %} style="display:none" {% endif %}>Default Address</span>
     <a name="setDefaultBtn" {% if address.default == 1 %} style="display:none" {% endif %} >Set as default</a>
     <a class="delete-link" name="deleteAddressBtn">Delete</a>
-    <input type="hidden" name="addressId" value="{{ address.id }}"/>
+    <input type="hidden" name="addressId" value="{{ address.id|encodeId }}"/>
   </div>
   <div>
     <div class="delimiter"></div>

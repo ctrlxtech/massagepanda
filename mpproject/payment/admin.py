@@ -2,6 +2,7 @@ from django.contrib import admin, messages
 from .models import Order, OrderTherapist, Coupon
 from feedback.models import Feedback
 from services.models import Service
+from manager.views import sendFeedbackEmail
 
 from django.conf import settings
 
@@ -27,7 +28,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderTherapistInline, FeedbackInline
     ]
 
-    actions = ['make_refunded', 'make_charged']
+    actions = ['make_refunded', 'make_charged', 'send_feedback_email']
 
     def get_service(self, obj):
         return '%s For %.1f' % (obj.service.service_type, obj.service.service_time)
@@ -56,7 +57,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def make_charged(self, request, queryset):
       stripe.api_key = settings.STRIPE_KEY
-      count = 0;
+      count = 0
       for order in queryset:
         try:
             if order.customer is not None:
@@ -81,6 +82,17 @@ class OrderAdmin(admin.ModelAdmin):
             self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as charged." % count)
+      
+    def send_feedback_email(self, request, queryset):
+      count = 0
+      for order in queryset:
+        try:
+          sendFeedbackEmail(order.id)
+          count += 1
+        except:
+          self.message_user(request, "Email can't be sent for order[%s]." % order.id, level=messages.ERROR)
+          pass
+      self.message_user(request, "%s email(s) sent." % count)
 
 class CouponAdmin(admin.ModelAdmin):
     list_display = ['code', 'discount']

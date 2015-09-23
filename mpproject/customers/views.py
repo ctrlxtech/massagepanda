@@ -8,6 +8,8 @@ from django.core import serializers
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.defaulttags import register
+from django.utils.encoding import force_text, force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 import stripe
 
@@ -159,9 +161,9 @@ def addNewAddress(request):
 
 @login_required(login_url="/customer/login")
 def deleteAddress(request):
-    addressId = request.POST.get('addressId')
     try:
-        a = Address.objects.get(pk=addressId)
+        addressId = force_text(urlsafe_base64_decode(request.POST.get('addressId')))
+        a = request.user.customer.address_set.get(pk=addressId)
         a.delete()
         context = {'status': 'success'}
     except:
@@ -204,6 +206,10 @@ def deletePayment(request):
 def referPage(request):
     context = {"customer": "Kevin"}
     return render(request, 'customers/refer.html', context)
+
+@register.filter
+def encodeId(value):
+    return urlsafe_base64_encode(force_bytes(value))
 
 @register.filter
 def div(value, arg):

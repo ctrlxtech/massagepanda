@@ -6,17 +6,19 @@
 <div id="main-wrap">
   <div class="container">
     <div id='wsite-content' class='wsite-elements wsite-not-footer'>
+    {% if validlink %}
       <h2 class="wsite-content-title" style="text-align:left;"><strong>We appreciate your response.</strong></h2>
       <div class="paragraph" style="text-align:left;">We're always looking for ways to better serve our customers&mdash;please&nbsp;<br />help us&nbsp;by answering the following two questions:</div>
       <div>
-        <form enctype="multipart/form-data" action="http://www.weebly.com/weebly/apps/formSubmit.php" method="POST" id="form-213431462888342694">
+        <form action="{% url 'feedbackConfirm' %}" method="POST" id="form-feedback-confirm">
+        {% csrf_token %}
           <div id="213431462888342694-form-parent" class="wsite-form-container" style="margin-top:10px;">
             <ul class="formlist" id="213431462888342694-form-list">
               <div>
                 <div class="wsite-form-field" style="margin:5px 0px 10px 0px;">
                   <label class="wsite-form-label" for="input-787690307137658887">1) How did you hear about us? <span class="form-required">*</span></label>
                   <div class="wsite-form-radio-container">
-                    <select name='_u787690307137658887' class='form-select'>
+                    <select name='whereYouLearn' class='form-select'>
                       <option value='Search Engine (Google, Yahoo, Bing, etc.)'>Search Engine (Google, Yahoo, Bing, etc.)</option>
                       <option value='Website (Yelp, Craigslist, Foursquare, etc.)'>Website (Yelp, Craigslist, Foursquare, etc.)</option>
                       <option value='Deals (Groupon, Gilt City, etc.)'>Deals (Groupon, Gilt City, etc.)</option>
@@ -34,25 +36,24 @@
                 <div class="wsite-form-field" style="margin:5px 0px 15px 0px;">
                   <label class="wsite-form-label" for="input-718975468683935464">2) Please share with us your valuable feedback about our service. (optional) <span class="form-not-required">*</span></label>
                   <div class="wsite-form-input-container">
-                    <textarea id="input-718975468683935464" class="wsite-form-input wsite-input wsite-input-width-370px" name="_u718975468683935464" style="height: 100px"></textarea>
+                    <textarea id="input-718975468683935464" name="comment" class="wsite-form-input wsite-input wsite-input-width-370px" style="height: 100px"></textarea>
                   </div>
                   <div id="instructions-718975468683935464" class="wsite-form-instructions" style="display:none;"></div>
                 </div>
               </div>
             </ul>
           </div>
-          <div style="display:none; visibility:hidden;">
-            <input type="text" name="wsite_subject" />
-          </div>
           <div style="text-align:left; margin-top:10px; margin-bottom:10px;">
-            <input type="hidden" name="form_version" value="2" />
-            <input type="hidden" name="wsite_approved" id="wsite-approved" value="approved" />
-            <input type="hidden" name="ucfid" value="213431462888342694" />
-            <input type='submit' style='position:absolute;top:0;left:-9999px;width:1px;height:1px' /><a class='wsite-button' onclick="document.getElementById('form-213431462888342694').submit()"><span class='wsite-button-inner'>Send your feedback</span></a>
+            <input type="hidden" name="code" value="{{ code }}" />
+            <input type="hidden" name="rating" value="{{ rating }}" />
+            <input type='submit' style='position:absolute;top:0;left:-9999px;width:1px;height:1px' /><a class='wsite-button' onclick="document.getElementById('form-feedback-confirm').submit()"><span class='wsite-button-inner'>Send your feedback</span></a>
           </div>
         </form>
       </div>
       <div class="wsite-spacer" style="height:61px;"></div>
+      {% else %}
+        The feedback link was invalid, possibly because it has already been used. Thank you for your feedback.
+      {% endif %}
     </div>
   </div>
   <!-- end container -->

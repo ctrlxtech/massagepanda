@@ -13,6 +13,12 @@ class UserInline(admin.StackedInline):
 
 class AreaInline(admin.TabularInline):
     model = Area
+    fk_name = "staff"
+    extra = 0
+
+class TherapistAreaInline(admin.TabularInline):
+    model = Area
+    fk_name = "therapist"
     extra = 0
 
 class StaffAdmin(admin.ModelAdmin):
@@ -25,9 +31,14 @@ class TemplateAdmin(admin.ModelAdmin):
     pass
 
 class TherapistAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'gender')
+    list_display = ('phone', 'get_name', 'gender')
     list_filter = ['gender']
-    #inlines = (UserInline, )
+    inlines = (TherapistAreaInline, )
+
+    def get_name(self, obj):
+        return '%s %s' % (obj.user.first_name, obj.user.last_name)
+    get_name.short_description = 'name'
+    get_name.admin_order_field = 'therapist__name'
 
 admin.site.register(Therapist, TherapistAdmin)
 admin.site.register(Staff, StaffAdmin)

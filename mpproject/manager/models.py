@@ -20,21 +20,6 @@ class Staff(models.Model):
     def __unicode__(self):
         return u'%s %s' %(self.first_name, self.last_name)
 
-
-class Area(models.Model):
-    AREA_CHOICES = (
-        ('SF', 'San Francisco'),
-        ('P', 'Peninsula'),
-        ('E', 'East Bay'),
-        ('S', 'South Bay'),
-    )
-    areacode = models.CharField(max_length=10, choices=AREA_CHOICES)
-    staff = models.ForeignKey(Staff)
-
-    def __unicode__(self):
-        return u'%s' %(self.get_areacode_display())
-
-    
 class Therapist(models.Model):
     user = models.OneToOneField(User)
     GENDER_CHOICES = (
@@ -62,6 +47,20 @@ class Therapist(models.Model):
 
     def __unicode__(self):
         return u'%s %s' %(self.user.first_name, self.user.last_name)
+
+class Area(models.Model):
+    AREA_CHOICES = (
+        ('SF', 'San Francisco'),
+        ('P', 'Peninsula'),
+        ('E', 'East Bay'),
+        ('S', 'South Bay'),
+    )
+    areacode = models.CharField(max_length=10, choices=AREA_CHOICES)
+    staff = models.ForeignKey(Staff, null=True, blank=True)
+    therapist = models.ForeignKey(Therapist, null=True, blank=True)
+
+    def __unicode__(self):
+        return u'%s' %(self.get_areacode_display())
 
 class InSMS(models.Model):
     staff = models.ForeignKey(Staff, null=True)

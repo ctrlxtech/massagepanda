@@ -48,18 +48,18 @@
                                           <div class="inner">
                                              <div class="wsite-form-field wsite-name-field">
                                                 <div class="wsite-form-input-container wsite-form-left">
-                                                   <input class="wsite-form-input" type="text" name="name_first" value="{{ request.user.first_name }}" placeholder="First Name">
+                                                   <input class="wsite-form-input" type="text" name="name_first" value="{{ request.user.first_name }}" placeholder="First Name" readonly>
                                                 </div>
                                                 <div class="wsite-form-input-container wsite-form-right">
-                                                   <input class="wsite-form-input" type="text" name="name_last" value="{{ request.user.last_name }}" placeholder="Last Name">
+                                                   <input class="wsite-form-input" type="text" name="name_last" value="{{ request.user.last_name }}" placeholder="Last Name" readonly>
                                                 </div>
                                              </div>
                                              <div class="wsite-form-field">
                                                 <div class="wsite-form-input-container wsite-form-left">
-                                                   <input class="wsite-form-input" type="text" name="email" value="{{ request.user.email }}" placeholder="Email">
+                                                   <input class="wsite-form-input" type="text" name="email" value="{{ request.user.email }}" placeholder="Email" readonly>
                                                 </div>
                                                 <div class="wsite-form-input-container wsite-form-right">
-                                                   <input class="wsite-form-input" type="text" name="home_phone" value="{{ request.user.customer.phone }}" placeholder="Phone">
+                                                   <input class="wsite-form-input" type="text" name="home_phone" value="{{ request.user.customer.phone }}" placeholder="Phone" readonly>
                                                 </div>
                                              </div>
                                           </div>
@@ -89,7 +89,7 @@
 														 </a>
 														 <div style="display:block;font-size:90%"></div>
 												   </div>
-												    <div class="paragraph" style="text-align:left;display: inline-block;">
+												    <div class="paragraph" style="text-align:left;display: none;">
 													<a data-toggle="modal" data-target="" href="#">
 													  Set Picture
 													</a>
@@ -119,7 +119,7 @@
                                  <hr class="styled-hr" style="width:100%;">
                                  <div style="height: 10px; overflow: hidden; width: 100%;"></div>
                               </div>
-                              <div style="text-align:center;">
+                              <div style="text-align:center;display: none;">
                                  <div style="height: 10px; overflow: hidden;"></div>
                                  <a class="wsite-button wsite-button-small wsite-button-normal" href="javascript:;">
                                  <span class="wsite-button-inner">Update Profile</span>
@@ -152,7 +152,8 @@
                                     <div style="display:block;font-size:90%"></div>
                                  </div>
                               </div>
-
+                              
+                              <div style="display: none;">
                               <div class="paragraph" style="text-align:left;margin-top:20px;"><strong>Connected Accounts</strong></div>
                               <div>
                                  <div class="wsite-multicol">
@@ -188,6 +189,7 @@
                                        </table>
                                     </div>
                                  </div>
+                              </div>
                               </div>
                            </td>
                         </tr>

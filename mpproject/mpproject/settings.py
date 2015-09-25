@@ -28,7 +28,7 @@ if keys is not None:
         exec('%s=%s' % (n, repr(v)))
 
 SF_ZIPCODES = {94101, 94102, 94103, 94104, 94105, 94107, 94108, 94109, 94110, 94111, 94112, 94114, 94115, 94116, 94117, 94118, 94119, 94120, 94121, 94122, 94123, 94124, 94125, 94126, 94127, 94128, 94129, 94130, 94131, 94132, 94133, 94134, 94137, 94139, 94140, 94141, 94142, 94143, 94144, 94145, 94146, 94147, 94151, 94153, 94154, 94156, 94158, 94159, 94160, 94161, 94162, 94163, 94164, 94171, 94172, 94177, 94188, 94199}
-TAX = 0.087
+TAX = 0.0875
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -132,10 +132,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'test',
-            'USER': 'root',
-            'PASSWORD': '1234',
-            'HOST': '52.8.5.153',
+            'OPTIONS': {
+                'read_default_file': '/etc/database.cnf',
+            },
         }
     }
 

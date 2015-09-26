@@ -7,8 +7,8 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('customers', '0005_auto_20150607_1223'),
-        ('payment', '0007_auto_20150525_2143'),
+        ('customers', '0001_initial'),
+        ('payment', '0001_initial'),
     ]
 
     operations = [
@@ -26,8 +26,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('status', models.CharField(max_length=1, choices=[(b'P', b'Pending'), (b'S', b'Success'), (b'C', b'Cancelled')])),
                 ('code', models.ForeignKey(to='referral.CustomerReferralCode')),
-                ('order', models.ForeignKey(to='payment.Order')),
-                ('referral', models.ForeignKey(to='customers.Customer')),
+                ('order', models.OneToOneField(to='payment.Order')),
             ],
         ),
     ]

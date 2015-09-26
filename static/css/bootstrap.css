@@ -5717,7 +5717,8 @@ button.close {
   border: 0;
 }
 .modal-open {
-  overflow: hidden;
+  /*overflow: hidden;*/
+  padding-right: 0px !important;
 }
 .modal {
   position: fixed;

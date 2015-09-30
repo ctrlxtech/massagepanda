@@ -2,11 +2,25 @@
 {% load staticfiles %}
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>In-Home Massage |  MassagePanda At Your Door | Mobile Massage Delivery - Home</title><meta name="description" content="MassagePanda brings you in-home on demand massages with the best licensed therapists. Anywhere. Anytime. Book your in home massage appointments online." />
+		<meta name="keywords" content="Massage, in home massage, in-home massage, at home massage, on site massage, on demand massage, mobile massage, massage therapists, massage panda" />
+		<meta property="og:site_name" content="In-Home Massage |  MassagePanda At Your Door | Mobile Massage Delivery" />
+		<meta property="og:title" content="In-Home Massage |  MassagePanda At Your Door | Mobile Massage Delivery" />
+		<meta property="og:description" content="MassagePanda brings you in-home on demand massages with the best licensed therapists. Anywhere. Anytime. Book your in home massage appointments online." />
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="Cache-control" content="no-cache">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-        <title>In-Home Massage |  MassagePanda At Your Door | Mobile Massage Delivery</title>
+		<meta property="og:site_name"        content="MassagePanda In Home Massage" />   
+		<meta property="og:type"   content="website" />
+		<meta property="og:url" content="https://www.massagepanda.com" />
+		<meta name="copyright" content="Copyright 2015, Ctrl X, Inc." />
+		<meta name="google-site-verification" content="QF-Uk7odNzJMXYyv_2Z5fCTa1qOKrQs-oLa-SU3gTho" />
+		<meta name="p:domain_verify" content="106decd4852ee09f01c7573f79403623"/>
+		<link href="https://plus.google.com/114942695031879741470" rel="publisher" />
+		<link href="https://www.massagepanda.com/" rel="canonical" />
+
         <link rel="shortcut icon" href="{% static "./images/favicon.ico" %}">
         <link rel="stylesheet" href="{% static "./css/bootstrap.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/jquery-ui.min.css" %}" type="text/css">
@@ -17,11 +31,12 @@
         <link rel="stylesheet" href="{% static "./css/smallScreen.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/sites.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "./css/main_style.css" %}" type="text/css">
-<link href='//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
-<link href='//fonts.googleapis.com/css?family=Lustria&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+		
+		<link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+		<link href='https://fonts.googleapis.com/css?family=Lustria&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 
-<link href='//fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
-<link href='//fonts.googleapis.com/css?family=Raleway:400,300,200,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+		<link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+		<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,200,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 
         {% block style %}
         {% endblock %}
@@ -38,14 +53,88 @@
         </script>
         <script type="text/javascript" src="{% static "./js/phone.js" %}">
         </script>
-        <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js">
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.js">
         </script>
-        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script type="text/javascript" src="https://js.stripe.com/v2/">
         </script>
 
         {% block script %}
         {% endblock %}
+
+{% if prod %}
+<script type="text/javascript" async defer
+  src="https://apis.google.com/js/platform.js?publisherid=114942695031879741470">
+</script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://www.massagepanda.com",
+      "logo": "https://www.massagepanda.com/uploads/4/4/9/9/44993235/1431646225.png",
+     "contactPoint" : [
+         { "@type" : "ContactPoint",
+           "telephone" : "+1 (855) 68-PANDA",
+           "contactType" : "customer service",
+           "contactOption" : "TollFree",
+           "areaServed" : "US"
+    } ],
+     "sameAs" : [ "https://www.facebook.com/massagepanda",
+      "https://twitter.com/massage_panda",
+      "https://plus.google.com/b/114942695031879741470/114942695031879741470/about",
+      "https://pinterest.com/massagepanda" ]
+    }
+</script>
+<script type="text/javascript">
+adroll_adv_id = "SER7YRCYGRGB3GPHBETY3K";
+adroll_pix_id = "GDII47NVS5B6RFJMEHOW23";
+(function () {
+var oldonload = window.onload;
+window.onload = function(){
+   __adroll_loaded=true;
+   var scr = document.createElement("script");
+   var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+   scr.setAttribute('async', 'true');
+   scr.type = "text/javascript";
+   scr.src = host + "/j/roundtrip.js";
+   ((document.getElementsByTagName('head') || [null])[0] ||
+    document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+   if(oldonload){oldonload()}};
+}());
+</script>
+<script src="https://load.sumome.com/" data-sumo-site-id="e097517efa317b1124d737f1e337c745b5c4aadbf0bab43b7ded7c942c10be5f" async="async"></script>
+<script src="https://cdn.optimizely.com/js/2403080326.js"></script>
+<!--GrowSumo Tracking Code -->
+<script type='text/javascript'>(function(){var gs=document.createElement('script');gs.src='https://growsumo-snippets.s3.amazonaws.com/growsumo-latest.min.js';gs.type='text/javascript';gs.async ='true';gs.onload=gs.onreadystatechange=function(){var rs=this.readyState;if(rs&&rs!='complete'&&rs!='loaded')return;try{growsumo._initialize('pk_56f0c7a1bb6c40c9ac172b4ab307c40e');}catch(e){}};var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(gs,s);})();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62398713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script type="text/javascript">
+  (function() {
+    window._pa = window._pa || {};
+    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/555db22f7e8800cb100000b5.js";
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+  })();
+</script>
+
+{% else %}
+
+<meta name="robots" content="noindex">
+{% endif %}
+
 <script>
     $(document).ready(function(){
         pandaPhoneInit();
@@ -68,12 +157,12 @@
   <a href="{% url 'customerLogin' %}" class="mp-pageHeader mp-mobileLoginfalse" data-mpController="pandaLoginPage" data-mpPageId="panda_login" >Login</a>
   {% endif %}
   <ul class="mp-sideBar-socialLink">
-    <li> <a class="mp-socialLink mp-socialLink-facebook" href="http://facebook.com/massagepanda" target="_blank"></a> </li>
-    <li> <a class="mp-socialLink mp-socialLink-twitter" href="http://twitter.com/massage_panda" target="_blank"></a> </li>
-    <li> <a class="mp-socialLink mp-socialLink-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a> </li>
-    <li> <a class="mp-socialLink mp-socialLink-pinterest" href="http://pinterest.com/massagepanda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-facebook" href="https://facebook.com/massagepanda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-twitter" href="https://twitter.com/massage_panda" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-plus" href="https://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"></a> </li>
+    <li> <a class="mp-socialLink mp-socialLink-pinterest" href="https://pinterest.com/massagepanda" target="_blank"></a> </li>
     <li> <a class="mp-socialLink mp-socialLink-mail" href="mailto:support@massagepanda.com" target="_blank"></a> </li>
-    <li> <a class="mp-socialLink wsite-social-yelp" href="http://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"></a></li>
+    <li> <a class="mp-socialLink wsite-social-yelp" href="https://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"></a></li>
     <li> <a class="mp-socialLink wsite-social-thumbtack" href="https://www.thumbtack.com/profile/services/Ytg6gI4BRZB$vQ/" target="_blank"></a></li>
   </ul>
 </nav>
@@ -141,24 +230,24 @@
               <tbody class="wsite-multicol-tbody">
                 <tr class="wsite-multicol-tr">
                   <td class="wsite-multicol-col" style="width:22.67472465008%; padding:0 10px;">
-                    <div class="paragraph" style="text-align:left;"><font size="3"><font color="#626262" style="background-color: initial;"><font color="#626262"><a href="{% url 'faq' %}" title=""><span id="selectionBoundary_1430557841526_49230635236017406" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Help Center</font><span id="selectionBoundary_1430557841526_6671315038111061" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font></font><span style="background-color: initial;">&nbsp;</span><br><a href="{% url 'services' %}" title=""><font color="#626262">Our Massages</font></a><br><a href="http://www.massagepanda.com/corporate-massage-program.html"><font color="#626262">Corporate Massage</font></a><br><a href="{% url 'giveGift' %}" title=""><font color="#626262">Give a Gift</font></a></font></div>
+                    <div class="paragraph" style="text-align:left;"><font size="3"><font color="#626262" style="background-color: initial;"><font color="#626262"><a href="{% url 'faq' %}" title=""><span id="selectionBoundary_1430557841526_49230635236017406" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Help Center</font><span id="selectionBoundary_1430557841526_6671315038111061" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font></font><span style="background-color: initial;">&nbsp;</span><br><a href="{% url 'services' %}" title=""><font color="#626262">Our Massages</font></a><br><a href="https://www.massagepanda.com/corporate-massage-program.html"><font color="#626262">Corporate Massage</font></a><br><a href="{% url 'giveGift' %}" title=""><font color="#626262">Give a Gift</font></a></font></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:22.554016072831%; padding:0 10px;">
-                    <div class="paragraph" style="text-align:left;"><a href="{% url 'tregister' %}" title="" style="">Apply&nbsp;as Therapist</a><br><a href="{% url 'locationCoverage' %}" title=""><font color="#626262">Service Area</font></a><br><br><br></div>
+                    <div class="paragraph" style="text-align:left;"><a href="{% url 'tregister' %}" title="" style="">Apply&nbsp;as Therapist</a><br><a href="{% url 'locationCoverage' %}" title=""><font color="#626262">Service Area</font></a><br><a href="https://massagepanda.growsumo.com/app/page" target="_blank" title="" style=""><font color="#626262">Affiliate Program</font></a><br></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:23.484342448786%; padding:0 10px;">
-                    <div class="paragraph" style="text-align:left;"><a href="http://www.massagepanda.com/blog.html" title=""><font color="#626262">Panda&nbsp;Blog</font></a><br><a href="{% url 'about' %}" title="" style=""><font color="#626262">About&nbsp;Panda</font></a><br><font color="#626262"><a href="{% url 'contactUs' %}" title=""><span id="selectionBoundary_1435051855307_4816014380194247" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Contact Us</font><span id="selectionBoundary_1435051855306_08649692195467651" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font><br><br></div>
+                    <div class="paragraph" style="text-align:left;"><a href="https://www.massagepanda.com/blog.html" title=""><font color="#626262">Panda&nbsp;Blog</font></a><br><a href="{% url 'about' %}" title="" style=""><font color="#626262">About&nbsp;Panda</font></a><br><font color="#626262"><a href="{% url 'contactUs' %}" title=""><span id="selectionBoundary_1435051855307_4816014380194247" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Contact Us</font><span id="selectionBoundary_1435051855306_08649692195467651" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font><br><br></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:31.286916828303%; padding:0 10px;">
-                    <div class="paragraph" style="text-align:right;">Made with <span id="selectionBoundary_1430556979825_03155022021383047" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#e05c5c">love</font><span id="selectionBoundary_1430556979825_22052562073804438" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span> in Silicon Valley<br>1 (855) 68-PANDA &nbsp;9am-10pm<br></div>
+                    <div class="paragraph" style="text-align:right;">Made with <span id="selectionBoundary_1430556979825_03155022021383047" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#e05c5c">love</font><span id="selectionBoundary_1430556979825_22052562073804438" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span> in Silicon Valley<br>1 (855) 68-PANDA &nbsp;9am - 10pm PT<br></div>
                     <div style="text-align:right;">
                       <div style="height:0px;overflow:hidden"></div>
-                      <span class="wsite-social wsite-social-default"><a class="first-child wsite-social-item wsite-social-facebook" href="http://facebook.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-twitter" href="http://twitter.com/massage_panda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-plus" href="http://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-pinterest" href="http://pinterest.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="last-child wsite-social-item wsite-social-mail" href="mailto:support@massagepanda.com" target="_blank"><span class="wsite-social-item-inner"></span></a></span>
+                      <span class="wsite-social wsite-social-default"><a class="first-child wsite-social-item wsite-social-facebook" href="https://facebook.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-twitter" href="https://twitter.com/massage_panda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-plus" href="https://plus.google.com/b/114942695031879741470/114942695031879741470/about" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="wsite-social-item wsite-social-pinterest" href="https://pinterest.com/massagepanda" target="_blank"><span class="wsite-social-item-inner"></span></a><a class="last-child wsite-social-item wsite-social-mail" href="mailto:support@massagepanda.com" target="_blank"><span class="wsite-social-item-inner"></span></a></span>
                       <div style="height:10px;overflow:hidden"></div>
                     </div>
                     <div>
                       <div id="451314862283876032" align="right" style="width: 100%; overflow-y: hidden;" class="wcustomhtml"><span class="wsite-social wsite-social-default">
-                        <a class="wsite-social-item wsite-social-yelp" href="http://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"><span class="wsite-social-item-inner"></span></a>
+                        <a class="wsite-social-item wsite-social-yelp" href="https://www.yelp.com/biz/massagepanda-in-home-massage-san-francisco" target="_blank"><span class="wsite-social-item-inner"></span></a>
                         <a class="wsite-social-item wsite-social-thumbtack" href="https://www.thumbtack.com/profile/services/Ytg6gI4BRZB$vQ/" target="_blank"><span class="wsite-social-item-inner"></span></a></span>
                       </div>
                     </div>
@@ -174,7 +263,7 @@
         <hr class="styled-hr" style="width:100%;">
         <div style="height: 10px; overflow: hidden; width: 100%;"></div>
       </div>
-      <div class="paragraph" style="text-align:left;"><font size="2">©2015 MassagePanda. All Rights Reserved.&nbsp;<a href="{% url 'terms' %}" title=""><font color="#626262"><u>Terms of Use</u></font></a>&nbsp;|&nbsp;<a href="{% url 'privacy' %}" title=""><font color="#626262"><u>Privacy Policy</u></font></a></font><span class="mp-smallScreenHide"><font size="2">.&nbsp;Copyright 2015, Ctrl X, Inc., 39105 Cedar Blvd, Newark, CA 94560. &nbsp;MASSAGEPANDA®,&nbsp;MASSAGE AT YOUR DOOR®,&nbsp;and&nbsp;FIND A PANDA®&nbsp;are trademarks of Ctrl X, Inc.&nbsp;The contents of the MassagePanda web site are for informational purposes only. None of the information on the site should be construed or used as professional medical advice or consultation.&nbsp;</font></span><br></div>
+      <div class="paragraph" style="text-align:left;"><font size="2">©2015 MassagePanda In Home Massage. All Rights Reserved.&nbsp;<a href="{% url 'terms' %}" title=""><font color="#626262"><u>Terms of Use</u></font></a>&nbsp;|&nbsp;<a href="{% url 'privacy' %}" title=""><font color="#626262"><u>Privacy Policy</u></font></a></font><span class="mp-smallScreenHide"><font size="2">.&nbsp;Copyright 2015, Ctrl X, Inc., 440 N Wolfe Rd, Sunnyvale, CA 94085. MASSAGEPANDA®,&nbsp;MASSAGE AT YOUR DOOR®,&nbsp;and&nbsp;FIND A PANDA®&nbsp;are trademarks of Ctrl X, Inc.&nbsp;The contents of the MassagePanda web site are for informational purposes only. None of the information on the site should be construed or used as professional medical advice or consultation.&nbsp;</font></span><br></div>
     </div>
   </div>
   <!-- end container -->

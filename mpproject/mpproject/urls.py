@@ -10,6 +10,7 @@ urlpatterns = [
 
     url(r'^$', include('index.urls')),
     url(r'^single$', TemplateView.as_view(template_name='index/single.html'), name='single'),
+    url(r'^howitworks$', TemplateView.as_view(template_name='index/howItWorks.html'), name='howItWorks'),
     url(r'^faq$', TemplateView.as_view(template_name='index/faq.html'), name='faq'),
     url(r'^terms$', TemplateView.as_view(template_name='index/terms.html'), name='terms'),
     url(r'^privacy$', TemplateView.as_view(template_name='index/privacy.html'), name='privacy'),

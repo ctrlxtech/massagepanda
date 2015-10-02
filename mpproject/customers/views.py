@@ -91,14 +91,18 @@ def userLogin(request, data):
         return redirect('index')
     return JsonResponse(context)
 
-def logout_view(request):
+def loginView(request):
+    if request.user.is_authenticated():
+        return redirect('index')
+    return render(request, 'customers/login.html')
+
+def logoutView(request):
     logout(request)
     try:
         del request.session['login']
     except KeyError:
         pass
     return redirect('index')
-    return HttpResponse("logout succeccfully")
 
 @login_required(login_url="/customer/login")
 def changePassword(request):
@@ -173,9 +177,8 @@ def deleteAddress(request):
 @login_required(login_url="/customer/login")
 @transaction.atomic
 def setDefaultAddress(request):
-    addressId = request.POST.get('addressId')
     try:
-        addressId = int(addressId)
+        addressId = force_text(urlsafe_base64_decode(request.POST.get('addressId')))
         addresses = request.user.customer.address_set.all()
         addresses.update(default=False)
         addresses.filter(id=addressId).update(default=True)
@@ -249,7 +252,7 @@ def paymentPage(request):
         stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
     except:
         pass
-    context = {'stripeCustomer': stripeCustomer}
+    context = {'stripeCustomer': stripeCustomer, 'stripePublishKey': settings.STRIPE_PUBLISH_KEY}
     return render(request, 'customers/payment.html', context)
     
 def checkAdmin(request):

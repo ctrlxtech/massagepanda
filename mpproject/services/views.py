@@ -104,7 +104,7 @@ def checkout(request):
       pass
 
     state_list = Address.STATE_CHOICES
-    context.update({'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
+    context.update({'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
         'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo,
         'zipcode': zipcode, 'tax': '%.2f' % tax, 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render(request, 'services/checkout.html', context)

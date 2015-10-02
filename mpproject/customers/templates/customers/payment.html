@@ -16,6 +16,8 @@
 {% include 'customers/confirmationModal.html' %}
 {% include 'customers/newPaymentModal.html' %}
 
+<input type="hidden" id="stripePublishKey" value="{{ stripePublishKey }}" />
+
 <div id="main-wrap">
   <div class="container">
     <div id="wsite-content" class="wsite-elements wsite-not-footer">

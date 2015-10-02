@@ -48,6 +48,7 @@
     <div class="mp-paymentForm">
         <form id="payment-form" class="form-inline" action="{% url 'placeOrderFromPost' %}" method=POST>
             {% csrf_token %}
+            <input type="hidden" id="stripePublishKey" value="{{ stripePublishKey }}" />
             <input type="hidden" name="referCode" data-serverField="true"/>
             <input type="hidden" name="needTable" data-serverField="true" value="{{ needTable }}"/>
             <input type="hidden" name="parkingInfo" data-serverField="true" value="{{ parkingInfo }}"/>

@@ -42,9 +42,9 @@
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                               </div>
                               <div class="paragraph" style="text-align:left;">Use these methods to share free massages with your friends.<br></div>
-                              <div id="fb-root"></div>
-                              <div class="fb-share-button" data-href="http://{{ request.get_host }}{% url 'index' %}" data-layout="button">
+                              <div class="fb-share-button" data-href="http://{{ request.get_host }}{% url 'customerLogin' %}?code={{ request.user.customer.customerreferralcode.code }}" data-layout="button">
                               </div>
+                              <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://{{ request.get_host }}{% url 'customerLogin' %}?code={{ request.user.customer.customerreferralcode.code }}" data-count="none" data-dnt="true">Tweet</a>
                               <div style="display: none">
                                  <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
                                     <a>

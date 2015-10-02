@@ -1,6 +1,6 @@
 $( window ).load(function() {
 
-  $('#payment-form').on('submit', function(event) {                                   
+  $('#payment-form').on('submit', function(event) {
     if ($("#new-payment-div").css('display') == "none") {
         return true;
     } else{
@@ -9,7 +9,7 @@ $( window ).load(function() {
         // Disable the submit button to prevent repeated clicks
         $form.find('button').prop('disabled', true);
         Stripe.card.createToken($form, stripeResponseHandler);
-        // Prevent the form from submitting with the default action                                       
+        // Prevent the form from submitting with the default action
         return false;
     }
   });

@@ -164,6 +164,6 @@ EMAIL_PORT = 587
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = '/home/ubuntu/massagepanda/images/'
 MEDIA_URL = '/static/images/'
-STATIC_ROOT = '/home/ubuntu/massagepanda/static/'
-STATIC_URL = '/images/'
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "static")
+STATIC_URL = '/static/'
 LOGIN_URL = 'admin:login'

@@ -100,6 +100,9 @@ function massageDetailsTimeForList() {
                 $timeList.find('li:lt(' + timeStringIndex + ')').addClass('timeListHide');
 
             }
+        } else {
+            $timeList.find('li').removeClass('timeListHide');
+            $timeList.find('li.noServiceAvaliable').hide();
         }
     }
 }

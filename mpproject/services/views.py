@@ -63,7 +63,6 @@ def taxAdditional(data):
       additional = 0.0;
     zipcode = data.get('zipcode')
     if isInSF(zipcode):
-      context['inSF'] = True
       additional += 10
     tax = additional * settings.TAX
     return additional + tax, tax
@@ -71,31 +70,35 @@ def taxAdditional(data):
 def checkout(request):
     context = {}
     try:
+      zipcode = request.POST.get('zipcode')
+      serviceDate = request.POST.get("massageDetailsDate")
+      serviceTime = request.POST.get("massageDetailsTime")
+      genderPreferred = request.POST.get("genderPreferred")
+ 
       service = Service.objects.get(pk=request.POST.get("serviceId"))
       total, tax = taxService(request.POST)
-    except Exception as e:
-      return HttpResponse(e)
 
-    additional, aTax = taxAdditional(request.POST)
-    tax += aTax
-    total += additional
-    needTable = request.POST.get("needTable")
-    parkingInfo = request.POST.get("parkingInfo")
-    massage1 = request.POST.get("massage1")
-    if massage1:
+      additional, aTax = taxAdditional(request.POST)
+      tax += aTax
+      total += additional
+
+      needTable = request.POST.get("needTable")
+      parkingInfo = request.POST.get("parkingInfo")
+      massage1 = request.POST.get("massage1")
+      if massage1:
         parkingInfo += " |massage1: " + massage1
-    massage2 = request.POST.get("massage2")
-    if massage2:
+      massage2 = request.POST.get("massage2")
+      if massage2:
         parkingInfo += " |massage2: " + massage2
-    b2b = request.POST.get("backToBack")
-    if b2b:
+      b2b = request.POST.get("backToBack")
+      if b2b:
         parkingInfo += " |Accept back-to-back"
 
-    zipcode = request.POST.get('zipcode')
-    serviceDate = request.POST.get("massageDetailsDate")
-    serviceTime = request.POST.get("massageDetailsTime")
-    genderPreferred = request.POST.get("genderPreferred")
-    
+      if isInSF(zipcode):
+        context['inSF'] = True
+    except Exception as e:
+      return HttpResponse(e)
+   
     stripeCustomer = ""
     try:
       stripe.api_key = settings.STRIPE_KEY

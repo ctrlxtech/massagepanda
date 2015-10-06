@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import os.path
 import json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,10 +31,9 @@ if keys is not None:
 SF_ZIPCODES = {94101, 94102, 94103, 94104, 94105, 94107, 94108, 94109, 94110, 94111, 94112, 94114, 94115, 94116, 94117, 94118, 94119, 94120, 94121, 94122, 94123, 94124, 94125, 94126, 94127, 94128, 94129, 94130, 94131, 94132, 94133, 94134, 94137, 94139, 94140, 94141, 94142, 94143, 94144, 94145, 94146, 94147, 94151, 94153, 94154, 94156, 94158, 94159, 94160, 94161, 94162, 94163, 94164, 94171, 94172, 94177, 94188, 94199}
 TAX = 0.0875
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'*'
+]
 
 SITE_ID = 1
 
@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'storages',
     'index',
     'services',
     'payment',
@@ -163,7 +164,21 @@ EMAIL_PORT = 587
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = '/home/ubuntu/massagepanda/images/'
-MEDIA_URL = '/static/images/'
 STATIC_ROOT = os.path.join(BASE_DIR, "..", "static")
 STATIC_URL = '/static/'
 LOGIN_URL = 'admin:login'
+
+if os.path.isfile('/etc/debug'):
+    MEDIA_URL = '/static/images/'
+    DEBUG = True
+else:
+    # Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
+    # you run `collectstatic`).
+    AWS_STORAGE_BUCKET_NAME = 'massagepanda-media-bucket'
+    MEDIAFILES_LOCATION = 'media'
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = False

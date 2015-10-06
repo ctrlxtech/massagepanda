@@ -1,6 +1,5 @@
 $(document).ready(function() {
-    console.log($('#stripePublishKey').val());
-    Stripe.setPublishableKey('pk_test_704p8Gz1ev0sCJJK5sc4b9cF');
+    Stripe.setPublishableKey($('#stripePublishKey').val());
 });
 
 var stripeResponseHandler = function(status, response) {

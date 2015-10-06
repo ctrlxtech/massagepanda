@@ -20,6 +20,8 @@ import json
 import time
 from datetime import datetime
 import stripe
+import urllib2
+import base64
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -103,15 +105,24 @@ def sendWelcomeEmail(to, first_name, code):
     return HttpResponse("Email sent!") 
 
 def test(request):
-    try:
-        name = request.POST.get('name')
-        context = {'status': 'success', 'message': "Hello, " + name}
-    except:
-        context = {'status': 'failure', 'message': "Format error"}
+    name = "Mr. unknown"
+    if request.POST.get('name'):
+      name = request.POST.get('name')
+    return pushIO()
+    context = {'status': 'success', 'message': "Hello, " + name}
         
     json = JsonResponse(context)
     json['Access-Control-Allow-Origin'] = "*"
     return json
+
+def pushIO():
+    payload = {'user_ids': ['fe3b6ed1-330e-4a0e-a05d-916e6357b8fb'], 'production': False, 'notification': { 'alert': 'MassagaPanda'}}
+    private_key = "d03a2dc3aa95b5884312c4102b731f54fc70a9d2a8479fd9"
+    b64 = base64.encodestring('%s:' % private_key).replace('\n', '')
+    auth = "Basic %s" % b64
+    headers = {'Content-type': 'application/json', 'X-Ionic-Application-Id': 'ce70fa55', 'Authorization': auth}
+    url = 'https://push.ionic.io/api/v1/push'
+    return HttpResponse(requests.post(url, data=json.dumps(payload), headers=headers))
 
 @login_required(login_url="/manager/login")
 def customerProfile(request):

@@ -192,7 +192,7 @@ def placeOrder(request, data):
     nums = [phone]
     sendSMS(nums, message_body, False)
 
-    context = {'status': 'success'}
+    context = {'status': 'success', 'total': o.amount, 'txid': o.id}
     return render(request, 'services/success.html', context)
 
 def getAddressDetail(customer, data):

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render_to_response
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.tokens import default_token_generator
@@ -13,7 +13,7 @@ def feedbackEmail(request):
     except:
       pass
     context = {'message': 'Thanks'}
-    return render(request, 'feedback/feedbackEmail.html', context)
+    return render_to_response('feedback/feedbackEmail.html', context, context_instance=RequestContext(request))
 
 def feedbackSurvey(request, code=None, rating=None):
     assert code is not None and rating is not None
@@ -26,7 +26,7 @@ def feedbackSurvey(request, code=None, rating=None):
     except:
       validlink = False
     context = {'message': 'Thanks', 'validlink': validlink, 'code': code, 'rating': rating}
-    return render(request, 'feedback/feedbackSurvey.html', context)
+    return render_to_response('feedback/feedbackSurvey.html', context, context_instance=RequestContext(request))
 
 @transaction.atomic
 def feedbackConfirm(request):
@@ -39,7 +39,7 @@ def feedbackConfirm(request):
     feedback = Feedback.objects.get(code=code)
     if feedback.rated is True:
         context = {'validlink': False}
-        return render(request, 'feedback/feedbackSurvey.html', context)
+        return render_to_response('feedback/feedbackSurvey.html', context, context_instance=RequestContext(request))
     feedback.rated = True
     feedback.rating = rating
     ots = feedback.order.ordertherapist_set.all()
@@ -58,4 +58,4 @@ def feedbackConfirm(request):
 
     feedback.comment = whereYouLearn + "|comment: " + comment
     feedback.save()
-    return render(request, 'index/index.html')
+    return render_to_response('index/index.html', {}, context_instance=RequestContext(request))

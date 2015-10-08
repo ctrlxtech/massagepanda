@@ -1,23 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render_to_response
 
+from django.template import RequestContext
 from django.template.defaulttags import register
 from django.http import HttpResponse, JsonResponse
 from services.models import Service
 from payment.models import Order
 from django.contrib.auth.decorators import user_passes_test
 from django.conf import settings
+
 import stripe
+
 # Create your views here.
 # Set your secret key: remember to change this to your live secret key in production
 # See your keys here https://dashboard.stripe.com/account/apikeys
 
 def test(request):
-    return render(request, 'payment/test.html')
+    return render_to_response('payment/test.html', {}, context_instance=RequestContext(request))
 
 def index(request):
     service_list = Service.objects.order_by('service_type')
     context = {"id": request.GET.get("id"), "service_list": service_list}
-    return render(request, 'payment/index.html', context)
+    return render_to_response('payment/index.html', context, context_instance=RequestContext(request))
 
 def buy(request):
     serviceId = request.POST.get("serviceId")
@@ -32,7 +35,7 @@ def buy(request):
     context = {"date": request.POST.get("Date"), "time": request.POST.get("Time"),
         "gender": request.POST.get("Gender"), "quantity": request.POST.get("Quantity"),
         "service": ser.service_type, "serviceFee": service_fee, "tax": tax, "total": total}
-    return render(request, 'payment/charge.html', context)
+    return render_to_response('payment/charge.html', context, context_instance=RequestContext(request))
 
 def charge(request):
     serviceId = request.POST.get("serviceId")

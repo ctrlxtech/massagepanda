@@ -9,8 +9,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core import serializers
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.template import loader
+from django.shortcuts import redirect, render_to_response
+from django.template import loader, RequestContext
 from django.template.defaulttags import register
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -25,7 +25,7 @@ from services.views import addPaymentForCustomer, getPhone
 def index(request):
     state_list = Address.STATE_CHOICES
     context = {'state_list': state_list}
-    return render(request, 'customers/profile.html', context)
+    return render_to_response('customers/profile.html', context, context_instance=RequestContext(request))
 
 def createCustomerFromForm(request):
     return createCustomer(request.POST, request)
@@ -150,7 +150,7 @@ def userLogin(request, data):
     else:
         context['error'] = "username and password do not match!"
     if 'error' in context:
-        return render(request, 'customers/login.html', context)
+        return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
     else:
         return redirect('index')
     return JsonResponse(context)
@@ -158,7 +158,7 @@ def userLogin(request, data):
 def loginView(request):
     if request.user.is_authenticated():
         return redirect('index')
-    return render(request, 'customers/login.html')
+    return render_to_response('customers/login.html', {}, context_instance=RequestContext(request))
 
 def logoutView(request):
     logout(request)
@@ -272,7 +272,7 @@ def deletePayment(request):
 @login_required(login_url="/customer/login")
 def referPage(request):
     context = {"customer": "Kevin"}
-    return render(request, 'customers/refer.html', context)
+    return render_to_response('customers/refer.html', context_instance=RequestContext(request, context))
 
 @register.filter
 def encodeId(value):
@@ -305,7 +305,7 @@ def addCardImageSrc(value, arg):
 @login_required(login_url="/customer/login")
 def historyPage(request):
     context = {"customer": "Kevin"}
-    return render(request, 'customers/history.html', context)
+    return render_to_response('customers/history.html', context, context_instance=RequestContext(request))
 
 @login_required(login_url="/customer/login")
 def paymentPage(request):
@@ -317,7 +317,7 @@ def paymentPage(request):
     except:
         pass
     context = {'stripeCustomer': stripeCustomer, 'stripePublishKey': settings.STRIPE_PUBLISH_KEY}
-    return render(request, 'customers/payment.html', context)
+    return render_to_response('customers/payment.html', context, context_instance=RequestContext(request))
     
 def checkAdmin(request):
     user = request.user

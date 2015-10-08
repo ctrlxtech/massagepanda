@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.template.defaulttags import register
 from django.views.generic import View
 
@@ -26,7 +27,7 @@ def stripZero(value):
 def services(request):
     service_list = Service.objects.order_by('popularity')
     context = {'service_list': service_list}
-    return render(request, 'services/store.html', context)
+    return render_to_response('services/store.html', context, context_instance=RequestContext(request))
 
 def details(request):
     context = {}
@@ -35,12 +36,12 @@ def details(request):
       context['service'] = service
     except:
       return JsonResponse("Service not found", safe=False)
-    return render(request, 'services/details.html', context)
+    return render_to_response('services/details.html', context, context_instance=RequestContext(request))
 
 class DetailsView(View):
     context = {}
     def get(self, request):
-      return render(request, 'services/details.html', self.context)
+      return render_to_response('services/details.html', self.context, context_instance=RequestContext(request))
 
 def taxService(data):
     try:
@@ -111,7 +112,7 @@ def checkout(request):
     context.update({'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
         'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo,
         'zipcode': zipcode, 'tax': '%.2f' % tax, 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
-    return render(request, 'services/checkout.html', context)
+    return render_to_response('services/checkout.html', context, context_instance=RequestContext(request))
 
 def placeOrderFromJson(request):
     data = json.loads(request.body)
@@ -198,7 +199,7 @@ def placeOrder(request, data):
     sendSMS(nums, message_body, False)
 
     context = {'status': 'success', 'total': o.amount, 'txid': o.id}
-    return render(request, 'services/success.html', context)
+    return render_to_response('services/success.html', context, context_instance=RequestContext(request))
 
 def getAddressDetail(customer, data):
     phone = getPhone(data)

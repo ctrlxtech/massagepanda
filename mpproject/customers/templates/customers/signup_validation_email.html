@@ -1,0 +1,12 @@
+{% autoescape off %}
+Thank you for signing up with MassagePanda.com. Please click the link below to verify your email address:
+
+{% block verify_link %}
+{{ protocol }}://{{ domain }}{% url 'signup_validation_confirm' uidb64=uid token=token %}
+{% endblock %}
+
+Thanks again for using MassagePanda.com!
+
+The MassagePanda team
+
+{% endautoescape %}

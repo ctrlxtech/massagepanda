@@ -13,6 +13,7 @@ from services.models import Service
 from manager.views import sendSMS
 
 import hashlib
+import re
 import stripe
 import time
 from datetime import datetime
@@ -128,6 +129,7 @@ def stringToDatetime(data):
 
 def getPhone(data):
     phone = data.get('phone')
+    phone = re.sub("[^0-9]", "", phone)
     if len(phone) == 10:
         phone = "1" + phone
     return phone

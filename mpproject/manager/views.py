@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
 from django.db import connection
 from django.contrib.auth.decorators import user_passes_test
@@ -24,7 +23,7 @@ import urllib2
 import base64
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 
 from django.template.loader import get_template
@@ -96,13 +95,6 @@ def sendFeedbackEmail(orderId):
     f.save()
 
     return
-
-def sendWelcomeEmail(to, first_name, code):
-    subject = "Welcome!"
-    text_content = "Thanks for signing up on MassagePanda, please click the following link to active your account: http://ec2-52-8-5-153.us-west-1.compute.amazonaws.com/?referCode=" + code
-    msg = EmailMultiAlternatives(subject, text_content, settings.SERVER_EMAIL, [to])
-    msg.send()
-    return HttpResponse("Email sent!") 
 
 def test(request):
     name = "Mr. unknown"

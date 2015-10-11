@@ -29,17 +29,34 @@ from django.template import Context
 from django.template.loader import get_template
 
 # Create your views here.
-def terms(request):
-    return render(request, 'manager/terms.html')
+def orderlisttest(request):
+    orders = Order.objects.all()
+    appOrders = []
+    for order in orders:
+        appOrders.append(buildAppOrder(order))
 
-def privacy(request):
-    return render(request, 'manager/privacy.html')
+    json = JsonResponse(appOrders, safe=False)
+    json['Access-Control-Allow-Origin'] = "*"
+    return json
 
-def logtest(request):
-    index = 105
-    data = InSMS.objects.all()[index:]
-    data = serializers.serialize("json", data)
-    return HttpResponse(data)
+def buildAppOrder(data):
+    order = {}
+    order['id'] = data.id.hex
+    order['date'] = datetimeToEpoch(data.service_datetime)
+    order['duration'] = data.service.service_time * 60
+    order['type'] = str(data.service.service_type)
+    order['status'] = data.get_status_display()
+    stubs = data.shipping_address.split(', ')
+    order['address'] = str(stubs[0])
+    order['city'] = str(stubs[1])
+    order['state'] = str(stubs[2])
+    order['country-and-zipcode'] = str(stubs[3])
+    return order
+
+def datetimeToEpoch(dt):
+    epoch = datetime.utcfromtimestamp(0)
+    naive = dt.replace(tzinfo=None)
+    return int((naive - epoch).total_seconds() * 1000)
 
 def referralTest(request):
     code = request.GET.get("referCode")

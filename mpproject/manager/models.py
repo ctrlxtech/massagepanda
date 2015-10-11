@@ -48,6 +48,27 @@ class Therapist(models.Model):
     def __unicode__(self):
         return u'%s %s' %(self.user.first_name, self.user.last_name)
 
+class Schedule(models.Model):
+    DAY_CHOICES = (
+        ('Mon', 'Monday'),
+        ('Tue', 'Tuesday'),
+        ('Wed', 'Wednesday'),
+        ('Thu', 'Thursday'),
+        ('Fri', 'Friday'),
+        ('Sat', 'Saturday'),
+        ('Sun', 'Sunday'),
+    )
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    therapist = models.ForeignKey(Therapist)
+
+    def __unicode__(self):
+        return u'%s' %(self.get_day_display())
+
+class Interval(models.Model):
+    starttime = models.TimeField()
+    endtime = models.TimeField()
+    therapist = models.ForeignKey(Schedule)
+
 class Area(models.Model):
     AREA_CHOICES = (
         ('SF', 'San Francisco'),

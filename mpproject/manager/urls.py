@@ -33,6 +33,6 @@ urlpatterns = [
     url(r'^tregister$', views.tregister_view, name='tregister'),
     url(r'^createTherapist$', views.createTherapist, name='createTherapist'),
     url(r'^test$', views.test, name='test'),
-    url(r'^logtest$', views.logtest, name='logtest'),
+    url(r'^getOrderlist$', views.orderlisttest, name='orderlisttest'),
     url(r'^referralTest$', views.referralTest, name='referralTest'),
 ]

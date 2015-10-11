@@ -1,15 +1,19 @@
 from django.contrib import admin
-from .models import Staff, Area, Therapist, SMSTemplate
+from .models import Staff, Area, Therapist, SMSTemplate, Interval, Schedule
 from django.contrib.auth.models import User
 
+from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
-class TherapistInline(admin.StackedInline):
-    model = Therapist
-    can_delete = False
-    verbose_name_plural = 'therapist'
+class IntervalInline(NestedStackedInline):
+    model = Interval
+    fk_name = "therapist"
+    extra = 1
 
-class UserInline(admin.StackedInline):
-    model = User
+class ScheduleInline(NestedStackedInline):
+    model = Schedule
+    fk_name = "therapist"
+    extra = 1
+    inlines = [IntervalInline, ]
 
 class AreaInline(admin.TabularInline):
     model = Area
@@ -30,10 +34,10 @@ class StaffAdmin(admin.ModelAdmin):
 class TemplateAdmin(admin.ModelAdmin):
     pass
 
-class TherapistAdmin(admin.ModelAdmin):
+class TherapistAdmin(NestedModelAdmin):
     list_display = ('phone', 'get_name', 'gender')
     list_filter = ['gender']
-    inlines = (TherapistAreaInline, )
+    inlines = (TherapistAreaInline, ScheduleInline)
 
     def get_name(self, obj):
         return '%s %s' % (obj.user.first_name, obj.user.last_name)

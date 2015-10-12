@@ -11,6 +11,7 @@ class Service(models.Model):
     service_time = models.FloatField(validators = [MinValueValidator(0.0)])
     service_sale = models.FloatField(validators = [MinValueValidator(0.00)], null=True, blank=True)
     service_fee = models.FloatField(validators = [MinValueValidator(0.00)])
+    labor_cost = models.FloatField(validators = [MinValueValidator(0.00)])
     popularity = models.IntegerField()
     
     def __unicode__(self):

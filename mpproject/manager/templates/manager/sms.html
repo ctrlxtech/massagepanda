@@ -17,11 +17,12 @@
 
 <div>
 <h4>Get logs for a particular phone number</h4>
-<form target="_blank" action="{% url 'getUserLogsByNum' %}" method="get">
+<form target="_blank" action="{% url 'logsByNum' %}" method="post">
 {% csrf_token %}
 <label for="number">Phone Number:</label><input type="number" name="number">
 <input type="submit" value="query" >
 </form>
+
 </div>
 <hr>
 

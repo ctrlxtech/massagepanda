@@ -46,6 +46,7 @@ def buildAppOrder(data):
     order['duration'] = data.service.service_time * 60
     order['type'] = str(data.service.service_type)
     order['status'] = data.get_status_display()
+    order['earn'] = data.service.labor_cost
     stubs = data.shipping_address.split(', ')
     order['address'] = str(stubs[0])
     order['city'] = str(stubs[1])
@@ -518,12 +519,31 @@ def getUserOutLogs(request):
     return HttpResponse(data)
 
 @user_passes_test(lambda u: u.is_superuser)
-def getUserLogsByNum(request):
-    number = request.GET.get('number')
-    inSMS_list = InSMS.objects.filter(sender=number).order_by('-timestamp')
-    outSMS_list = OutSMS.objects.filter(receiver=number).order_by('-timestamp')
-    context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list, 'num': number}
-    return render(request, 'manager/userlogs.html', context)
+def logsByNum(request):
+    context = {'number': request.POST.get('number'), 'byNum': True}
+    return render(request, 'manager/logs.html', context)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getInLogsByNum(request):
+    number = request.POST.get('number')
+    cursor = connection.cursor()
+    cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_insms.messageBody from manager_insms left join manager_staff" \
+        " on manager_insms.sender = manager_staff.phone_number where manager_insms.sender = %s ORDER BY manager_insms.id DESC", (number))
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
+
+@user_passes_test(lambda u: u.is_superuser)
+def getOutLogsByNum(request):
+    number = request.POST.get('number')
+    cursor = connection.cursor()
+    cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
+        " manager_staff.first_name, manager_staff.last_name," \
+        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
+        " on manager_outsms.receiver = manager_staff.phone_number where manager_outsms.receiver = %s ORDER BY manager_outsms.id DESC", (number))
+    data = dictfetchall(cursor)
+    return JsonResponse(data, safe=False)
 
 def register_view(request):
     return render(request, 'manager/register.html')

@@ -13,6 +13,11 @@
 
 <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
 <script type="text/javascript" src="{% static "js/logs.js" %}"></script>
+{% if byNum %}
+<script type="text/javascript" src="{% static "js/logsByNum.js" %}"></script>
+{% else %}
+<script type="text/javascript" src="{% static "js/allLogs.js" %}"></script>
+{% endif %}
 
 <style>
 ul {
@@ -63,8 +68,13 @@ Search:<input id="searchInList" type="text" size="45"/>
 </table>
 </div>
 
+{% if byNum %}
+<input type="hidden" id="number" value="{{ number }}" />
+{% else %}
 <div style="text-align:center">
 <a href="#" style="font-size: 20px;" id="showMore" onclick="return showMore();">show more</a>
 </div>
+{% endif %}
+
 </body>
 </html>

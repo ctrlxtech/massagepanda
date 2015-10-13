@@ -15,6 +15,7 @@ from django.template.defaulttags import register
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+import json
 import stripe
 
 from customers.models import Customer, Address
@@ -31,11 +32,17 @@ def createCustomerFromForm(request):
     return createCustomer(request.POST, request)
 
 def createCustomerFromJson(request):
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except:
+        data = None
     return createCustomer(data)
 
 @transaction.atomic
 def createCustomer(data, request=None):
+    if data is None:
+      return JsonResponse({"message": "check your inputs"})
+
     email = data.get('email')
     phone = getPhone(data)
     password = data.get('password')
@@ -123,19 +130,29 @@ def sendValidationEmail(request, user, use_https=False):
     return JsonResponse(context)
 
 def loginFromForm(request):
-    return userLogin(request, request.POST)
+    return userLogin(request, request.POST, True)
 
 def loginFromJson(request):
-    data = json.loads(request.body)
-    return userLogin(request, data)
+    try:
+        data = json.loads(request.body)
+    except:
+        data = None
+    return userLogin(request, data, True)
 
-def userLogin(request, data):
+def userLogin(request, data, fromJson=False):
     context = {'status': 'failure'}
     userID = request.POST.get('userID')
     fbToken = request.POST.get('fbToken')
     if fbToken and userID:
         request.session['login'] = True
         return HttpResponse("token: " + fbToken + " userID: " + userID)
+    if data is None:
+      json = JsonResponse({"error": "check your inputs"})
+      json['Access-Control-Allow-Origin'] = "*"
+      json['Access-Control-Allow-Methods'] = "GET,POST"
+      json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
+      return json
+
     username = data.get('username')
     password = data.get('password')
     user = authenticate(username=username, password=password)
@@ -145,15 +162,21 @@ def userLogin(request, data):
             request.session['login'] = True
             context['status'] = 'success'
             context['firstName'] = user.first_name
+            context['uid'] = urlsafe_base64_encode(force_bytes(user.pk))
         else:
             context['error'] = "user is inactive!"
     else:
         context['error'] = "username and password do not match!"
-    if 'error' in context:
+    if fromJson:
+        json = JsonResponse(context)
+        json['Access-Control-Allow-Origin'] = "*"
+        json['Access-Control-Allow-Methods'] = "GET,POST"
+        json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
+        return json
+    elif 'error' in context:
         return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
     else:
         return redirect('index')
-    return JsonResponse(context)
 
 def loginView(request):
     if request.user.is_authenticated():

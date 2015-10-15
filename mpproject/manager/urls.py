@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^createTherapist$', views.createTherapist, name='createTherapist'),
     url(r'^test$', views.test, name='test'),
     url(r'^getOrderlist$', views.orderlisttest, name='orderlisttest'),
+    url(r'^getSchedule$', views.getSchedule, name='schedule'),
     url(r'^referralTest$', views.referralTest, name='referralTest'),
 ]

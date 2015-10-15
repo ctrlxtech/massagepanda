@@ -54,6 +54,27 @@ def buildAppOrder(data):
     order['country-and-zipcode'] = str(stubs[3])
     return order
 
+def getSchedule(request):
+    therapist = Therapist.objects.get(pk=1)
+    schedule = therapist.schedule_set.all()
+    json = JsonResponse(buildAppSchedule(schedule), safe=False)
+    json['Access-Control-Allow-Origin'] = "*"
+    return json
+
+def buildAppSchedule(data):
+    schedule = []
+    for item in data:
+        singleSchedule = {}
+        singleSchedule['active'] = item.active
+        singleSchedule['day'] = str(item.get_day_display())
+        intervals = item.interval_set.all()
+        intvls = []
+        for interval in intervals:
+            intvls.append({"starttime": str(interval.starttime), "endtime": str(interval.endtime)})
+        singleSchedule['intervals'] = intvls
+        schedule.append(singleSchedule)
+    return schedule
+
 def datetimeToEpoch(dt):
     epoch = datetime.utcfromtimestamp(0)
     naive = dt.replace(tzinfo=None)
@@ -570,6 +591,8 @@ def createTherapist(request):
     emergency_last_name = request.POST.get('emergency_last_name')
     emergency_contact_name = emergency_first_name.strip() + "" + emergency_last_name.strip()
     emergency_contact_phone = request.POST.get('emergency_phone')
+    routing_number = request.POST.get('routing_number')
+    account_number = request.POST.get('account_number')
     supplementary = request.POST.get('supplementary')
     therapist = Therapist(user=user, phone=phone, gender=gender, home_address=home_address,
         availability=availability, working_area=working_area, experience=experience, specialty=specialty,

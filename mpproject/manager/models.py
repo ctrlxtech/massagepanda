@@ -44,6 +44,8 @@ class Therapist(models.Model):
     rating = models.PositiveIntegerField(blank=True, null=True, default=0)
     rate_count = models.PositiveIntegerField(blank=True, null=True, default=0)
     profile_photo = models.ImageField(null=True, blank=True);
+    routing_number = models.IntegerField()
+    account_number = models.IntegerField()
 
     def __unicode__(self):
         return u'%s %s' %(self.user.first_name, self.user.last_name)
@@ -60,6 +62,7 @@ class Schedule(models.Model):
     )
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
     therapist = models.ForeignKey(Therapist)
+    active = models.BooleanField()
 
     def __unicode__(self):
         return u'%s' %(self.get_day_display())
@@ -68,6 +71,8 @@ class Interval(models.Model):
     starttime = models.TimeField()
     endtime = models.TimeField()
     therapist = models.ForeignKey(Schedule)
+    def __str__(self):
+        return 'starttime:\'%s\',endtime:\'%s\'' %(self.starttime, self.endtime)
 
 class Area(models.Model):
     AREA_CHOICES = (

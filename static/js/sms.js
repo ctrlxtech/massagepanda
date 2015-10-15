@@ -47,6 +47,7 @@ $(document).ready(function() {
 
  // process the form
     $('#SMSForm').submit(function(event) {
+        $('#send').prop('disabled', true);
         document.getElementById("myDiv").innerHTML = "";
         // get the form data
         // there are many ways to get this data using jQuery (you can use the class or id also)
@@ -83,6 +84,7 @@ $(document).ready(function() {
             complete: function(data) {
                 //alert("complete");
                 document.getElementById("myDiv").innerHTML+=data.responseText + "<br>";
+                $('#send').prop('disabled', false);
             }
         });
         // stop the form from submitting the normal way and refreshing the page

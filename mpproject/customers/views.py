@@ -14,6 +14,7 @@ from django.template import loader, RequestContext
 from django.template.defaulttags import register
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
 
 import json
 import stripe
@@ -130,8 +131,9 @@ def sendValidationEmail(request, user, use_https=False):
     return JsonResponse(context)
 
 def loginFromForm(request):
-    return userLogin(request, request.POST, True)
+    return userLogin(request, request.POST)
 
+@csrf_exempt
 def loginFromJson(request):
     try:
         data = json.loads(request.body)

@@ -251,19 +251,7 @@
 									
 									<div id="wsite-com-checkout-breakdown-subtotal">
 										<span class="wsite-price-wrap">
-										{% if needTable %}
-                                                                                    {% if service.service_sale %}
-											$<span class="wsite-price">{{ service.service_sale|add:10|div:1 }}</span>
-                                                                                    {% else %}
-											$<span class="wsite-price">{{ service.service_fee|add:10|div:1 }}</span>
-                                                                                    {% endif %}
-										{% else %}
-                                                                                    {% if service.service_sale %}
-											$<span class="wsite-price">{{ service.service_sale|div:1 }}</span>
-                                                                                    {% else %}
-											$<span class="wsite-price">{{ service.service_fee|div:1 }}</span>
-                                                                                    {% endif %}
-										{% endif %}
+                                                                                $<span class="wsite-price">{{ subtotal }}</span>
 										</span>
 									</div>
 

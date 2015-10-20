@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django.db import connection
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import get_user_model
 
 from django.template.defaulttags import register
 
@@ -27,17 +28,34 @@ from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 
 from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.encoding import force_text, force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 # Create your views here.
+@csrf_exempt
 def orderlisttest(request):
-    orders = Order.objects.all()
-    appOrders = []
-    for order in orders:
+    try:
+      data = json.loads(request.body)
+      uidb64 = data['uid']
+      uid = force_text(urlsafe_base64_decode(uidb64))
+      UserModel = get_user_model()
+      therapist = UserModel._default_manager.get(pk=uid).therapist
+
+      orders = Order.objects.filter(ordertherapist__therapist=therapist)
+
+      appOrders = []
+      for order in orders:
         appOrders.append(buildAppOrder(order))
 
-    json = JsonResponse(appOrders, safe=False)
-    json['Access-Control-Allow-Origin'] = "*"
-    return json
+      jsonRes = JsonResponse(appOrders, safe=False)
+    except ValueError, e:
+      jsonRes = JsonResponse({"error": "Parameters are missing in request: " + str(request.body)}, safe=False)
+
+    jsonRes['Access-Control-Allow-Origin'] = "*"
+    jsonRes['Access-Control-Allow-Methods'] = "GET,POST"
+    jsonRes['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
+    return jsonRes
 
 def buildAppOrder(data):
     order = {}

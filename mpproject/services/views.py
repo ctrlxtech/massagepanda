@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render_to_response
@@ -9,6 +10,7 @@ from django.views.generic import View
 from customers.models import Address
 from feedback.models import Feedback
 from payment.models import Order, OrderTherapist, Coupon
+from referral.models import CustomerReferralHistory
 from services.models import Service
 
 from manager.views import sendSMS
@@ -111,7 +113,7 @@ def checkout(request):
     state_list = Address.STATE_CHOICES
     context.update({'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
         'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo,
-        'zipcode': zipcode, 'tax': '%.2f' % tax, 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
+        'zipcode': zipcode, 'tax': '%.2f' % tax, 'subtotal': '%.2f' % (total - tax), 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render_to_response('services/checkout.html', context, context_instance=RequestContext(request))
 
 def placeOrderFromJson(request):
@@ -134,6 +136,19 @@ def getPhone(data):
     if len(phone) == 10:
         phone = "1" + phone
     return phone
+
+def sendOrderNotification(order):
+    subject, from_email, to = 'New Order!', settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
+    try:
+      text_content = "address: " + order.shipping_address + " ,customer: " + order.recipient \
+        + " ,gender: " + order.get_preferred_gender_display() + " ,time: " + order.service_datetime.ctime() + " ,service: " \
+        + order.service.service_type + " for " + str(order.service.service_time) + " hour(s) ,table: " \
+        + str(order.need_table) + " ,parking: " + order.parking_info
+    except:
+      text_content = "Check admin page for new order!"
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.send()
+    return HttpResponse("Email sent!")
 
 @transaction.atomic
 def placeOrder(request, data):
@@ -192,14 +207,41 @@ def placeOrder(request, data):
         amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
+    insertReferCode(o, customer)
     createFeedbackForOrder(o)
 
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
     nums = [phone]
     sendSMS(nums, message_body, False)
 
+    sendOrderNotification(o)
+
     context = {'status': 'success', 'total': o.amount, 'txid': o.id}
     return render_to_response('services/success.html', context, context_instance=RequestContext(request))
+
+def insertReferCode(order, customer=None):
+    if customer is None:
+        return
+
+    try: 
+        crh = CustomerReferralHistory(order=order, code=customer.referredcustomer.code, referred_customer=customer)
+        crh.save()
+    except:
+        pass
+    return
+
+def redeemRefer(order=None):
+    if order is None:
+        return
+
+    try:
+        rc = order.customerreferralhistory.referred_customer.referredcustomer
+        if rc.redeemed is False:
+            rc.redeemed = True
+            rc.save()
+    except:
+        pass
+    return
 
 def getAddressDetail(customer, data):
     phone = getPhone(data)

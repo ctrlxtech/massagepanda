@@ -19,6 +19,10 @@ class Customer(models.Model):
     def __unicode__(self):
         return "%s, %s %s %s" % (self.user.first_name, self.user.last_name, self.gender, self.phone)
 
+class CustomerCredit(models.Model):
+    customer = models.OneToOneField(Customer)
+    credit = models.PositiveIntegerField(blank=True, null=True, default=0)
+
 class Address(models.Model):
     STATE_CHOICES = (
       ('AL', 'Alabama'),

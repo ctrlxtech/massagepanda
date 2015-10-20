@@ -20,6 +20,8 @@ import json
 import stripe
 
 from customers.models import Customer, Address
+from referral.models import CustomerReferralCode, ReferredCustomer
+from referral.views import referralCodeGenerator
 from services.views import addPaymentForCustomer, getPhone
 
 # Create your views here.
@@ -44,6 +46,10 @@ def createCustomer(data, request=None):
     if data is None:
       return JsonResponse({"message": "check your inputs"})
 
+    referCode = None
+    if request is not None:
+        referCode = request.session['code']
+
     email = data.get('email')
     phone = getPhone(data)
     password = data.get('password')
@@ -65,13 +71,18 @@ def createCustomer(data, request=None):
       customer = Customer(user=user, stripe_customer_id=stripe_cus['id'], gender=gender, phone=phone)
       customer.save()
 
+      if referCode is not None:
+          rc = ReferredCustomer(customer=customer, code=CustomerReferralCode.objects.get(code=referCode))
+          rc.save()
+
       code = referralCodeGenerator()
       customerReferralCode = CustomerReferralCode(customer=customer, code=code)
       customerReferralCode.save()
     except IntegrityError as e:
       return JsonResponse({"message": e.message})
 
-    return sendValidationEmail(request, user)
+    sendValidationEmail(request, user)
+    return redirect('index')
 
 @transaction.atomic
 def verifyCustomer(request, uidb64=None, token=None, token_generator=default_token_generator):
@@ -149,7 +160,7 @@ def userLogin(request, data, fromJson=False):
         request.session['login'] = True
         return HttpResponse("token: " + fbToken + " userID: " + userID)
     if data is None:
-      json = JsonResponse({"error": "check your inputs"})
+      json = JsonResponse({"error": "check your inputs"}, safe=False)
       json['Access-Control-Allow-Origin'] = "*"
       json['Access-Control-Allow-Methods'] = "GET,POST"
       json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
@@ -157,20 +168,27 @@ def userLogin(request, data, fromJson=False):
 
     username = data.get('username')
     password = data.get('password')
+
     user = authenticate(username=username, password=password)
+
     if user is not None:
         if user.is_active:
             login(request, user)
             request.session['login'] = True
             context['status'] = 'success'
             context['firstName'] = user.first_name
+            context['lastName'] = user.last_name
+            try:
+                context['rating'] = float(user.therapist.rating) / user.therapist.rate_count
+            except:
+                pass
             context['uid'] = urlsafe_base64_encode(force_bytes(user.pk))
         else:
             context['error'] = "user is inactive!"
     else:
         context['error'] = "username and password do not match!"
     if fromJson:
-        json = JsonResponse(context)
+        json = JsonResponse(context, safe=False)
         json['Access-Control-Allow-Origin'] = "*"
         json['Access-Control-Allow-Methods'] = "GET,POST"
         json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
@@ -179,6 +197,14 @@ def userLogin(request, data, fromJson=False):
         return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
     else:
         return redirect('index')
+
+def registerView(request):
+    if request.user.is_authenticated():
+        return redirect('index')
+
+    if request.GET.get('code'):
+        request.session['code'] = request.GET.get('code')
+    return render_to_response('customers/register.html', {}, context_instance=RequestContext(request))
 
 def loginView(request):
     if request.user.is_authenticated():

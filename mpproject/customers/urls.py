@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^logout$', views.logoutView, name='logoutView'),
     url(r'^userLogin$', views.loginFromForm, name='userLoginFromForm'),
     url(r'^userLoginFromJson$', views.loginFromJson, name='userLogin'),
-    url(r'^register$', TemplateView.as_view(template_name='customers/register.html'), name='customerRegister'),
+    url(r'^register$', views.registerView, name='customerRegister'),
     url(r'^changePassword$', views.changePassword, name='changePassword'),
     url(r'^resetPassword$', views.resetPassword, name='resetPassword'),
     url(r'^addNewAddress$', views.addNewAddress, name='addNewAddress'),

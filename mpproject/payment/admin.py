@@ -2,6 +2,7 @@ from django.contrib import admin, messages
 from .models import Order, OrderTherapist, Coupon
 from feedback.models import Feedback
 from services.models import Service
+from services.views import redeemRefer
 from manager.views import sendFeedbackEmail
 
 from django.conf import settings
@@ -28,7 +29,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderTherapistInline, FeedbackInline
     ]
 
-    actions = ['make_refunded', 'make_charged', 'send_feedback_email']
+    actions = ['make_refunded', 'make_charged', 'charge_but_40', 'charge_but_10', 'send_feedback_email']
 
     def get_service(self, obj):
         return '%s For %.1f' % (obj.service.service_type, obj.service.service_time)
@@ -77,12 +78,74 @@ class OrderAdmin(admin.ModelAdmin):
             order.stripe_token = ch.id
             order.save()
 
+            redeemRefer(order)
+
             count += 1
         except stripe.error.StripeError, e:
             self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as charged." % count)
-      
+    
+    def charge_but_40(self, request, queryset):
+      stripe.api_key = settings.STRIPE_KEY
+      count = 0
+      for order in queryset:
+        try:
+            if order.customer is not None:
+                stripeCustomerId = order.customer.stripe_customer_id
+            else:
+                stripeCustomerId = None
+
+            ch = stripe.Charge.create(
+                amount=order.amount - 4000, # amount in cents, again
+                currency="usd",
+                customer=stripeCustomerId,
+                source=order.stripe_token,
+                description="Admin charge"
+            )
+
+            order.status = 4
+            order.stripe_token = ch.id
+            order.save()
+
+            redeemRefer(order)
+
+            count += 1
+        except stripe.error.StripeError, e:
+            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
+
+      self.message_user(request, "%s successfully marked as charged." % count)
+
+    def charge_but_10(self, request, queryset):
+      stripe.api_key = settings.STRIPE_KEY
+      count = 0
+      for order in queryset:
+        try:
+            if order.customer is not None:
+                stripeCustomerId = order.customer.stripe_customer_id
+            else:
+                stripeCustomerId = None
+
+            ch = stripe.Charge.create(
+                amount=order.amount - 1000, # amount in cents, again
+                currency="usd",
+                customer=stripeCustomerId,
+                source=order.stripe_token,
+                description="Admin charge"
+            )
+
+            order.status = 4
+            order.stripe_token = ch.id
+            order.save()
+
+            redeemRefer(order)
+
+            count += 1
+        except stripe.error.StripeError, e:
+            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
+
+      self.message_user(request, "%s successfully marked as charged." % count)
+    
     def send_feedback_email(self, request, queryset):
       count = 0
       for order in queryset:

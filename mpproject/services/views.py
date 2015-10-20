@@ -61,13 +61,11 @@ def taxService(data):
 
 def taxAdditional(data):
     needTable = data.get("needTable")
+    additional = 0
     if needTable:
-      additional = 10.0;
-    else:
-      additional = 0.0;
-    zipcode = data.get('zipcode')
-    if isInSF(zipcode):
-      additional += 10
+      zipcode = data.get('zipcode')
+      if isInSF(zipcode):
+        additional += 10
     tax = additional * settings.TAX
     return additional + tax, tax
 

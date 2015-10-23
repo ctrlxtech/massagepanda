@@ -52,3 +52,4 @@ class OrderTherapist(models.Model):
 class Coupon(models.Model):
     code = models.CharField(max_length=40, unique=True, db_index=True)
     discount = models.FloatField()
+    is_flat = models.BooleanField()

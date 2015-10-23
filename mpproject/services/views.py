@@ -135,7 +135,7 @@ def getPhone(data):
         phone = "1" + phone
     return phone
 
-def sendOrderNotification(order):
+def sendOrderNotificationToManager(order):
     subject, from_email, to = 'New Order!', settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
     try:
       text_content = "address: " + order.shipping_address + " ,customer: " + order.recipient \
@@ -147,6 +147,17 @@ def sendOrderNotification(order):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.send()
     return HttpResponse("Email sent!")
+
+def sendNewOrderEmail(order):
+    stripe.api_key = settings.STRIPE_KEY
+    order = Order.objects.get(pk='2d5b4b009046465aa04d48849fde2a89')
+    stripeToken = stripe.Token.retrieve(order.stripe_token)
+    subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
+    text_content = 'This is an email containing your order.'
+    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeToken': stripeToken}))
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 @transaction.atomic
 def placeOrder(request, data):
@@ -211,8 +222,9 @@ def placeOrder(request, data):
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
     nums = [phone]
     sendSMS(nums, message_body, False)
+    sendNewOrderEmail(o)
 
-    sendOrderNotification(o)
+    sendOrderNotificationToManager(o)
 
     context = {'status': 'success', 'total': o.amount, 'txid': o.id}
     return render_to_response('services/success.html', context, context_instance=RequestContext(request))
@@ -283,10 +295,13 @@ def markDownPrice(data):
     additional, aTax = taxAdditional(data)
     couponCode = data.get('couponCode').upper()
     try:
-        discount = Coupon.objects.get(code=couponCode).discount
+        coupon = Coupon.objects.get(code=couponCode)
+        if coupon.is_flat:
+            newPrice = total - coupon.discount * ( 1 + settings.TAX)
+        else:
+            newPrice = total * coupon.discount
     except:
-        discount = 1
-    newPrice = total * discount
+        newPrice = total
     markDown = total - newPrice
     newPrice += additional
     return newPrice, markDown

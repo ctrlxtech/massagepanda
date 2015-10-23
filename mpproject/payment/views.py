@@ -4,10 +4,12 @@ from django.template import RequestContext
 from django.template.defaulttags import register
 from django.http import HttpResponse, JsonResponse
 from services.models import Service
+from services.views import stripZero # used by order_confirmation_email
 from payment.models import Order
 from django.contrib.auth.decorators import user_passes_test
 from django.conf import settings
 
+import decimal
 import stripe
 
 # Create your views here.
@@ -72,3 +74,16 @@ def processOrder(request):
 @register.filter
 def get_service(dictionary, key):
     return dictionary.get(pk=key)
+
+@register.filter
+def centsToDollars(cents):
+    cents_to_dollars_format_string = '{:,.2f}'
+    return cents_to_dollars_format_string.format(cents/100.0)
+
+@register.filter
+def getFirstFromAddress(address):
+    return address.split(',', 1)[0]
+
+@register.filter
+def getSecondFromAddress(address):
+    return address.split(',', 1)[1]

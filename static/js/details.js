@@ -11,12 +11,37 @@ window.addEventListener("DOMContentLoaded", function () {
   });
   setupTimeDropdown($("#massageDetails_timeList"));
   var genderPreferredList = $('#massageDetails_genderPreferredList');
-  genderPreferredList.on("click", "a", processSelection);
+  genderPreferredList.on("click", "a", genderSelection);
   var massage1List = $('#massageDetails_massage1List');
   massage1List.on("click", "a", processSelection);
   var massage2List = $('#massageDetails_massage2List');
   massage2List.on("click", "a", processSelection);
 });
+
+//private function
+function genderSelection(e){
+    var value = $(this).text();
+    var gender = 0;
+    switch(value) {
+        case "Either":
+            gender = 0;
+            break;
+        case "Female Preferred":
+            gender = 1;
+            break;
+        case "Male Preferred":
+            gender = 2;
+            break;
+        default:
+            break;
+    }
+            
+    $('#genderPreferred').val(gender);
+    console.log($('#genderPreferred').val());
+    var $parentDiv = $(this).closest('div.mp-massageDetails-input');
+    $parentDiv.find('button').html(value + '<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true">');
+    e.preventDefault();
+};
 
 //private function
 function processSelection(e){

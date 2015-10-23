@@ -117,9 +117,12 @@ def sendEmail(request):
 
 @login_required
 def sendMyEmail(request):
+    stripe.api_key = settings.STRIPE_KEY
+    order = Order.objects.get(pk='2d5b4b009046465aa04d48849fde2a89')
+    stripeToken = stripe.Token.retrieve(order.stripe_token)
     subject, from_email, to = 'Your Coupon!', settings.SERVER_EMAIL, 'yuechen1989@gmail.com'
     text_content = 'This is an email containing your coupon.'
-    html_content = get_template('manager/helloEmail.html').render()
+    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeToken': stripeToken}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

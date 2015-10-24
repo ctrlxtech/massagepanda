@@ -42,6 +42,8 @@ class Order(models.Model):
         ('3', 'Canceled'),
         ('4', 'Charged'),
         ('5', 'Refunded'),
+        ('6', 'Charged10'),
+        ('7', 'Charged40'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='0')
 

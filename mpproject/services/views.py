@@ -3,7 +3,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import Context, RequestContext
+from django.template.loader import get_template
 from django.template.defaulttags import register
 from django.views.generic import View
 
@@ -150,7 +151,6 @@ def sendOrderNotificationToManager(order):
 
 def sendNewOrderEmail(order):
     stripe.api_key = settings.STRIPE_KEY
-    order = Order.objects.get(pk='2d5b4b009046465aa04d48849fde2a89')
     stripeToken = stripe.Token.retrieve(order.stripe_token)
     subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'

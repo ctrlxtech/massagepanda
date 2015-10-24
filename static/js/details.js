@@ -16,6 +16,20 @@ window.addEventListener("DOMContentLoaded", function () {
   massage1List.on("click", "a", processSelection);
   var massage2List = $('#massageDetails_massage2List');
   massage2List.on("click", "a", processSelection);
+
+$('#zipcode').keydown(function(e) {
+    date = $(this).val();
+    if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 106 && e.keyCode <= 111) || (e.keyCode >= 186 && e.keyCode <= 222)) {
+      e.preventDefault();
+      return;
+    }
+    date = $(this).val();
+    if (date.length == 5 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+      e.preventDefault();
+      return;
+    }
+});
+
 });
 
 //private function

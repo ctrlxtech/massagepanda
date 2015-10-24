@@ -122,7 +122,7 @@ def sendMyEmail(request):
     stripeToken = stripe.Token.retrieve(order.stripe_token)
     subject, from_email, to = 'Your Coupon!', settings.SERVER_EMAIL, 'yuechen1989@gmail.com'
     text_content = 'This is an email containing your coupon.'
-    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeToken': stripeToken}))
+    html_content = get_template('payment/order_shipped_email.html').render(Context({'order': order, 'stripeToken': stripeToken}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

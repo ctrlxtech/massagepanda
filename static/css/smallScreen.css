@@ -3,8 +3,13 @@
  */ 
 @media screen and (max-width: 1024px) {
 	
+.mp-pandaIcon {
+    margin-top: 6px;
+}
+
 #mp-mainContent{
 	padding: 30px 0 0 0 !important;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }	
 .mp-smallScreenPadding{
 	padding: 0px !important;
@@ -58,13 +63,14 @@
 }
 
 #banner-mask .select-type {
-    display: table-cell !important;
-    width: 40% !important;
+    width: 63% !important;
+    float:left;
+    margin-left:0px;
 }
 
 #banner-mask .select-length {
-    display: table-cell !important;
-    width: 25% !important;
+    width: 37% !important;
+    margin-left:0px;
 }
 
 #banner-mask .wsite-button {
@@ -137,13 +143,16 @@ div#panda_checkout {
     width: 14% !important;
 }
 
+
 /*
  *   begin navigation
  */
 #mp-leftSideNav {
-	background: -webkit-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
+    /*background: -webkit-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
     background: -moz-linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
-    background: linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;
+    background: linear-gradient(to right, rgb(242, 242, 242) 90%, rgba(152, 152, 152, 0.6)) repeat scroll 0% 0% !important;*/
+    background: #f5f6f8;
+    z-index: 0;
 }
 
 #mp-navbar{
@@ -207,8 +216,13 @@ display: inline;
   border-radius: 5px;
     padding: 6px 10px;
   padding-bottom: 3px;
-  box-shadow: 0px 0px 3px rgb(166, 166, 166) inset;
-  background-color: rgba(232, 232, 232, 0.3);
+  box-shadow: 0px 0px 1px rgb(166, 166, 166) inset;
+  background-color: rgba(232, 232, 232, 0.2);
+  cursor: pointer;
+}
+
+div#mp-showLeftPush:active {
+  background: #eee;
 }
 
 .mp-navigation-mobileSetting {
@@ -220,12 +234,12 @@ z-index: 10;
 }
 
 span.glyphicon.glyphicon-menu-hamburger {
-  -webkit-transform: scale(1.2,1.2);
-  -moz-transform: scale(1.2,1.2);
-  -ms-transform: scale(1.2,1.2);
-  -o-transform: scale(1.2,1.2);
-  transform: scale(1.2,1.2);
-    opacity: 0.6;
+  -webkit-transform: scale(1,0.75);
+  -moz-transform: scale(1,0.75);
+  -ms-transform: scale(1,0.75);
+  -o-transform: scale(1,0.75);
+  transform: scale(1,0.75);
+    opacity: 0.9;
 }
 
 span.glyphicon.glyphicon-cog {
@@ -476,19 +490,27 @@ padding: 10px;
 }
 .cbp-spmenu > a {
     font-family: "Oxygen",sans-serif;
-    font-size: 1.2em;
-    line-height: 26px;
-    color: #5D5D5D;
+    font-size: 18px;
+    line-height: 20px;
+    color: #555;
     font-weight: 300;
     display: block;
 
 }
 .cbp-spmenu a:hover {
-	 background: -webkit-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+	 /*background: -webkit-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
   background: -moz-linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
-  background: linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));
+  background: linear-gradient(rgb(240, 240, 240),rgb(255, 255, 255),rgb(240, 240, 240));*/
 	text-decoration: none;
+    color:inherit;
 }
+
+.cbp-spmenu a:active {
+    background: #555;
+    color:#f5f6f8;
+}
+
+
 /* Orientation-dependent styles for the content of the menu */
 
 .cbp-spmenu-vertical {
@@ -498,7 +520,7 @@ padding: 10px;
 	z-index: 1000;
 }
 .cbp-spmenu-vertical> a {
-	border-bottom: 1px solid #969696;
+	border-bottom: 1px solid #cbccce;
 	padding: 1em;
 }
 /* Vertical menu that slides from the left or right */
@@ -558,5 +580,7 @@ text-align: center;
 height: 50px;
 font-size: 18px;
 }
+
+
 
 }

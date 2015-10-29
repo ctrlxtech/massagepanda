@@ -7,6 +7,21 @@ from manager.models import Therapist
 import uuid
 
 # Create your models here.
+GENDER_PREFERENCES = (
+    ('0', 'Either'),
+    ('1', 'Female Preferred'),
+    ('2', 'Male Preferred'),
+)
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=40, unique=True, db_index=True)
+    discount = models.FloatField()
+    quantity = models.IntegerField()
+    is_flat = models.BooleanField()
+
+    def __unicode__(self):
+        return "%s" % (self.code)
+
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
@@ -15,17 +30,12 @@ class Order(models.Model):
     service = models.ForeignKey(Service, default=None, null=True)
     service_datetime = models.DateTimeField()
 
-    GENDER_PREFERENCES = (
-        ('0', 'Either'),
-        ('1', 'Female Preferred'),
-        ('2', 'Male Preferred'),
-    )
-
     preferred_gender = models.CharField(max_length = 10, choices=GENDER_PREFERENCES, default='0')
     need_table = models.BooleanField()
     parking_info = models.CharField(max_length = 500)
 
     customer = models.ForeignKey(Customer, default=None, null=True, blank=True)
+    coupon = models.ForeignKey(Coupon, default=None, null=True, blank=True)
     stripe_token = models.CharField(max_length = 100)
     amount = models.IntegerField()
     
@@ -47,11 +57,10 @@ class Order(models.Model):
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='0')
 
+class ServiceCoupon(models.Model):
+    service = models.ForeignKey(Service)
+    coupon = models.ForeignKey(Coupon)
+
 class OrderTherapist(models.Model):
     order = models.ForeignKey(Order)
     therapist = models.ForeignKey(Therapist)
-
-class Coupon(models.Model):
-    code = models.CharField(max_length=40, unique=True, db_index=True)
-    discount = models.FloatField()
-    is_flat = models.BooleanField()

@@ -205,7 +205,7 @@
 									<span class="item-options"> 
 									<br> Date: {{ serviceDate }} 
 									<br> Time: {{ serviceTime }} 
-									<br> Gender Preferred: {{ gender }}
+									<br> Gender Preferred: {{ gender|gender_display }}
 									<br> Table Needed: {% if needTable %}Yes{% else %}No{% endif %}
 									</span>
 								
@@ -224,7 +224,7 @@
 								        {% endif %}
 								</td>
 							</tr>
-							{% if inSF %}
+							{% if additionalCharge %}
 							<tr>
 								<td class="item-text">
 									<span class="item-title">Additional Service Fee in San Francisco</span>

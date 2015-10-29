@@ -138,16 +138,17 @@ window.onload = function(){
 <script>
     $(document).ready(function(){
         pandaPhoneInit();
-
-        {% block docReady %}
+		{% block docReady %}
         {% endblock %}
     });
 </script>
     </head>
-    <body class="no-header-page  wsite-theme-light">
-<nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide">
-  <a href="http://www.massagepanda.com" class="mp-pageHeader" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
-  <a href="http://www.massagepanda.com/our-massages.html" class="mp-pageHeader" data-mpController="pandaBookMassagePage"  data-mpPageId="panda_bookMassage">Our Massages</a>
+<body class="no-header-page  wsite-theme-light" ontouchstart="">
+<div id="site-viewport" style="width: 100%; overflow: visible;">
+<nav id="mp-leftSideNav" class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left mp-largeScreenHide" style="display:none; left: 0px; min-height: 100%; width: 60%; height: auto;">
+  <a href="http://www.massagepanda.com" class="mp-pageHeader" onclick="" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">Home</a>
+  <a href="{% url 'services' %}" class="mp-pageHeader" onclick="" data-mpController="pandaBookMassagePage"  data-mpPageId="panda_bookMassage">Our Massages</a>
+  <a href="http://www.massagepanda.com/how-it-works" class="mp-pageHeader" onclick="">How It Works</a>
     <!--
   <a href="{% url 'customer' %}" class="mp-pageHeader mp-mobileLoginTrue" data-mpController="pandaProfilePage" data-mpPageId="panda_profile">Profile</a>
   -->
@@ -168,12 +169,12 @@ window.onload = function(){
 </nav>
 <nav id="mp-navbar" class="navbar navbar-default navbar-fixed-top cbp-spmenu-push">
   <div class="container">
-    <div id="mp-showLeftPush" class="mp-navigation-mobileIcon mp-largeScreenHide">
+    <div id="mp-showLeftPush" class="mp-navigation-mobileIcon mp-largeScreenHide" onclick="">
       <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
     </div>
     <div class="mp-pageHeader mp-IconDiv" data-mpShow="true" data-mpLoaded="true" data-mpPageId="panda_home">
       <a href="http://www.massagepanda.com">
-      <img class="mp-pandaIcon" src="{% static "./images/pandaNewIcon.png" %}"/>
+      <img class="mp-pandaIcon" width="190" src="{% static "./images/pandaNewIcon.png" %}"/>
       </a>
     </div>
     <!--
@@ -186,7 +187,7 @@ window.onload = function(){
     <div class="mp-navigation mp-smallScreenHide">
       <ul>
         <li>
-          <a href="http://www.massagepanda.com/our-massages.html" class="mp-pageHeader" data-mpPageId="panda_bookMassage">Our Massages</a>
+          <a href="{% url 'services' %}" class="mp-pageHeader" data-mpPageId="panda_bookMassage">Our Massages</a>
         </li>
         <li>
           <a href="http://www.massagepanda.com/how-it-works.html" class="mp-pageHeader" data-mpController="pandaHelpCenterPage" data-mpPageId="panda_helpCenter">How It Works</a>
@@ -214,6 +215,8 @@ window.onload = function(){
     </div>
   </div>
 </nav>
+<div id="page-wrapper" style="position: relative; z-index: 3; left: 0px; top: 0px; backface-visibility: hidden; transform: translate3d(0%, 0px, 0px);  -webkit-transition: all 0.3s ease;-moz-transition: all 0.3s ease; transition: all 0.3s ease;">
+
 <!-- end header-wrap -->
 <div id="mp-mainContent" class="jumbotron cbp-spmenu-push"> 
         {% block content %}
@@ -230,7 +233,7 @@ window.onload = function(){
               <tbody class="wsite-multicol-tbody">
                 <tr class="wsite-multicol-tr">
                   <td class="wsite-multicol-col" style="width:22.67472465008%; padding:0 10px;">
-                    <div class="paragraph" style="text-align:left;"><font size="3"><font color="#626262" style="background-color: initial;"><font color="#626262"><a href="{% url 'faq' %}" title=""><span id="selectionBoundary_1430557841526_49230635236017406" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Help Center</font><span id="selectionBoundary_1430557841526_6671315038111061" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font></font><span style="background-color: initial;">&nbsp;</span><br><a href="http://www.massagepanda.com/our-massages.html" title=""><font color="#626262">Our Massages</font></a><br><a href="https://www.massagepanda.com/corporate-massage-program.html"><font color="#626262">Corporate Massage</font></a><br><a href="http://www.massagepanda.com/store/p30/MassagePanda_e-Gift_Card.html" title=""><font color="#626262">Give a Gift</font></a></font></div>
+                    <div class="paragraph" style="text-align:left;"><font size="3"><font color="#626262" style="background-color: initial;"><font color="#626262"><a href="{% url 'faq' %}" title=""><span id="selectionBoundary_1430557841526_49230635236017406" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span><font color="#626262">Help Center</font><span id="selectionBoundary_1430557841526_6671315038111061" class="rangySelectionBoundary" style="line-height: 0; display: none;">﻿</span></a></font></font><span style="background-color: initial;">&nbsp;</span><br><a href="{% url 'services' %}" title=""><font color="#626262">Our Massages</font></a><br><a href="https://www.massagepanda.com/corporate-massage-program.html"><font color="#626262">Corporate Massage</font></a><br><a href="" title=""><font color="#626262">Give a Gift</font></a></font></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:22.554016072831%; padding:0 10px;">
                     <div class="paragraph" style="text-align:left;"><a href="http://www.massagepanda.com/apply_first.html" title="" style="">Apply&nbsp;as Therapist</a><br><a href="{% url 'locationCoverage' %}" title=""><font color="#626262">Service Area</font></a><br><a href="https://massagepanda.growsumo.com/app/page" target="_blank" title="" style=""><font color="#626262">Affiliate Program</font></a><br></div>
@@ -270,4 +273,7 @@ window.onload = function(){
 </div>
 </div>
 <!-- end footer-wrap -->
-
+</div>
+<!-- end page-wrap -->
+</div>
+<!-- end viewport -->

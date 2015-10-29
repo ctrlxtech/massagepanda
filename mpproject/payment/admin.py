@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Order, OrderTherapist, Coupon
+from .models import Order, OrderTherapist, Coupon, ServiceCoupon
 from feedback.models import Feedback
 from services.models import Service
 from services.views import redeemRefer
@@ -189,8 +189,17 @@ class OrderAdmin(admin.ModelAdmin):
           pass
       self.message_user(request, "%s email(s) sent." % count)
 
+class ServiceCouponInline(admin.StackedInline):
+    model = ServiceCoupon
+    extra = 1
+
 class CouponAdmin(admin.ModelAdmin):
     list_display = ['code', 'discount']
+
+    inlines = [
+        ServiceCouponInline,
+    ]
+
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Coupon, CouponAdmin)

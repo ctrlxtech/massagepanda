@@ -10,7 +10,7 @@ from django.views.generic import View
 
 from customers.models import Address
 from feedback.models import Feedback
-from payment.models import Order, OrderTherapist, Coupon
+from payment.models import Order, Coupon, GENDER_PREFERENCES
 from referral.models import CustomerReferralHistory
 from services.models import Service
 
@@ -46,11 +46,7 @@ class DetailsView(View):
     def get(self, request):
       return render_to_response('services/details.html', self.context, context_instance=RequestContext(request))
 
-def taxService(data):
-    try:
-      service = Service.objects.get(pk=data.get("serviceId"))
-    except:
-      raise Exception("Service not found")
+def taxService(service):
 
     if service.service_sale:
       total = service.service_sale
@@ -77,9 +73,13 @@ def checkout(request):
       serviceDate = request.POST.get("massageDetailsDate")
       serviceTime = request.POST.get("massageDetailsTime")
       genderPreferred = request.POST.get("genderPreferred")
- 
-      service = Service.objects.get(pk=request.POST.get("serviceId"))
-      total, tax = taxService(request.POST)
+
+      try:
+        service = Service.objects.get(pk=request.POST.get("serviceId"))
+      except:
+        raise Exception("Service not found")
+
+      total, tax = taxService(service)
 
       additional, aTax = taxAdditional(request.POST)
       tax += aTax
@@ -97,8 +97,8 @@ def checkout(request):
       if b2b:
         parkingInfo += " |Accept back-to-back"
 
-      if isInSF(zipcode):
-        context['inSF'] = True
+      if additional != 0:
+        context['additionalCharge'] = True
     except Exception as e:
       return HttpResponse(e)
    
@@ -196,7 +196,7 @@ def placeOrder(request, data):
         email = data.get('email')
 
     try:
-        amount, markDown = markDownPrice(data)
+        amount, markDown, coupon = markDownPrice(data)
         serviceId = data.get('serviceId')
     except Exception as e:
         return JsonResponse(e, safe=False)
@@ -211,11 +211,15 @@ def placeOrder(request, data):
         needTable = False
     parkingInfo = request.POST.get("parkingInfo")
    
-    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime,
+    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime, coupon=coupon,
         preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
         amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
+    if coupon.quantity != -1:
+        coupon.quantity -= 1
+        coupon.save()
+
     insertReferCode(o, customer)
     createFeedbackForOrder(o)
 
@@ -287,36 +291,46 @@ def addPaymentForCustomer(customer, stripeToken):
     return newPayment
 
 def markDownPrice(data):
+    isSuccess = False
+
     try:
-        total, tax = taxService(data)
-    except Exception as e :
-        return JsonResponse(e, safe=False)
+        service = Service.objects.get(pk=data.get("serviceId"))
+        total, tax = taxService(service)
+    except:
+        return 0, 0, None, isSuccess
 
     additional, aTax = taxAdditional(data)
     couponCode = data.get('couponCode').upper()
+    coupon = None
+    newPrice = total
     try:
         coupon = Coupon.objects.get(code=couponCode)
-        if coupon.is_flat:
-            newPrice = total - coupon.discount * ( 1 + settings.TAX)
-        else:
-            newPrice = total * coupon.discount
+        if (not coupon.servicecoupon_set.all() or service in [sc.service for sc in coupon.servicecoupon_set.all()]) and coupon.quantity != 0:
+          if coupon.is_flat:
+            newPrice -= coupon.discount * ( 1 + settings.TAX)
+          else:
+            newPrice *= coupon.discount
+          isSuccess = True
     except:
-        newPrice = total
+        pass
     markDown = total - newPrice
     newPrice += additional
-    return newPrice, markDown
+    return newPrice, markDown, coupon, isSuccess
    
 def applyCoupon(request):
-    newPrice, markDown = markDownPrice(request.POST)
-    couponCode = request.POST.get('couponCode').upper()
-    context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': couponCode.upper()}
+    newPrice, markDown, coupon, isSuccess = markDownPrice(request.POST)
+    if isSuccess:
+        context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': coupon.code}
+    else:
+        context = {'status': 'failure', 'error': 'Invalid coupon'}
     return JsonResponse(context)
 
 def deleteCoupon(request):
     try:
-        total, tax = taxService(request.POST)
-    except Exception as e :
-        return JsonResponse(e, safe=False)
+        service = Service.objects.get(pk=request.POST.get("serviceId"))
+        total, tax = taxService(service)
+    except:
+        return JsonResponse({'status': 'failure', 'error': 'Error occurred'})
 
     additional, aTax = taxAdditional(request.POST)
     total += additional
@@ -342,3 +356,10 @@ def isInSF(zipcode):
         return False
     except:
         return False
+
+@register.filter
+def gender_display(q):
+    for choice in GENDER_PREFERENCES:
+        if choice[0] == q:
+            return choice[1]
+    return ''

@@ -15,7 +15,10 @@ class Service(models.Model):
     popularity = models.IntegerField()
     
     def __unicode__(self):
-        return u'%s %s' % (self.service_type, self.service_time)
+        if self.service_sale:
+          return u'%s %s - $%s' % (self.service_type, self.service_time, self.service_sale)
+        else:
+          return u'%s %s - $%s' % (self.service_type, self.service_time, self.service_fee)
 
     def link(self):
         if self.service_time > 1:

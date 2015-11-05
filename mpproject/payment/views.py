@@ -87,3 +87,7 @@ def getFirstFromAddress(address):
 @register.filter
 def getSecondFromAddress(address):
     return address.split(',', 1)[1]
+ 
+@register.filter
+def getShortId(value):
+    return value >> 96

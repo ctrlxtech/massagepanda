@@ -26,5 +26,6 @@ class GroupAdmin(admin.ModelAdmin):
         ServiceGroupInline
     ]
 
+
 admin.site.register(Service, ServiceAdmin)
-admin.site.register(Group, GroupAdmin)
+admin.site.register(ServiceGroup, ServiceGroupAdmin)

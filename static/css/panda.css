@@ -1045,3 +1045,4 @@ overflow: hidden;
     border: 1px solid #c2c2c2;
 }
 
+#rc-imageselect {transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0;}

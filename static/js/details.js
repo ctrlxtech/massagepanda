@@ -1,9 +1,11 @@
 window.addEventListener("DOMContentLoaded", function () {
+
   $('#datepicker').val('');
   $('#timepicker').val('');
   $('#genderPreferred').val('');
   $('#massage1').val('');
   $('#massage2').val('');
+
   $(function() {
     $("#datepicker").datepicker({
       minDate: new Date()
@@ -169,10 +171,9 @@ function validate() {
       $panelAlert.css('display', 'block');
       return false;
   };
-  if (!zipcode) {
-      $panelAlert.text('Please provide your zipcode!');
+  if (!zipcode || (zipcode.length != 5)) {
+      $panelAlert.text('Please provide your correct zipcode!');
       $panelAlert.css('display', 'block');
       return false;
   };
-
 }

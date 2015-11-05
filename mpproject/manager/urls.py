@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^sendMyEmail$', views.sendMyEmail, name='sendMyEmail'),
     url(r'^sendFeedbackEmails$', views.sendFeedbackEmails, name='sendFeedbackEmails'),
     url(r'^assignTherapist$', views.assignTherapist, name='assignTherapist'),
+    url(r'^addCoupons$', views.addCoupons_view, name='addCoupons'),
+    url(r'^addCoupon$', views.addCoupon, name='addCoupon'),
     
     url(r'^payment', views.payment, name='mpayment'),
     url(r'^charge', views.mcharge, name='mcharge'),

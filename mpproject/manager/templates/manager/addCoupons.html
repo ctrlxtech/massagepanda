@@ -1,0 +1,20 @@
+{% load staticfiles %}
+
+{% if service_groups %}
+      <form action="{% url 'addCoupon' %}" method="post">
+      {% csrf_token %}
+        <select name="serviceGroup">
+        {% for group in service_groups %}
+          <option value="{{ group.id }}">{{ group.group_name }}</option>
+        {% endfor %}
+        </select> 
+        <input type="text" placeholder="coupon code" name="couponCode">
+        <input type="number" step="any" placeholder="discount(e.g. 0.8)" name="discount">
+        <input type="number" placeholder="quantity" name="quantity">
+        <input type="checkbox" name="isFlat">Flat<br>
+        <input type="submit" />
+      </form>
+{% else %}
+ <p>No groups are available.</p>
+{% endif %}
+

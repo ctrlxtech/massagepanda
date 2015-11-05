@@ -17,6 +17,7 @@ class Coupon(models.Model):
     code = models.CharField(max_length=40, unique=True, db_index=True)
     discount = models.FloatField()
     quantity = models.IntegerField()
+    used = models.IntegerField(default=0)
     is_flat = models.BooleanField()
 
     def __unicode__(self):
@@ -24,6 +25,7 @@ class Coupon(models.Model):
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
 

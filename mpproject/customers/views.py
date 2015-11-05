@@ -17,6 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 
 import json
+import requests
 import stripe
 
 from customers.models import Customer, Address
@@ -142,7 +143,13 @@ def sendValidationEmail(request, user, use_https=False):
     return JsonResponse(context)
 
 def loginFromForm(request):
-    return userLogin(request, request.POST)
+    payload = {"response": request.POST.get('g-recaptcha-response'), "secret": settings.GOOGLE_RECAPTCHA}
+    resp = requests.post("https://www.google.com/recaptcha/api/siteverify", data=payload).json()
+    if resp['success']:
+        return userLogin(request, request.POST)
+    else:
+        context = {'status': 'failure', 'error': 'Are you a bot?'}
+        return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
 
 @csrf_exempt
 def loginFromJson(request):

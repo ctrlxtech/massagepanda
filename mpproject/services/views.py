@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import redirect, render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.template.defaulttags import register
@@ -59,10 +59,12 @@ def taxService(service):
 def taxAdditional(data):
     needTable = data.get("needTable")
     additional = 0
-    if needTable:
-      zipcode = data.get('zipcode')
-      if isInSF(zipcode):
-        additional += 10
+    if not needTable or needTable == "None":
+      return 0, 0
+
+    zipcode = data.get('zipcode')
+    if isInSF(zipcode):
+      additional += 10
     tax = additional * settings.TAX
     return additional + tax, tax
 
@@ -115,11 +117,22 @@ def checkout(request):
         'zipcode': zipcode, 'tax': '%.2f' % tax, 'subtotal': '%.2f' % (total - tax), 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render_to_response('services/checkout.html', context, context_instance=RequestContext(request))
 
+def orderSuccess(request, foo="foo"):
+    context = {'status': 'success', 'foo': foo}
+
+    return render_to_response('services/success.html', context, context_instance=RequestContext(request))
+
 def placeOrderFromJson(request):
     data = json.loads(request.body)
     return placeOrder(request, data);
 
 def placeOrderFromPost(request):
+    try:
+      if request.session['complete']:
+        request.session['complete'] = False
+        return redirect('index')
+    except:
+      pass
     data = request.POST;
     return placeOrder(request, data);
 
@@ -196,7 +209,7 @@ def placeOrder(request, data):
         email = data.get('email')
 
     try:
-        amount, markDown, coupon = markDownPrice(data)
+        amount, markDown, coupon, isSuccess = markDownPrice(data)
         serviceId = data.get('serviceId')
     except Exception as e:
         return JsonResponse(e, safe=False)
@@ -216,8 +229,10 @@ def placeOrder(request, data):
         amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
-    if coupon.quantity != -1:
-        coupon.quantity -= 1
+    if isSuccess:
+        if coupon.quantity > 0:
+          coupon.quantity -= 1
+        coupon.used += 1
         coupon.save()
 
     insertReferCode(o, customer)
@@ -230,6 +245,7 @@ def placeOrder(request, data):
 
     sendOrderNotificationToManager(o)
 
+    request.session['complete'] = True
     context = {'status': 'success', 'total': o.amount, 'txid': o.id}
     return render_to_response('services/success.html', context, context_instance=RequestContext(request))
 

@@ -32,10 +32,11 @@ class FeedbackInline(admin.StackedInline):
 
 class OrderAdmin(admin.ModelAdmin):
     list_select_related = ('service', )
-    list_display = ('id', 'get_service', 'recipient', 'service_datetime', 'status', 'get_feedback')
-    list_display_links = ('id', 'get_service', 'recipient', 'service_datetime')
+    list_display = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
+    list_display_links = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at')
     search_fields = ['id', ]
-    readonly_fields = ('id', 'need_table', 'parking_info', 'stripe_token', 'status')
+    readonly_fields = ('order_id', 'need_table', 'parking_info', 'stripe_token', 'created_at' , 'status')
+    ordering = ['-created_at',]
 
     inlines = [
         OrderTherapistInline, FeedbackInline
@@ -43,15 +44,18 @@ class OrderAdmin(admin.ModelAdmin):
 
     actions = ['mark_refunded', 'mark_charged', 'charge_40', 'charge_10', 'mark_canceled', 'send_feedback_email']
 
+    def order_id(self, obj):
+        return '%s' % (obj.id.int >> 96)
+
     def get_service(self, obj):
         return '%s For %.1f' % (obj.service.service_type, obj.service.service_time)
     get_service.short_description = 'service'
-    get_service.admin_order_field = 'order__service'
+    get_service.admin_order_field = 'service'
 
     def get_feedback(self, obj):
         return '%s' % (obj.feedback.rating)
-    get_service.short_description = 'feedback'
-    get_service.admin_order_field = 'order__feedback'
+    get_feedback.short_description = 'feedback'
+    get_feedback.admin_order_field = 'feedback'
 
     def mark_refunded(self, request, queryset):
       stripe.api_key = settings.STRIPE_KEY
@@ -195,11 +199,11 @@ class ServiceCouponInline(admin.StackedInline):
 
 class CouponAdmin(admin.ModelAdmin):
     list_display = ['code', 'discount']
+    readonly_fields = ('used',)
 
     inlines = [
         ServiceCouponInline,
     ]
-
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Coupon, CouponAdmin)

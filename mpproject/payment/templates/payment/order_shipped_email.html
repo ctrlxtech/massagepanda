@@ -81,7 +81,7 @@
                       <tr>
                         <td class="site-title" style="color: #666; font-family: Helvetica; font-size: 30px; line-height: 1.5em; vertical-align: top;">MassagePanda</td>
                         <td class="info" style="color: #999; font-family: Helvetica; font-size: 20px; line-height: 1.5em; vertical-align: top; text-align: right;">
-                          Order Number<br><span class="order-number" style="color: #000;">#{{ order.id.hex }}</span>
+                          Order Number<br><span class="order-number" style="color: #000;">#{{ order.id.int|getShortId }}</span>
                         </td>
                       </tr>
                     </table>

@@ -9,8 +9,8 @@ from django.template.defaulttags import register
 from django.http import HttpResponse, JsonResponse
 from feedback.models import Feedback
 from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardSMS, ForwardNumber, SMSTemplate
-from payment.models import Order, OrderTherapist
-from services.models import Service
+from payment.models import Order, OrderTherapist, Coupon, ServiceCoupon
+from services.models import Service, Group
 from referral.models import CustomerReferralCode, CustomerReferralHistory
 from django.contrib.auth.models import User
 from customers.models import Customer, Address
@@ -157,6 +157,7 @@ def sendFeedbackEmail(orderId):
     return
 
 def test(request):
+    return redirect('orderSuccess', foo="woo")    
     name = "Mr. unknown"
     if request.POST.get('name'):
       name = request.POST.get('name')
@@ -621,3 +622,29 @@ def createTherapist(request):
         massage_license=request.FILES['massage_license'], driver_license=request.FILES['driver_license'])
     therapist.save()
     return HttpResponse("Thank you for registering MassagePanda, " + therapist.user.first_name)
+
+def addCoupons_view(request):
+    serviceGroups = Group.objects.all()
+    context = {'service_groups': serviceGroups}
+    return render(request, 'manager/addCoupons.html', context)
+
+@transaction.atomic
+def addCoupon(request):
+    couponCode = request.POST.get('couponCode')
+    groupId = request.POST.get('serviceGroup')
+    group = Group.objects.get(pk=groupId)
+    isFlat = request.POST.get('isFlat')
+    if not isFlat:
+        isFlat = False
+    discount = request.POST.get('discount')
+    quantity = request.POST.get('quantity')
+
+    coupon = Coupon(code=couponCode, discount=discount, quantity=quantity, used=0, is_flat=isFlat)
+    coupon.save()
+
+    sgs = group.servicegroup_set.all()
+    for sg in sgs:
+        sc = ServiceCoupon(service=sg.service, coupon=coupon)
+        sc.save()
+
+    return HttpResponse("Coupon added")

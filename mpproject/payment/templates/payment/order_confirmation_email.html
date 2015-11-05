@@ -81,7 +81,7 @@
                       <tr>
                         <td class="site-title" style="color: #666; font-family: Helvetica; font-size: 30px; line-height: 1.5em; vertical-align: top;">MassagePanda</td>
                         <td class="info" style="color: #999; font-family: Helvetica; font-size: 20px; line-height: 1.5em; vertical-align: top; text-align: right;">
-                          Order Confirmation<br><span class="order-number" style="color: #000;">#{{ order.id.hex }}</span>
+                          Order Confirmation<br><span class="order-number" style="color: #000;">#{{ order.id.int|getShortId }}</span>
                         </td>
                       </tr>
                     </table>
@@ -94,7 +94,7 @@
                       <div class="custom-message header-message" style="font-size: 17px; color: #606060; font-weight: lighter;">
                         <span style=""><span style="">Thank you for booking with MassagePanda!</span></span>
                         <div><span style=""><span style=""><br></span></span></div>
-                        <div><span style=""><span style="">We're reaching out to therapists now, we'll let you know when one responds!</span></span></div>
+                        <div><span style=""><span style="">We're reaching out to our therapists now, we'll let you know when one responds!</span></span></div>
                       </div>
                       <h3 style="margin-bottom: 15px; padding-top: 25px; padding-bottom: 15px; border-bottom: 1px solid #E3E5E7; font-size: 16px; font-weight: normal; color: #444;">
                         Shipping Address

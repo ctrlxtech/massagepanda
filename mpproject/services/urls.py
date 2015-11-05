@@ -12,8 +12,9 @@ urlpatterns = [
     url(r'^checkout$', views.checkout, name='serviceCheckout'),
     url(r'^applyCoupon$', views.applyCoupon, name='applyCoupon'),
     url(r'^deleteCoupon$', views.deleteCoupon, name='deleteCoupon'),
-    url(r'^placeOrder$', views.placeOrderFromJson, name='placeOrderFromJson'),
-    url(r'^placeOrderFromPost$', views.placeOrderFromPost, name='placeOrderFromPost'),
+    url(r'^orderSuccess$', views.orderSuccess, name='orderSuccess'),
+    url(r'^placeOrderFromJson$', views.placeOrderFromJson, name='placeOrderFromJson'),
+    url(r'^placeOrder$', views.placeOrderFromPost, name='placeOrderFromPost'),
 
     url(r'^In-Home_Swedish_Massage_for_1_Hour$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Swedish Massage", service_time=1), 'prod': not settings.DEBUG}), name='swedishOneHourDetail'),
     url(r'^In-Home_Swedish_Massage_for_1.5_Hours$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Swedish Massage", service_time=1.5), 'prod': not settings.DEBUG})),

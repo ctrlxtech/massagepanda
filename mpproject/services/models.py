@@ -26,6 +26,13 @@ class Service(models.Model):
         else:
           return "In-Home_%s_for_%d_Hour" % (self.service_type.replace(' ', '_'), self.service_time)
 
+class Group(models.Model):
+    group_name = models.CharField(max_length = 200)
+
+class ServiceGroup(models.Model):
+    service = models.ForeignKey(Service)
+    group = models.ForeignKey(Group)
+
 class ServiceImage(models.Model):
     service = models.ForeignKey(Service, related_name = 'images')
     image = models.ImageField();

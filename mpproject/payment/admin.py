@@ -198,7 +198,7 @@ class ServiceCouponInline(admin.StackedInline):
     extra = 1
 
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ['code', 'discount']
+    list_display = ['code', 'quantity', 'used', 'start_date', 'end_date']
     readonly_fields = ('used',)
 
     inlines = [

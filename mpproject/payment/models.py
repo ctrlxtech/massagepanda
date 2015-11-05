@@ -19,6 +19,8 @@ class Coupon(models.Model):
     quantity = models.IntegerField()
     used = models.IntegerField(default=0)
     is_flat = models.BooleanField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
 
     def __unicode__(self):
         return "%s" % (self.code)

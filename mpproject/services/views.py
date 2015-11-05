@@ -21,6 +21,7 @@ import re
 import stripe
 import time
 from datetime import datetime
+from django.utils import timezone
 
 # Create your views here.
 @register.filter
@@ -306,6 +307,10 @@ def addPaymentForCustomer(customer, stripeToken):
         newPayment = cu.sources.create(source=stripeToken)
     return newPayment
 
+def isCurrent(coupon):
+    now = timezone.now()
+    return coupon.start_date <= now and coupon.end_date >= now
+
 def markDownPrice(data):
     isSuccess = False
 
@@ -321,7 +326,9 @@ def markDownPrice(data):
     newPrice = total
     try:
         coupon = Coupon.objects.get(code=couponCode)
-        if (not coupon.servicecoupon_set.all() or service in [sc.service for sc in coupon.servicecoupon_set.all()]) and coupon.quantity != 0:
+
+        if (not coupon.servicecoupon_set.all() or service in [sc.service for sc in coupon.servicecoupon_set.all()]) \
+            and coupon.quantity != 0 and isCurrent(coupon):
           if coupon.is_flat:
             newPrice -= coupon.discount * ( 1 + settings.TAX)
           else:

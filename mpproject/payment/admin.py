@@ -14,10 +14,10 @@ import stripe
 
 def sendOrderEmail(order, template, subject):
     stripe.api_key = settings.STRIPE_KEY
-    stripeToken = stripe.Token.retrieve(order.stripe_token)
+    stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     from_email, to = settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'
-    html_content = get_template(template).render(Context({'order': order, 'stripeToken': stripeToken}))
+    html_content = get_template(template).render(Context({'order': order, 'stripeCharge': stripeCharge}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -35,7 +35,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
     list_display_links = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at')
     search_fields = ['id', ]
-    readonly_fields = ('order_id', 'need_table', 'parking_info', 'stripe_token', 'created_at' , 'status')
+    readonly_fields = ('order_id', 'need_table', 'parking_info', 'stripe_token', 'created_at' )
     ordering = ['-created_at',]
 
     inlines = [
@@ -63,7 +63,7 @@ class OrderAdmin(admin.ModelAdmin):
       for order in queryset:
         try:
             stripe.Refund.create(charge=order.stripe_token)
-            order.status = 5
+            order.status = '5'
             order.save()
 
             count += 1
@@ -77,25 +77,20 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
-            if order.status == 3 or order.status != 1:
-                raise ValueError("Order is not chargeable")
+            if order.status == '3' or order.status != '1':
+                raise ValueError("Order is not chargeable[" + order.status + "]")
 
             if order.customer is not None:
                 stripeCustomerId = order.customer.stripe_customer_id
             else:
                 stripeCustomerId = None
 
-            ch = stripe.Charge.create(
-                amount=order.amount, # amount in cents, again
-                currency="usd",
-                customer=stripeCustomerId,
-                source=order.stripe_token,
-                description="Admin charge"
-            )
+            ch = stripe.Charge.retrieve(order.stripe_token)
+            ch.capture()
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
 
-            order.status = 4
+            order.status = '4'
             order.stripe_token = ch.id
             order.save()
 
@@ -112,22 +107,19 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
-            if order.status == 3:
+            if order.status == '3':
                 raise ValueError("Order has been canceled")
             if order.customer is not None:
                 stripeCustomerId = order.customer.stripe_customer_id
             else:
                 stripeCustomerId = None
 
-            ch = stripe.Charge.create(
-                amount=4000, # amount in cents, again
-                currency="usd",
-                customer=stripeCustomerId,
-                source=order.stripe_token,
-                description="Admin charge"
+            ch = stripe.Charge.retrieve(order.stripe_token)
+            ch.capture(
+                amount=4000 # amount in cents, again
             )
 
-            order.status = 7
+            order.status = '7'
             order.stripe_token = ch.id
             order.save()
 
@@ -142,22 +134,19 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
-            if order.status == 3:
+            if order.status == '3':
                 raise ValueError("Order has been canceled")
             if order.customer is not None:
                 stripeCustomerId = order.customer.stripe_customer_id
             else:
                 stripeCustomerId = None
 
-            ch = stripe.Charge.create(
-                amount=1000, # amount in cents, again
-                currency="usd",
-                customer=stripeCustomerId,
-                source=order.stripe_token,
-                description="Admin charge"
+            ch = stripe.Charge.retrieve(order.stripe_token)
+            ch.capture(
+                amount=1000 # amount in cents, again
             )
 
-            order.status = 6
+            order.status = '6'
             order.stripe_token = ch.id
             order.save()
 
@@ -171,7 +160,7 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
-            order.status = 3
+            order.status = '3'
             order.save()
 
             sendOrderEmail(order, 'payment/order_canceled_email.html', 'Your order has been canceled! - MassagePanda')

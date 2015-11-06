@@ -168,7 +168,6 @@ $('#delete-coupon').click(function(){
   });
   return false;
 });
-
 });
 
 function showCoupon(data) {

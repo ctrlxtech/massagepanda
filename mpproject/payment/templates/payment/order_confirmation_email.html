@@ -106,7 +106,7 @@
                       <h3 style="margin-bottom: 15px; padding-top: 25px; padding-bottom: 15px; border-bottom: 1px solid #E3E5E7; font-size: 16px; font-weight: normal; color: #444;">Billing Information</h3>
                       <p style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; font-weight: lighter;">
                       </p>
-                      {{ stripeToken.card.brand }} ending in <span class="ccLast4">{{ stripeToken.card.last4 }}</span><br><span class="fullName">{{ stripeCharge.card.name }}</span>
+                      {{ stripeCharge.source.brand }} ending in <span class="ccLast4">{{ stripeCharge.source.last4 }}</span><br><span class="fullName">{{ stripeCharge.source.name }}</span>
                     </div>
                     <h2 style="padding: 6px 40px; background-color: #F2F4F5; color: #363b3e; border: 1px solid #E7E8EA; border-width: 1px 0 1px 0; font-size: 15px; font-weight: normal;">Order Receipt</h2>
                     <div class="sub-content" style="padding: 0 40px 40px 40px;">

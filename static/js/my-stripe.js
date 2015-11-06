@@ -2,6 +2,33 @@ $(document).ready(function() {
     Stripe.setPublishableKey($('#stripePublishKey').val());
 });
 
+function doCheckout(form) {
+  var formData = $("#payment-form").serialize();
+  var csrfToken = $.cookie('csrftoken');
+  $.parseHTML(formData);
+  $.ajax({
+      type        : 'POST',
+      beforeSend: function (request)
+      {
+          request.setRequestHeader("X-CSRFToken", csrfToken);
+      },
+      url         : 'uncaptureCharge',
+      data: formData,
+      success: function(data) {
+          if (data.status == 'succeeded') {
+             $('input[name="stripeToken"]').val(data.id)
+             // and re-submit
+             form.get(0).submit();
+          } else {
+             $("#payment-errors").text(data.error);
+          }
+      },
+      complete: function(data) {
+          //alert("complete");
+      }
+  })
+}
+
 var stripeResponseHandler = function(status, response) {
     var $form = $('#payment-form');
     if (response.error) {
@@ -15,8 +42,7 @@ var stripeResponseHandler = function(status, response) {
         var token = response.id;
         // Insert the token into the form so it gets submitted to the server
         $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-        // and re-submit
-        $form.get(0).submit();
+        doCheckout($form);
     }
 };
 

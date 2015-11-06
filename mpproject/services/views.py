@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
@@ -134,6 +134,13 @@ def placeOrderFromPost(request):
         return redirect('index')
     except:
       pass
+
+    try:
+      if request.session['succeeded']:
+        request.session['succeeded'] = False
+    except:
+        raise Http404("Invalid card!")
+      
     data = request.POST;
     return placeOrder(request, data);
 
@@ -165,17 +172,49 @@ def sendOrderNotificationToManager(order):
 
 def sendNewOrderEmail(order):
     stripe.api_key = settings.STRIPE_KEY
-    stripeToken = stripe.Token.retrieve(order.stripe_token)
+    stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'
-    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeToken': stripeToken}))
+    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeCharge': stripeCharge}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
+    ch = stripe.Charge.create(
+        amount=amount, # amount in cents, again
+        currency="usd",
+        customer=stripeCustomerId,
+        source=stripeToken,
+        capture=False,
+        description="Uncaptured charge"
+    )
+
+    return ch
+
+def uncaptureCharge(request):
+    try:
+        amount, markDown, coupon, isSuccess = markDownPrice(request.POST)
+    except Exception as e:
+        return JsonResponse(e, safe=False)
+    amount = amount * 100
+
+    stripe.api_key = settings.STRIPE_KEY
+    stripeToken = request.POST.get('stripeToken')
+    try:
+      stripeCustomerId = request.user.customer.stripe_customer_id
+    except:
+      stripeCustomerId = None
+
+    ch = createUncapturedCharge(amount, stripeToken, stripeCustomerId)
+    if ch.status == 'succeeded':
+        request.session['succeeded'] = True
+    return JsonResponse(ch)
+
 @transaction.atomic
 def placeOrder(request, data):
-    customer = None;
+    customer = None
+    stripeCustomerId = None
     if request.user.is_authenticated():
         try:
             customer = request.user.customer
@@ -190,11 +229,19 @@ def placeOrder(request, data):
         stripe.api_key = settings.STRIPE_KEY
         stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
         name = stripeCustomer.sources.retrieve(savedPayment).name
+        stripeCustomerId = customer.stripe_customer_id
     else:
         stripeToken = data.get('stripeToken')
         name = data.get('name')
         if customer is not None and stripeToken:
             addPaymentForCustomer(customer, stripeToken)
+
+    try:
+        amount, markDown, coupon, isSuccess = markDownPrice(data)
+        serviceId = data.get('serviceId')
+    except Exception as e:
+        return JsonResponse(e, safe=False)
+    amount = amount * 100
 
     if savedAddress:
         addressObj = Address.objects.get(pk=savedAddress)
@@ -208,13 +255,6 @@ def placeOrder(request, data):
         sName += " " + data.get('last-name')
         phone = getPhone(data)
         email = data.get('email')
-
-    try:
-        amount, markDown, coupon, isSuccess = markDownPrice(data)
-        serviceId = data.get('serviceId')
-    except Exception as e:
-        return JsonResponse(e, safe=False)
-    amount = amount * 100
 
     service_datetime = stringToDatetime(data)
     preferredGender = data.get('serviceGenderPreferred')
@@ -338,7 +378,7 @@ def markDownPrice(data):
         pass
     markDown = total - newPrice
     newPrice += additional
-    return newPrice, markDown, coupon, isSuccess
+    return int(newPrice), markDown, coupon, isSuccess
    
 def applyCoupon(request):
     newPrice, markDown, coupon, isSuccess = markDownPrice(request.POST)

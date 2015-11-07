@@ -48,7 +48,6 @@ class DetailsView(View):
       return render_to_response('services/details.html', self.context, context_instance=RequestContext(request))
 
 def taxService(service):
-
     if service.service_sale:
       total = service.service_sale
     else:
@@ -118,32 +117,6 @@ def checkout(request):
         'zipcode': zipcode, 'tax': '%.2f' % tax, 'subtotal': '%.2f' % (total - tax), 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render_to_response('services/checkout.html', context, context_instance=RequestContext(request))
 
-def orderSuccess(request, foo="foo"):
-    context = {'status': 'success', 'foo': foo}
-
-    return render_to_response('services/success.html', context, context_instance=RequestContext(request))
-
-def placeOrderFromJson(request):
-    data = json.loads(request.body)
-    return placeOrder(request, data);
-
-def placeOrderFromPost(request):
-    try:
-      if request.session['complete']:
-        request.session['complete'] = False
-        return redirect('index')
-    except:
-      pass
-
-    try:
-      if request.session['succeeded']:
-        request.session['succeeded'] = False
-    except:
-        raise Http404("Invalid card!")
-      
-    data = request.POST;
-    return placeOrder(request, data);
-
 def stringToDatetime(data):
     service_datetime_string = data.get('serviceDate')
     service_datetime_string += " " + data.get('serviceTime')
@@ -170,7 +143,7 @@ def sendOrderNotificationToManager(order):
     msg.send()
     return HttpResponse("Email sent!")
 
-def sendNewOrderEmail(order):
+def sendNewOrderEmailToCustomer(order):
     stripe.api_key = settings.STRIPE_KEY
     stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
@@ -210,85 +183,6 @@ def uncaptureCharge(request):
     if ch.status == 'succeeded':
         request.session['succeeded'] = True
     return JsonResponse(ch)
-
-@transaction.atomic
-def placeOrder(request, data):
-    customer = None
-    stripeCustomerId = None
-    if request.user.is_authenticated():
-        try:
-            customer = request.user.customer
-        except:
-            pass
-
-    savedAddress = data.get("savedAddress")
-    savedPayment = data.get("savedPayment")
-
-    if savedPayment:
-        stripeToken = savedPayment
-        stripe.api_key = settings.STRIPE_KEY
-        stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
-        name = stripeCustomer.sources.retrieve(savedPayment).name
-        stripeCustomerId = customer.stripe_customer_id
-    else:
-        stripeToken = data.get('stripeToken')
-        name = data.get('name')
-        if customer is not None and stripeToken:
-            addPaymentForCustomer(customer, stripeToken)
-
-    try:
-        amount, markDown, coupon, isSuccess = markDownPrice(data)
-        serviceId = data.get('serviceId')
-    except Exception as e:
-        return JsonResponse(e, safe=False)
-    amount = amount * 100
-
-    if savedAddress:
-        addressObj = Address.objects.get(pk=savedAddress)
-        address = addressObj.detail()
-        sName = addressObj.name
-        phone = addressObj.phone
-        email = addressObj.email
-    else:
-        address = getAddressDetail(customer, data)
-        sName = data.get('first-name')
-        sName += " " + data.get('last-name')
-        phone = getPhone(data)
-        email = data.get('email')
-
-    service_datetime = stringToDatetime(data)
-    preferredGender = data.get('serviceGenderPreferred')
-    needTable = request.POST.get("needTable")
-    if needTable != "None":
-        needTable = True
-    else:
-        needTable = False
-    parkingInfo = request.POST.get("parkingInfo")
-   
-    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime, coupon=coupon,
-        preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
-        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
-    o.save()
-    
-    if isSuccess:
-        if coupon.quantity > 0:
-          coupon.quantity -= 1
-        coupon.used += 1
-        coupon.save()
-
-    insertReferCode(o, customer)
-    createFeedbackForOrder(o)
-
-    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
-    nums = [phone]
-    sendSMS(nums, message_body, False)
-    sendNewOrderEmail(o)
-
-    sendOrderNotificationToManager(o)
-
-    request.session['complete'] = True
-    context = {'status': 'success', 'total': o.amount, 'txid': o.id}
-    return render_to_response('services/success.html', context, context_instance=RequestContext(request))
 
 def insertReferCode(order, customer=None):
     if customer is None:
@@ -426,3 +320,104 @@ def gender_display(q):
         if choice[0] == q:
             return choice[1]
     return ''
+
+def placeOrderFromJson(request):
+    data = json.loads(request.body)
+    return placeOrder(request, data);
+
+def placeOrderFromPost(request):
+    try:
+      if request.session['complete']:
+        request.session['complete'] = False
+        return redirect('index')
+    except:
+      pass
+
+    try:
+      if request.session['succeeded']:
+        request.session['succeeded'] = False
+    except:
+        raise Http404("Invalid card!")
+      
+    data = request.POST;
+    return placeOrder(request, data);
+
+@transaction.atomic
+def placeOrder(request, data):
+    customer = None
+    stripeCustomerId = None
+    if request.user.is_authenticated():
+        try:
+            customer = request.user.customer
+        except:
+            pass
+
+    savedAddress = data.get("savedAddress")
+    savedPayment = data.get("savedPayment")
+
+    if savedPayment:
+        stripeToken = savedPayment
+        stripe.api_key = settings.STRIPE_KEY
+        stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
+        name = stripeCustomer.sources.retrieve(savedPayment).name
+        stripeCustomerId = customer.stripe_customer_id
+    else:
+        stripeToken = data.get('stripeToken')
+        name = data.get('name')
+        if customer is not None and stripeToken:
+            addPaymentForCustomer(customer, stripeToken)
+
+    try:
+        amount, markDown, coupon, isSuccess = markDownPrice(data)
+        serviceId = data.get('serviceId')
+    except Exception as e:
+        return JsonResponse(e, safe=False)
+    amount = amount * 100
+
+    if savedAddress:
+        addressObj = Address.objects.get(pk=savedAddress)
+        address = addressObj.detail()
+        sName = addressObj.name
+        phone = addressObj.phone
+        email = addressObj.email
+    else:
+        address = getAddressDetail(customer, data)
+        sName = data.get('first-name')
+        sName += " " + data.get('last-name')
+        phone = getPhone(data)
+        email = data.get('email')
+
+    service_datetime = stringToDatetime(data)
+    preferredGender = data.get('serviceGenderPreferred')
+    needTable = request.POST.get("needTable")
+    if needTable != "None":
+        needTable = True
+    else:
+        needTable = False
+    parkingInfo = request.POST.get("parkingInfo")
+   
+    o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime, coupon=coupon,
+        preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
+        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
+    o.save()
+    
+    if isSuccess:
+        if coupon.quantity > 0:
+          coupon.quantity -= 1
+        coupon.used += 1
+        coupon.save()
+
+    insertReferCode(o, customer)
+    createFeedbackForOrder(o)
+
+    message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
+    nums = [phone]
+    sendSMS(nums, message_body, False)
+    sendNewOrderEmailToCustomer(o)
+
+    sendOrderNotificationToManager(o)
+
+    request.session['complete'] = True
+    context = {'status': 'success', 'total': o.amount, 'txid': o.id}
+    return render_to_response('services/success.html', context, context_instance=RequestContext(request))
+

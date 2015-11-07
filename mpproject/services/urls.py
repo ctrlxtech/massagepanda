@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^checkout$', views.checkout, name='serviceCheckout'),
     url(r'^applyCoupon$', views.applyCoupon, name='applyCoupon'),
     url(r'^deleteCoupon$', views.deleteCoupon, name='deleteCoupon'),
-    url(r'^orderSuccess$', views.orderSuccess, name='orderSuccess'),
     url(r'^uncaptureCharge$', views.uncaptureCharge, name='uncaptureCharge'),
     url(r'^placeOrderFromJson$', views.placeOrderFromJson, name='placeOrderFromJson'),
     url(r'^placeOrder$', views.placeOrderFromPost, name='placeOrderFromPost'),

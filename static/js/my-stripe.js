@@ -21,11 +21,12 @@ function doCheckout(form) {
           if (data.status == 'succeeded') {
              $('input[name="stripeToken"]').val(data.id)
              // and re-submit
+             console.log(form.get(0))
              form.get(0).submit();
           } else {
              $("#payment-errors").text(data.error);
              $("#mp-checkoutAlertDanger").show();
-             $('[name="submit"]').prop('disabled', false);
+             $('.btn-success').prop('disabled', false);
           }
       },
       complete: function(data) {

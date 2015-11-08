@@ -154,14 +154,19 @@ def sendNewOrderEmailToCustomer(order):
     msg.send()
 
 def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
-    ch = stripe.Charge.create(
+    ch = {'status': 'failure'}
+    try:
+      ch = stripe.Charge.create(
         amount=amount, # amount in cents, again
         currency="usd",
         customer=stripeCustomerId,
         source=stripeToken,
         capture=False,
         description="Uncaptured charge"
-    )
+      )
+    except stripe.error.StripeError, e:
+      ch['error'] = str(e)
+      return ch
 
     return ch
 
@@ -180,7 +185,7 @@ def uncaptureCharge(request):
       stripeCustomerId = None
 
     ch = createUncapturedCharge(amount, stripeToken, stripeCustomerId)
-    if ch.status == 'succeeded':
+    if ch['status'] == 'succeeded':
         request.session['succeeded'] = True
     return JsonResponse(ch)
 

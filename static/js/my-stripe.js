@@ -3,6 +3,9 @@ $(document).ready(function() {
 });
 
 function doCheckout(form) {
+  $("#payment-errors").text("");
+  $("#mp-checkoutAlertDanger").hide();
+
   var formData = $("#payment-form").serialize();
   var csrfToken = $.cookie('csrftoken');
   $.parseHTML(formData);
@@ -21,6 +24,8 @@ function doCheckout(form) {
              form.get(0).submit();
           } else {
              $("#payment-errors").text(data.error);
+             $("#mp-checkoutAlertDanger").show();
+             $('[name="submit"]').prop('disabled', false);
           }
       },
       complete: function(data) {

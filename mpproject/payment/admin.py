@@ -67,7 +67,7 @@ class OrderAdmin(admin.ModelAdmin):
             order.save()
 
             count += 1
-        except stripe.error.StripeError, e:
+        except (stripe.error.StripeError, ValueError) as e:
             self.message_user(request, "%s can't be marked as refunded. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as refunded." % count)

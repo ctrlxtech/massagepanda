@@ -12,12 +12,15 @@ from django.template.loader import get_template
 
 import stripe
 
-def sendOrderEmail(order, template, subject):
+def sendOrderEmail(order, template, subject, extra=[]):
     stripe.api_key = settings.STRIPE_KEY
     stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     from_email, to = settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'
-    html_content = get_template(template).render(Context({'order': order, 'stripeCharge': stripeCharge}))
+    context = {'order': order, 'stripeCharge': stripeCharge}
+    real_context = dict(context)
+    real_context.update(extra)
+    html_content = get_template(template).render(Context(real_context))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
@@ -42,7 +45,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderTherapistInline, FeedbackInline
     ]
 
-    actions = ['mark_refunded', 'mark_charged', 'charge_40', 'charge_10', 'mark_canceled', 'send_feedback_email']
+    actions = ['mark_charged', 'punish', 'mark_canceled', 'send_feedback_email']
 
     def order_id(self, obj):
         return '%s' % (obj.id.int >> 96)
@@ -101,7 +104,34 @@ class OrderAdmin(admin.ModelAdmin):
             self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as charged." % count)
-    
+ 
+    def punish(self, request, queryset):
+      stripe.api_key = settings.STRIPE_KEY
+      count = 0
+      for order in queryset:
+        try:
+            if order.customer is not None:
+                stripeCustomerId = order.customer.stripe_customer_id
+            else:
+                stripeCustomerId = None
+
+            ch = stripe.Charge.retrieve(order.stripe_token)
+            ch.capture(
+                amount=order.amount
+            )
+
+            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda', {"customerCanceled": True})
+
+            order.status = '6'
+            order.stripe_token = ch.id
+            order.save()
+
+            count += 1
+        except (stripe.error.StripeError, ValueError) as e:
+            self.message_user(request, "Order(number: %s) can't be punished. Error: %s" % (order.id, e), level=messages.ERROR)
+
+      self.message_user(request, "%s successfully punished." % count)
+   
     def charge_40(self, request, queryset):
       stripe.api_key = settings.STRIPE_KEY
       count = 0
@@ -160,6 +190,7 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
+            stripe.Refund.create(charge=order.stripe_token)
             order.status = '3'
             order.save()
 

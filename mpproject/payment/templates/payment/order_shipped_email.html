@@ -109,6 +109,13 @@
                         <tr class="product">
                           <td style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; padding: 25px 0; border-bottom: 1px solid #E3E5E7;">
                             <strong style="color: #363b3e; font-weight: normal; font-size: 17px;">In-Home {{ order.service.service_type }} for {{ order.service.service_time|stripZero }} Hour{{ order.service.service_time|pluralize }}</strong>
+
+                            {% if customerCanceled %}
+                            <br>
+                            <span style="color: red">
+                            (cancellation fee)
+                            </span>
+                            {% endif %}
                             <span class="options" style="font-weight: lighter; font-size: 14px; color: #999;">
                             <br><span class="option">Date</span>: <span class="choice">{{ order.service_datetime|date:"D d M" }}</span>
                             <br><span class="option">Time</span>: <span class="choice">{{ order.service_datetime|time:"H:i" }}</span>

@@ -77,6 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -184,3 +185,11 @@ else:
 
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = False
+
+ROLLBAR = {
+    'access_token': '11d3ef845039461d93de971769845146',
+    'environment': 'development' if DEBUG else 'production',
+    'root': BASE_DIR,
+}
+import rollbar
+rollbar.init(**ROLLBAR)

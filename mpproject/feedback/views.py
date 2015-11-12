@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response
 
 from django.http import HttpResponse, JsonResponse
+from django.template import Context, RequestContext
 from django.contrib.auth.tokens import default_token_generator
 from feedback.models import Feedback
 

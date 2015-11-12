@@ -41,8 +41,7 @@ class TherapistAdmin(NestedModelAdmin):
     readonly_fields = ('rating', 'rate_count')
 
     def get_rating(self, obj):
-        return '%s' % (0 if obj.rate_count == 0 else (obj.rating / obj.rate_count))
-    get_rating.short_description = 'rating'
+        return '%s' % (0 if obj,rate_count == 1 else obj.rating / obj.rate_count)
 
     def get_name(self, obj):
         return '%s %s' % (obj.user.first_name, obj.user.last_name)

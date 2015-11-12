@@ -133,10 +133,10 @@ def getPhone(data):
 def sendOrderNotificationToManager(order):
     subject, from_email, to = 'New Order!', settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
     try:
-      text_content = "address: " + order.shipping_address + " ,customer: " + order.recipient \
-        + " ,gender: " + order.get_preferred_gender_display() + " ,time: " + order.service_datetime.ctime() + " ,service: " \
-        + order.service.service_type + " for " + str(order.service.service_time) + " hour(s) ,table: " \
-        + str(order.need_table) + " ,parking: " + order.parking_info
+      text_content = order.recipient + ", " + order.shipping_address + ", " + order.service.service_type \
+        + " for " + str(order.service.service_time) + " hour(s), " + order.service_datetime.ctime() \
+        + ". Could you provide the service? " + order.get_preferred_gender_display() \
+        + ", table: " + str(order.need_table) + ", parking: " + order.parking_info
     except:
       text_content = "Check admin page for new order!"
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])

@@ -618,7 +618,8 @@ def createTherapist(request):
     supplementary = request.POST.get('supplementary')
     therapist = Therapist(user=user, phone=phone, gender=gender, home_address=home_address,
         availability=availability, working_area=working_area, experience=experience, specialty=specialty,
-        emergency_contact_name=emergency_contact_name, emergency_contact_phone=emergency_contact_phone, supplementary=supplementary,
+        emergency_contact_name=emergency_contact_name, emergency_contact_phone=emergency_contact_phone,
+        account_number=account_number, routing_number=routing_number, supplementary=supplementary,
         massage_license=request.FILES['massage_license'], driver_license=request.FILES['driver_license'])
     therapist.save()
     return HttpResponse("Thank you for registering MassagePanda, " + therapist.user.first_name)

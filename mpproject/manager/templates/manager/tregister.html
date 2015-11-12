@@ -6,13 +6,14 @@
 <div id="panda_apply" class="mp-pageContent container-fluid">
 <div class="mp-paymentForm ">
 <h2 align="center">Massage Therapist Registration Form（按摩师注册表）</h2>
-<form method="POST" id="payment-form" class="form-horizontal">
+<form method="POST" id="payment-form" enctype="multipart/form-data" action="{% url 'createTherapist' %}" class="form-horizontal">
+{% csrf_token %}
 <div class="col-xs-12 col-sm-6 col-md-6">
 <div class="mp-checkoutSection mp-checkoutSection-left">
     <div class="form-group">
         <label><span class="mp-asterisk">*</span>English Name（英文姓名）</label><br>
-        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="First Name" name="first-name" required/>
-        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Last Name" name="last-name" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="First Name" name="first_name" required/>
+        <input type="text" class="form-control mp-halfwidth" data-serverField="true" placeholder="Last Name" name="last_name" required/>
     </div>
     <div class="form-group">
         <label><span class="mp-asterisk">*</span>Gender（性别）</label><br>
@@ -28,6 +29,11 @@
     <div class="form-group">
         <label><span class="mp-asterisk">*</span>Email（邮箱）</label><br>
         <input type="text" class="form-control" data-serverField="true" name="email" required/>
+    </div>
+
+    <div class="form-group">
+        <label><span class="mp-asterisk">*</span>Password</label><br>
+        <input type="password" class="form-control" data-serverField="true" name="password" required/>
     </div>
 
     <div class="form-group">

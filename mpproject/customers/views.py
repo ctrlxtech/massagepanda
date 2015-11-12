@@ -17,6 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 
 import json
+import re
 import requests
 import stripe
 

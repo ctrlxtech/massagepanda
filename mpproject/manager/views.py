@@ -594,6 +594,13 @@ def register_view(request):
 def tregister_view(request):
     return render(request, 'manager/tregister.html')
 
+def getPhone(data):
+    phone = data.get('phone')
+    phone = re.sub("[^0-9]", "", phone)
+    if len(phone) == 10:
+        phone = "1" + phone
+    return phone
+
 @transaction.atomic
 def createTherapist(request):
     email = request.POST.get('email')
@@ -602,7 +609,7 @@ def createTherapist(request):
     last_name = request.POST.get('last_name')
     user = User.objects.create_user(email, email, password,
         first_name=first_name, last_name=last_name)
-    phone = request.POST.get('phone')
+    phone = getPhone(request.POST)
     gender = request.POST.get('gender')
     home_address = buildAddress(request)
     availability = request.POST.get('availability')

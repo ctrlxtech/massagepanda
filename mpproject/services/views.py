@@ -135,7 +135,7 @@ def sendOrderNotificationToManager(order):
     try:
       text_content = order.recipient + ", " + order.shipping_address + ", " + order.service.service_type \
         + " for " + str(order.service.service_time) + " hour(s), " + order.service_datetime.ctime() \
-        + ". Could you provide the service? " + order.get_preferred_gender_display() \
+        + ". " + order.get_preferred_gender_display() \
         + ", table: " + str(order.need_table) + ", parking: " + order.parking_info
     except:
       text_content = "Check admin page for new order!"

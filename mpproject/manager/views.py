@@ -595,7 +595,8 @@ def tregister_view(request):
     return render(request, 'manager/tregister.html')
 
 def getPhone(data):
-    phone = data.get('phone')
+    phone = str(data.get('phone'))
+    phone = filter(str.isdigit, phone)
     phone = re.sub("[^0-9]", "", phone)
     if len(phone) == 10:
         phone = "1" + phone

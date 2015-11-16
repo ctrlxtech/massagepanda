@@ -124,7 +124,8 @@ def stringToDatetime(data):
     return datetime.strptime(service_datetime_string, date_format)
 
 def getPhone(data):
-    phone = data.get('phone')
+    phone = str(data.get('phone'))
+    phone = filter(str.isdigit, phone)
     phone = re.sub("[^0-9]", "", phone)
     if len(phone) == 10:
         phone = "1" + phone
@@ -135,7 +136,7 @@ def sendOrderNotificationToManager(order):
     try:
       text_content = order.recipient + ", " + order.shipping_address + ", " + order.service.service_type \
         + " for " + str(order.service.service_time) + " hour(s), " + order.service_datetime.ctime() \
-        + ". " + order.get_preferred_gender_display() \
+        + ". Customer Phone: " + order.phone + ", Customer email: " + order.email + ". " + order.get_preferred_gender_display() \
         + ", table: " + str(order.need_table) + ", parking: " + order.parking_info
     except:
       text_content = "Check admin page for new order!"

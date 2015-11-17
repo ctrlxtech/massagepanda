@@ -157,7 +157,7 @@ USE_TZ = True
 
 DEFAULT_FROM_EMAIL = "support@massagepanda.com"
 
-SERVER_EMAIL = "support@massagepanda.com"
+SERVER_EMAIL = "MassagePanda<support@massagepanda.com>"
 
 EMAIL_HOST = "smtp.mandrillapp.com"
 

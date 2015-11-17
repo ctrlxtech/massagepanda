@@ -132,7 +132,7 @@ def getPhone(data):
     return phone
 
 def sendOrderNotificationToManager(order):
-    subject, from_email, to = 'New Order! - ' + order.id.int, settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
+    subject, from_email, to = 'New Order! - ' + str(order.id.int >> 96), settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
     try:
       text_content = order.recipient + ", " + order.shipping_address + ", " + order.service.service_type \
         + " for " + str(order.service.service_time) + " hour(s), " + order.service_datetime.ctime() \

@@ -185,7 +185,7 @@ def uncaptureCharge(request):
     except:
       stripeCustomerId = None
 
-    ch = createUncapturedCharge(amount, stripeToken, stripeCustomerId)
+    ch = createUncapturedCharge(int(amount), stripeToken, stripeCustomerId)
     if ch['status'] == 'succeeded':
         request.session['succeeded'] = True
     return JsonResponse(ch)
@@ -278,7 +278,7 @@ def markDownPrice(data):
         pass
     markDown = total - newPrice
     newPrice += additional
-    return int(newPrice), markDown, coupon, isSuccess
+    return newPrice, markDown, coupon, isSuccess
    
 def applyCoupon(request):
     newPrice, markDown, coupon, isSuccess = markDownPrice(request.POST)

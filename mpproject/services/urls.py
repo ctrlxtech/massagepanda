@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.conf import settings
 from services import views
-from services.views import DetailsView
+from services.views import DetailsView, PlaceOrderView
 from django.views.generic import TemplateView
 from services.models import Service
 
@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^deleteCoupon$', views.deleteCoupon, name='deleteCoupon'),
     url(r'^uncaptureCharge$', views.uncaptureCharge, name='uncaptureCharge'),
     url(r'^placeOrderFromJson$', views.placeOrderFromJson, name='placeOrderFromJson'),
-    url(r'^placeOrder$', views.placeOrderFromPost, name='placeOrderFromPost'),
+    url(r'^placeOrder$', PlaceOrderView.as_view(), name='placeOrderFromPost'),
 
     url(r'^In-Home_Swedish_Massage_for_1_Hour$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Swedish Massage", service_time=1), 'prod': not settings.DEBUG}), name='swedishOneHourDetail'),
     url(r'^In-Home_Swedish_Massage_for_1.5_Hours$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Swedish Massage", service_time=1.5), 'prod': not settings.DEBUG})),

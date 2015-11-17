@@ -643,12 +643,16 @@ def addCoupon(request):
     groupId = request.POST.get('serviceGroup')
     group = Group.objects.get(pk=groupId)
     isFlat = request.POST.get('isFlat')
+    startDate = request.POST.get('start_date')
+    endDate = request.POST.get('end_date')
+    startDate = datetime.strptime(startDate, '%Y-%m-%d')
+    endDate = datetime.strptime(endDate, '%Y-%m-%d')
     if not isFlat:
         isFlat = False
     discount = request.POST.get('discount')
     quantity = request.POST.get('quantity')
 
-    coupon = Coupon(code=couponCode, discount=discount, quantity=quantity, used=0, is_flat=isFlat)
+    coupon = Coupon(code=couponCode, discount=discount, quantity=quantity, used=0, start_date=startDate, end_date=endDate, is_flat=isFlat)
     coupon.save()
 
     sgs = group.servicegroup_set.all()

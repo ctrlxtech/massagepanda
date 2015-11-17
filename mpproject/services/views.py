@@ -327,6 +327,12 @@ def gender_display(q):
             return choice[1]
     return ''
 
+class PlaceOrderView(View):
+    def get(self, request):
+        return redirect('index')
+    def post(self, request):
+        return placeOrderFromPost(request);
+
 def placeOrderFromJson(request):
     data = json.loads(request.body)
     return placeOrder(request, data);

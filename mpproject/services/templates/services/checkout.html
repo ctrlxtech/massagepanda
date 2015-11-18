@@ -147,15 +147,15 @@
 					<div class="mp-checkout-billing-info">
 						<h2 class="mp-store-shipping-info-label">Billing Information</h2>
 						{% if stripeCustomer %}
-						<div class="border">
 						  {% for data in stripeCustomer.sources.data %}
+						<div class="border">
 					  	  <input type="radio" name="savedPayment" value="{{ data.id }}" {% if forloop.counter0 == 0 %} checked="checked" {% endif %}/>
 						  {{ data.brand }}
 						  ••••{{ data.last4 }},
 						  {{ data.exp_month}}/{{ data.exp_year }},
                                                   {{ data.name }}
-						  {% endfor %}
 						</div>
+						  {% endfor %}
 						<div class="border">
 						  <input type="radio" name="savedPayment" value="new-payment-selector"><span style="font-weight:400;"> New Payment</span></input>
                                                 </div>

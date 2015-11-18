@@ -11,7 +11,7 @@ from django.views.generic import View
 from customers.models import Address
 from feedback.models import Feedback
 from payment.models import Order, Coupon, GENDER_PREFERENCES
-from referral.models import CustomerReferralHistory
+from referral.models import CustomerReferralHistory, ReferralCredit
 from services.models import Service
 
 from manager.views import sendSMS
@@ -154,6 +154,14 @@ def sendNewOrderEmailToCustomer(order):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+def isSavedPaymentSeleted(request):
+    savedPayment = request.POST.get("savedPayment")
+    return savedPayment != "new-payment-selector"
+
+def isSavedAddressSeleted(request):
+    savedAddress = request.POST.get("savedAddress")
+    return savedAddress != "new-address-selector"
+
 def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
     ch = {'status': 'failure'}
     try:
@@ -178,12 +186,23 @@ def uncaptureCharge(request):
         return JsonResponse(e, safe=False)
     amount = amount * 100
 
+    customer = None
+    stripeCustomerId = None
+    if request.user.is_authenticated():
+        try:
+            customer = request.user.customer
+            stripeCustomerId = customer.stripe_customer_id
+        except:
+            pass
+
     stripe.api_key = settings.STRIPE_KEY
-    stripeToken = request.POST.get('stripeToken')
-    try:
-      stripeCustomerId = request.user.customer.stripe_customer_id
-    except:
-      stripeCustomerId = None
+
+    if isSavedPaymentSeleted(request):
+        stripeToken = request.POST.get("savedPayment")
+    else:
+        stripeToken = request.POST.get('stripeToken')
+        if customer is not None and stripeToken:
+            stripeToken = addPaymentForCustomer(customer, stripeToken).id
 
     ch = createUncapturedCharge(int(amount), stripeToken, stripeCustomerId)
     if ch['status'] == 'succeeded':
@@ -201,13 +220,26 @@ def insertReferCode(order, customer=None):
         pass
     return
 
+@transaction.atomic
 def redeemRefer(order=None):
     if order is None:
         return
 
     try:
-        rc = order.customerreferralhistory.referred_customer.referredcustomer
+        crh = order.customerreferralhistory
+        rc = crh.referred_customer.referredcustomer
         if rc.redeemed is False:
+            customer = rc.customer
+            accumulativeCredit = 0
+            try:
+                accumulativeCredit = customer.referralcredit.accumulative_credit
+            except:
+                pass
+            credit = float(settings.REFER_BONUS)
+            accumulativeCredit += credit
+            rCredit = ReferralCredit(customer=rc.customer, customer_referral_history=crh, credit=settings.REFER_BONUS, accumulative_credit=accumulativeCredit)
+            rCredit.save()
+
             rc.redeemed = True
             rc.save()
     except:
@@ -364,20 +396,15 @@ def placeOrder(request, data):
         except:
             pass
 
-    savedAddress = data.get("savedAddress")
-    savedPayment = data.get("savedPayment")
-
-    if savedPayment:
-        stripeToken = savedPayment
+    if isSavedPaymentSeleted(request):
         stripe.api_key = settings.STRIPE_KEY
         stripeCustomer = stripe.Customer.retrieve(customer.stripe_customer_id)
-        name = stripeCustomer.sources.retrieve(savedPayment).name
+        name = stripeCustomer.sources.retrieve(data.get("savedPayment")).name
         stripeCustomerId = customer.stripe_customer_id
     else:
-        stripeToken = data.get('stripeToken')
         name = data.get('name')
-        if customer is not None and stripeToken:
-            addPaymentForCustomer(customer, stripeToken)
+
+    stripeToken = data.get('stripeToken')
 
     try:
         amount, markDown, coupon, isSuccess = markDownPrice(data)
@@ -386,8 +413,8 @@ def placeOrder(request, data):
         return JsonResponse(e, safe=False)
     amount = amount * 100
 
-    if savedAddress:
-        addressObj = Address.objects.get(pk=savedAddress)
+    if isSavedAddressSeleted(request):
+        addressObj = Address.objects.get(pk=data.get("savedAddress"))
         address = addressObj.detail()
         sName = addressObj.name
         phone = addressObj.phone

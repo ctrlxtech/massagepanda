@@ -19,9 +19,13 @@ function doCheckout(form) {
       data: formData,
       success: function(data) {
           if (data.status == 'succeeded') {
-             $('input[name="stripeToken"]').val(data.id)
+
+             if ($('input[name="stripeToken"]').length == 0) {
+                form.append($('<input type="hidden" name="stripeToken" />').val(data.id));
+             } else {
+                $('input[name="stripeToken"]').val(data.id)
+             }
              // and re-submit
-             console.log(form.get(0))
              form.get(0).submit();
           } else {
              $("#payment-errors").text(data.error);

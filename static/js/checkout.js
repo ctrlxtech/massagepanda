@@ -1,11 +1,12 @@
 $( window ).load(function() {
 
   $('#payment-form').on('submit', function(event) {
+    var $form = $(this);
     if ($("#new-payment-div").css('display') == "none") {
-        return true;
+        doCheckout($form);
+        return false;
     } else{
         populateExpYearAndMonth();
-        var $form = $(this);
         // Disable the submit button to prevent repeated clicks
         $form.find('button').prop('disabled', true);
         Stripe.card.createToken($form, stripeResponseHandler);

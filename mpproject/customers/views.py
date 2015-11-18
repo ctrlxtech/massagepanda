@@ -105,16 +105,17 @@ def verifyCustomer(request, uidb64=None, token=None, token_generator=default_tok
       user.is_active = True
       user.save()
 
+      user.backend = 'django.contrib.auth.backends.ModelBackend'
       login(request, user)
 
-      sendWelcomeEmail(user.email, first_name, code)
-      context = {'status': 'success', 'firstName': first_name}
+      sendWelcomeEmail(user.email, user.first_name)
+      context = {'status': 'success', 'firstName': user.first_name}
     else:
       context = {'status': 'failure'}
 
     return redirect('index')
 
-def sendWelcomeEmail(to, first_name, code):
+def sendWelcomeEmail(to, first_name):
     subject = "Welcome!"
     text_content = "Thanks for signing up on MassagePanda! Hope you enjoy our services."
     msg = EmailMultiAlternatives(subject, text_content, settings.SERVER_EMAIL, [to])
@@ -136,7 +137,6 @@ def sendValidationEmail(request, user, use_https=False):
         'token': token_generator.make_token(user),
         'protocol': 'https' if use_https else 'http',
     }
-    token_generator=default_token_generator
     body = loader.render_to_string(email_template_name, context)
     email_message = EmailMultiAlternatives(subject, body, settings.SERVER_EMAIL, [user.email])
     email_message.send()

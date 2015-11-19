@@ -156,11 +156,11 @@ def sendNewOrderEmailToCustomer(order):
 
 def isSavedPaymentSeleted(request):
     savedPayment = request.POST.get("savedPayment")
-    return savedPayment != "new-payment-selector"
+    return savedPayment and savedPayment != "new-payment-selector"
 
 def isSavedAddressSeleted(request):
     savedAddress = request.POST.get("savedAddress")
-    return savedAddress != "new-address-selector"
+    return savedAddress and savedAddress != "new-address-selector"
 
 def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
     ch = {'status': 'failure'}
@@ -333,15 +333,9 @@ def deleteCoupon(request):
     return JsonResponse(context)
 
 def createFeedbackForOrder(order):
-    f = Feedback(order=order, code=getFeedbackCode(order.id), rated=False)
+    f = Feedback(order=order, rated=False)
     f.save()
-    return
-
-def getFeedbackCode(value):
-    m = hashlib.md5()
-    m.update(str(time.time()))
-    m.update(str(value))
-    return m.hexdigest()
+    return f
 
 def isInSF(zipcode):
     try:
@@ -386,7 +380,6 @@ def placeOrderFromPost(request):
     data = request.POST;
     return placeOrder(request, data);
 
-@transaction.atomic
 def placeOrder(request, data):
     customer = None
     stripeCustomerId = None
@@ -447,7 +440,7 @@ def placeOrder(request, data):
         coupon.save()
 
     insertReferCode(o, customer)
-    createFeedbackForOrder(o)
+    f = createFeedbackForOrder(o)
 
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"
     nums = [phone]

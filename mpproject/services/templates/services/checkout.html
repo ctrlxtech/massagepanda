@@ -62,13 +62,27 @@
                     <div class="alert alert-danger mp-checkoutAlertDanger" id="mp-checkoutAlertDanger" role="alert" style="display:none">
                         <span class="payment-errors" id="payment-errors"></span>
                     </div>
-                    <h2>Secure Checkout</h2>
+					<div style="align-items: center; display: flex;">
+						<h2 style="display: inline-block;">Secure Checkout</h2>
+						<div id="stripe-icon" style="margin-top: 7px; margin-left: 15px; display: inline-block; width: 128px;">
+							<a href="https://stripe.com/" target="_blank">
+								<img src="{% static "images/stripe.png" %}" width="100%">
+							</a>
+						</div>
+					</div>
                     <div class="mp-payment-selector">
 					  	<input type="radio" value="CC" id="mp-radio-cc" name="payment-type" checked="checked" style="display: none;">
 						<label for="mp-radio-cc"><span></span></label>
-                        <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}"/>
+                        <img class="mp-checkout-cardImage" src="{% static "images/credit-cards.png" %}" width="175px"/>
                     </div>
-					<div style="display: inline-block;padding: 10px 18px;margin-bottom: 35px;margin-top: 25px;"><a href="https://stripe.com/" target="_blank"><img src="{% static "images/stripe.png" %}" width="135" /></a></div>
+					{% if request.user.is_authenticated %}
+					<div class="mp-payment-selector">
+					  	<input type="radio" value="CC" id="mp-radio-cc" name="payment-type" style="display: none;">
+						<label for="mp-radio-cc"><span></span></label>
+                        <span style="margin-left: 10px;">Account Balance: $100</span>
+                    </div>
+					{% endif %}
+					<!-- <div style="display: inline-block;padding: 10px 18px;margin-bottom: 35px;margin-top: 25px;"><a href="https://stripe.com/" target="_blank"><img src="{% static "images/stripe.png" %}" width="135" /></a></div> -->
 					<div class="mp-checkout-shipping-address">
 						<h2 class="mp-store-shipping-info-label">Shipping Information</h2>
                                                 {% with noSavedAddress=request.user.customer.address_set|length_is:"0" %}

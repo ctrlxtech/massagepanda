@@ -581,6 +581,12 @@ height: 50px;
 font-size: 18px;
 }
 
+#stripe-icon {
+  width: 100px !important;
+}
 
+.mp-payment-selector {
+  margin: 10px 2px 20px 0 !important;
+}
 
 }

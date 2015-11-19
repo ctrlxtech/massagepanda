@@ -3,6 +3,7 @@ from django.core import serializers
 from django.db import connection
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
 
 from django.template.defaulttags import register
 
@@ -132,10 +133,10 @@ def sendMyEmail(request):
 def sendFeedbackEmails(request):
     orderIds = request.POST.getlist('orderIds')
     for orderId in orderIds:
-        sendFeedbackEmail(orderId)
+        sendFeedbackEmail(request, orderId)
     return HttpResponse("Email sent!") 
 
-def sendFeedbackEmail(orderId):
+def sendFeedbackEmail(request, orderId):
     order = Order.objects.get(pk=orderId)
     f = order.feedback
 
@@ -146,7 +147,9 @@ def sendFeedbackEmail(orderId):
         subject += ' and ' + ot[1].therapist.user.first_name
     subject += ' - Your Feedback is Important to Us'
     text_content = 'We really appreciate your feedback!'
-    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'host': "http://us.massagepanda.com", 'code': f.code.hex}))
+    current_site = get_current_site(request)
+    host = "http://" + current_site.domain
+    html_content = get_template('feedback/feedbackEmail.html').render(Context({'order': order, 'host': host, 'code': f.code.hex}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [Order.objects.get(pk=orderId).email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

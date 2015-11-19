@@ -451,7 +451,7 @@ input[type = checkbox] {
 }
 
 .mp-checkout-cardImage {
-    padding: 0 15px;
+    padding: 0 0 0 10px;
 }
 
 .form-group {

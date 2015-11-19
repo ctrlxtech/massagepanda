@@ -206,7 +206,7 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0
       for order in queryset:
         try:
-          sendFeedbackEmail(order.id)
+          sendFeedbackEmail(request, order.id)
           count += 1
         except:
           self.message_user(request, "Email can't be sent for order[%s]." % order.id, level=messages.ERROR)

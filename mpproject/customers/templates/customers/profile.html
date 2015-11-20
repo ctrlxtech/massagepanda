@@ -9,11 +9,13 @@
 <link rel="stylesheet" href="{% static "./css/profile.css" %}" type="text/css">
 {% endblock %}
 
-{% block content %}
-
+{% block outter %}
 {% include 'customers/confirmationModal.html' %}
 {% include 'customers/addressModal.html' %}
 {% include 'customers/changePasswordModal.html' %}
+{% endblock %}
+
+{% block content %}
 
 <div id="main-wrap">
    <div class="container">

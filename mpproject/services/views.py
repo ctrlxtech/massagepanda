@@ -11,7 +11,7 @@ from django.views.generic import View
 from customers.models import Address
 from feedback.models import Feedback
 from payment.models import Order, Coupon, GENDER_PREFERENCES
-from referral.models import CustomerReferralHistory, ReferralCredit
+from referral.models import CustomerReferralCode, CustomerReferralHistory, ReferralCredit
 from services.models import Service
 
 from manager.views import sendSMS
@@ -27,6 +27,13 @@ from django.utils import timezone
 @register.filter
 def stripZero(value):
     return ('%f' % value).rstrip(".0")
+
+@register.filter
+def toCents(value):
+    if value:
+        return '%.2f' % value
+    else:
+        return '0.00'
 
 def services(request):
     service_list = Service.objects.order_by('popularity')
@@ -209,16 +216,28 @@ def uncaptureCharge(request):
         request.session['succeeded'] = True
     return JsonResponse(ch)
 
-def insertReferCode(order, customer=None):
+def insertReferOrder(order, customer=None):
     if customer is None:
         return
 
     try: 
-        crh = CustomerReferralHistory(order=order, code=customer.referredcustomer.code, referred_customer=customer)
-        crh.save()
+        crh = customer.customerreferralhistory
+        if not crh.order:
+          crh.order = order
+          crh.save()
     except:
         pass
     return
+
+def rewardCredit(customer, crh, credit=float(settings.REFER_BONUS)):
+    accumulativeCredit = 0
+    try:
+        accumulativeCredit = customer.referralcredit.accumulative_credit
+    except:
+        pass
+    accumulativeCredit += credit
+    rCredit = ReferralCredit(customer=customer, customer_referral_history=crh, credit=credit, accumulative_credit=accumulativeCredit)
+    rCredit.save()
 
 @transaction.atomic
 def redeemRefer(order=None):
@@ -226,24 +245,18 @@ def redeemRefer(order=None):
         return
 
     try:
-        crh = order.customerreferralhistory
-        rc = crh.referred_customer.referredcustomer
-        if rc.redeemed is False:
-            customer = rc.customer
-            accumulativeCredit = 0
-            try:
-                accumulativeCredit = customer.referralcredit.accumulative_credit
-            except:
-                pass
-            credit = float(settings.REFER_BONUS)
-            accumulativeCredit += credit
-            rCredit = ReferralCredit(customer=rc.customer, customer_referral_history=crh, credit=settings.REFER_BONUS, accumulative_credit=accumulativeCredit)
-            rCredit.save()
+      crh = order.customerreferralhistory
+      if crh.status == 'P' and crh.order:
+        referredCustomer = crh.referred_customer
+        referrer = crh.code.customer
 
-            rc.redeemed = True
-            rc.save()
+        rewardCredit(referredCustomer, crh)
+        rewardCredit(referrer, crh)
+
+        crh.status = 'S'
+        crh.save()
     except:
-        pass
+      pass
     return
 
 def getAddressDetail(customer, data):
@@ -439,7 +452,7 @@ def placeOrder(request, data):
         coupon.used += 1
         coupon.save()
 
-    insertReferCode(o, customer)
+    insertReferOrder(o, customer)
     f = createFeedbackForOrder(o)
 
     message_body = "Thank you for booking with MassagePanda! We are reaching out to our therapists now, and we'll let you know once anyone responds!"

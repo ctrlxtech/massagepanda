@@ -22,7 +22,7 @@ import requests
 import stripe
 
 from customers.models import Customer, Address
-from referral.models import CustomerReferralCode, ReferredCustomer
+from referral.models import CustomerReferralCode
 from referral.views import referralCodeGenerator
 from services.views import addPaymentForCustomer, getPhone
 
@@ -74,8 +74,8 @@ def createCustomer(data, request=None):
       customer.save()
 
       if referCode is not None:
-          rc = ReferredCustomer(customer=customer, code=CustomerReferralCode.objects.get(code=referCode))
-          rc.save()
+          crh = CustomerReferralHistory(referred_customer=customer, code=CustomerReferralCode.objects.get(code=referCode))
+          crh.save()
 
       code = referralCodeGenerator()
       customerReferralCode = CustomerReferralCode(customer=customer, code=code)

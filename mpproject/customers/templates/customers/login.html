@@ -6,9 +6,13 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}
 
-{% block content %}
+{% block outter %}
 
 {% include 'customers/forgotPasswordModal.html' %}
+{% endblock %}
+
+{% block content %}
+
 
 <div id="panda_login" class="mp-pageContent container-fluid" data-mpController="pandaLoginPage">
     <div class="login-card">

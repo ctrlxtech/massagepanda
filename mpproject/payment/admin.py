@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
 from django.template.loader import get_template
+from django.db import transaction
 
 import stripe
 
@@ -75,6 +76,7 @@ class OrderAdmin(admin.ModelAdmin):
 
       self.message_user(request, "%s successfully marked as refunded." % count)
 
+    @transaction.atomic
     def mark_charged(self, request, queryset):
       stripe.api_key = settings.STRIPE_KEY
       count = 0
@@ -104,7 +106,7 @@ class OrderAdmin(admin.ModelAdmin):
             self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as charged." % count)
- 
+      
     def punish(self, request, queryset):
       stripe.api_key = settings.STRIPE_KEY
       count = 0

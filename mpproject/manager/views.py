@@ -50,7 +50,7 @@ def orderlisttest(request):
         appOrders.append(buildAppOrder(order))
 
       jsonRes = JsonResponse(appOrders, safe=False)
-    except ValueError, e:
+    except (ValueError, KeyError) as e:
       jsonRes = JsonResponse({"error": "Parameters are missing in request: " + str(request.body)}, safe=False)
 
     jsonRes['Access-Control-Allow-Origin'] = "*"

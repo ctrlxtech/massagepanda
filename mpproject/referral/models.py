@@ -10,7 +10,7 @@ class CustomerReferralCode(models.Model):
 
 class CustomerReferralHistory(models.Model):
     code = models.ForeignKey(CustomerReferralCode)
-    order = models.OneToOneField(Order)
+    order = models.OneToOneField(Order, null=True, blank=True)
     referred_customer = models.OneToOneField(Customer)
     STATUS_CHOICES = (
         ('P', 'Pending'),
@@ -26,6 +26,6 @@ class ReferredCustomer(models.Model):
 
 class ReferralCredit(models.Model):
     customer = models.ForeignKey(Customer)
-    customer_referral_history = models.OneToOneField(CustomerReferralHistory)
+    customer_referral_history = models.ForeignKey(CustomerReferralHistory)
     credit = models.FloatField(validators = [MinValueValidator(0.00)])
     accumulative_credit = models.FloatField(validators = [MinValueValidator(0.00)])

@@ -79,7 +79,7 @@
 					<div class="mp-payment-selector">
 					  	<input type="radio" value="CC" id="mp-radio-cc1" name="payment-type" style="display: none;" >
 						<label for="mp-radio-cc1"><span></span></label>
-                        <span style="margin-left: 10px;">Account Balance: ${{ request.user.customer.referralcredit.credit|toCents }}</span>
+                        <span style="margin-left: 10px;">Account Balance: ${{ request.user.customer.referralcredit_set.all|sum }}</span>
                     </div>
 					{% endif %}
 					<!-- <div style="display: inline-block;padding: 10px 18px;margin-bottom: 35px;margin-top: 25px;"><a href="https://stripe.com/" target="_blank"><img src="{% static "images/stripe.png" %}" width="135" /></a></div> -->

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
+from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import redirect, render_to_response
 from django.template import Context, RequestContext
@@ -29,7 +30,10 @@ def stripZero(value):
     return ('%f' % value).rstrip(".0")
 
 @register.filter
-def toCents(value):
+def sum(creditSet):
+    credit_sum = creditSet.aggregate(Sum('credit'))
+
+    value = credit_sum.get('credit__sum', 0)
     if value:
         return '%.2f' % value
     else:

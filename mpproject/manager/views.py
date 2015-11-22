@@ -18,6 +18,7 @@ from customers.models import Customer, Address
 from django.db import transaction
 import requests
 import json
+import re
 import time
 from datetime import datetime
 import stripe

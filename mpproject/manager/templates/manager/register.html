@@ -14,7 +14,7 @@ function checkpwd() {
     }
 }
 </script>
-<form action="{% url 'createCustomer' %}" method="POST" onsubmit="return checkpwd();">
+<form action="{% url 'createCustomerFromForm' %}" method="POST" onsubmit="return checkpwd();">
 {% csrf_token %}
  <label>First Name: </label><input type="text" name="first_name">
  <label>Last Name: </label><input type="text" name="last_name"><br>

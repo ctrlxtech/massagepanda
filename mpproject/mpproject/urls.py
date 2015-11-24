@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^manager/', include('manager.urls')),
     url(r'^customer/', include('customers.urls')),
     url(r'^referral/', include('referral.urls')),
+    url(r'^robots\.txt$', TemplateView.as_view(template_name='index/robots.txt', content_type='text/plain')),
 ]

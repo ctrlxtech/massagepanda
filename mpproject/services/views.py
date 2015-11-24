@@ -31,13 +31,16 @@ def stripZero(value):
 
 @register.filter
 def sum(creditSet):
-    credit_sum = creditSet.aggregate(Sum('credit'))
+    try:
+      credit_sum = creditSet.aggregate(Sum('credit'))
 
-    value = credit_sum.get('credit__sum', 0)
-    if value:
+      value = credit_sum.get('credit__sum', 0)
+      if value:
         return '%.2f' % value
-    else:
+      else:
         return '0.00'
+    except:
+      return '0.00'
 
 def services(request):
     service_list = Service.objects.order_by('popularity')
@@ -145,10 +148,11 @@ def getPhone(data):
 def sendOrderNotificationToManager(order):
     subject, from_email, to = 'New Order! - ' + str(order.id.int >> 96), settings.SERVER_EMAIL, settings.ORDER_NOTIFICATION_EMAIL
     try:
+      charge = order.amount / 100.0
       text_content = order.recipient + ", " + order.shipping_address + ", " + order.service.service_type \
         + " for " + str(order.service.service_time) + " hour(s), " + order.service_datetime.ctime() \
         + ". Customer Phone: " + order.phone + ", Customer email: " + order.email + ". " + order.get_preferred_gender_display() \
-        + ", table: " + str(order.need_table) + ", parking: " + order.parking_info
+        + ", table: " + str(order.need_table) + ", parking: " + order.parking_info + ", charge: $" + str(charge) + ", coupon: " + str(order.coupon)
     except:
       text_content = "Check admin page for new order!"
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -191,6 +195,7 @@ def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
     return ch
 
 def uncaptureCharge(request):
+    request.session['complete'] = False
     try:
         amount, markDown, coupon, isSuccess = markDownPrice(request.POST)
     except Exception as e:

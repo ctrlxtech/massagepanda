@@ -8,4 +8,4 @@ django-storages==1.1.8
 django-nested-inline==0.3.5
 requests==2.8.1
 rollbar==0.11.0
-protobuf==3.0.0a4
+protobuf==3.0.0a3

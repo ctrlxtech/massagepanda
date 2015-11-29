@@ -173,6 +173,10 @@ def isSavedPaymentSeleted(request):
     savedPayment = request.POST.get("savedPayment")
     return savedPayment and savedPayment != "new-payment-selector"
 
+def isAccountBalanceSeleted(request):
+    paymentType = request.POST.get("payment-type")
+    return paymentType and paymentType == "account-balance"
+
 def isSavedAddressSeleted(request):
     savedAddress = request.POST.get("savedAddress")
     return savedAddress and savedAddress != "new-address-selector"
@@ -220,7 +224,11 @@ def uncaptureCharge(request):
         if customer is not None and stripeToken:
             stripeToken = addPaymentForCustomer(customer, stripeToken).id
 
+    if isAccountBalanceSeleted(request):
+        amount -= request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
+
     ch = createUncapturedCharge(int(amount), stripeToken, stripeCustomerId)
+
     if ch['status'] == 'succeeded':
         request.session['succeeded'] = True
     return JsonResponse(ch)
@@ -241,7 +249,7 @@ def insertReferOrder(order, customer=None):
 def rewardCredit(customer, crh, credit=float(settings.REFER_BONUS)):
     accumulativeCredit = 0
     try:
-        accumulativeCredit = customer.referralcredit.accumulative_credit
+        accumulativeCredit = customer.referralcredit_set.all().latest('id').accumulative_credit
     except:
         pass
     accumulativeCredit += credit

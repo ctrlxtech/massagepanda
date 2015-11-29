@@ -4,15 +4,8 @@ from django.contrib.auth.models import User
 
 from customers.models import Customer
 
-class CustomerInline(admin.StackedInline):
-    model = Customer
-    can_delete = False
-    verbose_name_plural = 'customer'
-
 # Define a new User admin
-class UserAdmin(UserAdmin):
-    inlines = (CustomerInline, )
+class CustomerAdmin(admin.ModelAdmin):
+    readonly_fields = ('user', 'stripe_customer_id')
 
-# Re-register UserAdmin
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(Customer, CustomerAdmin)

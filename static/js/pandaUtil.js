@@ -439,7 +439,7 @@ $('.mp-form-input[name="cvc"]').keydown(function(e) {
       return;
     }
     date = $(this).val();
-    if (date.length == 3 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+    if (date.length == 4 && ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
       e.preventDefault();
       return;
     }

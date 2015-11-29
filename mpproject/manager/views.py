@@ -1,78 +1,83 @@
-from django.shortcuts import render, redirect
-from django.core import serializers
-from django.db import connection
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth import get_user_model
-from django.contrib.sites.shortcuts import get_current_site
-
-from django.template.defaulttags import register
-
-from django.http import HttpResponse, JsonResponse
-from feedback.models import Feedback
-from manager.models import Staff, Area, Therapist, InSMS, OutSMS, ForwardSMS, ForwardNumber, SMSTemplate
-from payment.models import Order, OrderTherapist, Coupon, ServiceCoupon
-from services.models import Service, Group
-from referral.models import CustomerReferralCode, CustomerReferralHistory
-from django.contrib.auth.models import User
-from customers.models import Customer, Address
-from django.db import transaction
-import requests
+import base64
 import json
 import re
 import time
-from datetime import datetime
-import stripe
 import urllib2
-import base64
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMultiAlternatives
-from django.template import Context
+from datetime import datetime
 
+import requests
+import stripe
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
+from django.db import connection, transaction
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.template import Context
+from django.template.defaulttags import register
 from django.template.loader import get_template
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.encoding import force_text, force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+import therapist_pb2
+from customers.models import Address, Customer
+from feedback.models import Feedback
+from manager.models import (Area, ForwardNumber, ForwardSMS, InSMS, OutSMS,
+                            SMSTemplate, Staff, Therapist)
+from payment.models import Coupon, Order, OrderTherapist, ServiceCoupon
+from referral.models import CustomerReferralCode, CustomerReferralHistory
+from services.models import Group, Service
 
 # Create your views here.
 @csrf_exempt
 def orderlisttest(request):
-    try:
-      data = json.loads(request.body)
-      uidb64 = data['uid']
-      uid = force_text(urlsafe_base64_decode(uidb64))
-      UserModel = get_user_model()
-      therapist = UserModel._default_manager.get(pk=uid).therapist
+    '''
+    data = json.loads(request.body)
+    uidb64 = data['uid']
+    uid = force_text(urlsafe_base64_decode(uidb64))
+    UserModel = get_user_model()
+    therapist = UserModel._default_manager.get(pk=uid).therapist
+    '''
 
-      orders = Order.objects.filter(ordertherapist__therapist=therapist)
+    UserModel = get_user_model()
+    therapist = UserModel._default_manager.get(pk=9).therapist
 
-      appOrders = []
-      for order in orders:
-        appOrders.append(buildAppOrder(order))
+    orders = Order.objects.filter(ordertherapist__therapist=therapist)
 
-      jsonRes = JsonResponse(appOrders, safe=False)
-    except (ValueError, KeyError) as e:
-      jsonRes = JsonResponse({"error": "Parameters are missing in request: " + str(request.body)}, safe=False)
+    order_list = buildOrderListProto(orders)
+
+    jsonRes = HttpResponse(order_list.SerializeToString(), content_type="application/octet-stream")
 
     jsonRes['Access-Control-Allow-Origin'] = "*"
     jsonRes['Access-Control-Allow-Methods'] = "GET,POST"
     jsonRes['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
     return jsonRes
 
-def buildAppOrder(data):
-    order = {}
-    order['id'] = data.id.hex
-    order['date'] = datetimeToEpoch(data.service_datetime)
-    order['duration'] = data.service.service_time * 60
-    order['type'] = str(data.service.service_type)
-    order['status'] = data.get_status_display()
-    order['earn'] = data.service.labor_cost
-    stubs = data.shipping_address.split(', ')
-    order['address'] = str(stubs[0])
-    order['city'] = str(stubs[1])
-    order['state'] = str(stubs[2])
-    order['country-and-zipcode'] = str(stubs[3])
-    return order
+def buildOrderListProto(orders):
+    order_list = therapist_pb2.OrderList()
+    for data in orders:
+      order = order_list.order.add()
+
+      order.id = (data.id.int >> 96)
+      order.service_time = datetimeToEpoch(data.service_datetime)
+      order.service_duration = int(data.service.service_time * 60)
+      order.service_type = str(data.service.service_type)
+      order.order_status = int(data.status)
+      order.earn = data.service.labor_cost
+
+      stubs = data.shipping_address.split(', ')
+      order.address.address_line = str(stubs[0])
+      order.address.city = str(stubs[1])
+      order.address.state = str(stubs[2])
+      country_and_zipcode = stubs[3].split(' ')
+      order.address.country = str(country_and_zipcode[0])
+      order.address.zipcode = str(country_and_zipcode[1])
+    return order_list
 
 def getSchedule(request):
     therapist = Therapist.objects.get(pk=1)
@@ -161,7 +166,6 @@ def sendFeedbackEmail(request, orderId):
     return
 
 def test(request):
-    return redirect('orderSuccess', foo="woo")    
     name = "Mr. unknown"
     if request.POST.get('name'):
       name = request.POST.get('name')

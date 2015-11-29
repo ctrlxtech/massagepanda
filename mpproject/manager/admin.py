@@ -38,7 +38,7 @@ class TherapistAdmin(NestedModelAdmin):
     list_display = ('phone', 'get_name', 'gender', 'get_rating')
     list_filter = ['gender']
     inlines = (TherapistAreaInline, ScheduleInline)
-    readonly_fields = ('rating', 'rate_count')
+    readonly_fields = ('user', 'rating', 'rate_count')
 
     def get_rating(self, obj):
         return '%s' % (0 if obj.rate_count == 0 else (obj.rating / obj.rate_count))

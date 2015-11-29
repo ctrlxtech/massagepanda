@@ -26,6 +26,8 @@ class ReferredCustomer(models.Model):
 
 class ReferralCredit(models.Model):
     customer = models.ForeignKey(Customer)
-    customer_referral_history = models.ForeignKey(CustomerReferralHistory)
-    credit = models.FloatField(validators = [MinValueValidator(0.00)])
+    customer_referral_history = models.ForeignKey(CustomerReferralHistory, null=True, blank=True)
+    adjustment = models.BooleanField(default = False)
+    order = models.OneToOneField(Order, null=True, blank=True)
+    credit = models.FloatField()
     accumulative_credit = models.FloatField(validators = [MinValueValidator(0.00)])

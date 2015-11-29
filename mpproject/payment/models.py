@@ -41,7 +41,8 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, default=None, null=True, blank=True)
     coupon = models.ForeignKey(Coupon, default=None, null=True, blank=True)
     stripe_token = models.CharField(max_length = 100)
-    amount = models.IntegerField()
+    credit_used = models.FloatField(default=0.0)
+    amount = models.IntegerField() # total amount to charge
     
     shipping_address = models.CharField(max_length = 500)
     recipient = models.CharField(max_length = 50)
@@ -59,6 +60,9 @@ class Order(models.Model):
         ('6', 'Punished'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='0')
+
+    def __unicode__(self):
+        return "%s" % (self.id.int >> 96)
 
 class ServiceCoupon(models.Model):
     service = models.ForeignKey(Service)

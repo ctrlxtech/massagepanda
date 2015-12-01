@@ -7,8 +7,8 @@ class Customer(models.Model):
     user = models.OneToOneField(User)
     stripe_customer_id = models.CharField(max_length = 50)
     GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
+        ('0', 'Male'),
+        ('1', 'Female'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \

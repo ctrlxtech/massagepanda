@@ -4,6 +4,7 @@ from feedback.models import Feedback
 from services.models import Service
 from services.views import redeemRefer
 from manager.views import sendFeedbackEmail
+from referral.models import ReferralCredit
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -117,10 +118,18 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 stripeCustomerId = None
 
-            ch = stripe.Charge.retrieve(order.stripe_token)
-            ch.capture(
-                amount=order.amount
-            )
+            if order.credit_used >= order.amount:
+                credit_refunded = order.amount - order.credit_used
+                aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + credit_refunded
+                rCredit = ReferralCredit(customer=customer, adjustment=True, credit=credit_refunded, accumulative_credit=aCredit)
+                rCredit.save()
+                stripe.Refund.create(charge=order.stripe_token)
+            else:
+                ch = stripe.Charge.retrieve(order.stripe_token)
+                amount_to_charge = order.amount - order.credit_used
+                ch.capture(
+                    amount=amount_to_charge
+                )
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda', {"customerCanceled": True})
 
@@ -134,60 +143,6 @@ class OrderAdmin(admin.ModelAdmin):
 
       self.message_user(request, "%s successfully punished." % count)
    
-    def charge_40(self, request, queryset):
-      stripe.api_key = settings.STRIPE_KEY
-      count = 0
-      for order in queryset:
-        try:
-            if order.status == '3':
-                raise ValueError("Order has been canceled")
-            if order.customer is not None:
-                stripeCustomerId = order.customer.stripe_customer_id
-            else:
-                stripeCustomerId = None
-
-            ch = stripe.Charge.retrieve(order.stripe_token)
-            ch.capture(
-                amount=4000 # amount in cents, again
-            )
-
-            order.status = '7'
-            order.stripe_token = ch.id
-            order.save()
-
-            count += 1
-        except (stripe.error.StripeError, ValueError) as e:
-            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
-
-      self.message_user(request, "%s successfully marked as charged." % count)
-
-    def charge_10(self, request, queryset):
-      stripe.api_key = settings.STRIPE_KEY
-      count = 0
-      for order in queryset:
-        try:
-            if order.status == '3':
-                raise ValueError("Order has been canceled")
-            if order.customer is not None:
-                stripeCustomerId = order.customer.stripe_customer_id
-            else:
-                stripeCustomerId = None
-
-            ch = stripe.Charge.retrieve(order.stripe_token)
-            ch.capture(
-                amount=1000 # amount in cents, again
-            )
-
-            order.status = '6'
-            order.stripe_token = ch.id
-            order.save()
-
-            count += 1
-        except (stripe.error.StripeError, ValueError) as e:
-            self.message_user(request, "Order(number: %s) can't be marked as charged. Error: %s" % (order.id, e), level=messages.ERROR)
-
-      self.message_user(request, "%s successfully marked as charged." % count)
- 
     def mark_canceled(self, request, queryset):
       count = 0
       for order in queryset:

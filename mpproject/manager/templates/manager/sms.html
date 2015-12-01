@@ -27,8 +27,8 @@
 <hr>
 
 <form id="getcontactlistform">
-<label>Male</label><input type="checkbox" name="gender" value="M" id="selectmale"/>
-<label>Female</label><input type="checkbox" name="gender" value="F" id="selectfemale"/>
+<label>Male</label><input type="checkbox" name="gender" value="0" id="selectmale"/>
+<label>Female</label><input type="checkbox" name="gender" value="1" id="selectfemale"/>
 {% if area_list %}
 <select name="areacode">
 {% for area in area_list %}
@@ -116,7 +116,7 @@ SMS templates:
 <script>
 addToList("adminList", 1, "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
 </script>
-{% elif staff.gender == 'M' %}
+{% elif staff.gender == '0' %}
 <script>
 addToList("mList", 2, "{{staff.first_name}}", "{{staff.last_name}}", "{{staff.phone_number}}")
 </script>

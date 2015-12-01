@@ -202,8 +202,11 @@ def uncaptureCharge(request):
     request.session['complete'] = False
     try:
         amount, markDown, coupon, isSuccess = markDownPrice(request.POST)
+        if isAccountBalanceSeleted(request):
+            amount = max(amount - request.user.customer.referralcredit_set.all().latest('id').accumulative_credit, 0)
     except Exception as e:
         return JsonResponse(e, safe=False)
+
     amount = amount * 100
 
     customer = None
@@ -223,9 +226,6 @@ def uncaptureCharge(request):
         stripeToken = request.POST.get('stripeToken')
         if customer is not None and stripeToken:
             stripeToken = addPaymentForCustomer(customer, stripeToken).id
-
-    if isAccountBalanceSeleted(request):
-        amount -= request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
 
     ch = createUncapturedCharge(int(amount), stripeToken, stripeCustomerId)
 
@@ -413,6 +413,8 @@ def placeOrderFromPost(request):
 def placeOrder(request, data):
     customer = None
     stripeCustomerId = None
+    rCredit = None
+    credit_used = 0
     if request.user.is_authenticated():
         try:
             customer = request.user.customer
@@ -431,6 +433,12 @@ def placeOrder(request, data):
 
     try:
         amount, markDown, coupon, isSuccess = markDownPrice(data)
+        if isAccountBalanceSeleted(request):
+            accumulative_credit = request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
+            credit_used = min(amount, accumulative_credit)
+            remain_credit = accumulative_credit-credit_used
+            rCredit = ReferralCredit(customer=customer, credit=-credit_used, accumulative_credit=remain_credit)
+
         serviceId = data.get('serviceId')
     except Exception as e:
         return JsonResponse(e, safe=False)
@@ -460,9 +468,13 @@ def placeOrder(request, data):
    
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime, coupon=coupon,
         preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
-        amount=amount, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
+        amount=amount, credit_used=credit_used, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)
     o.save()
     
+    if rCredit and isinstance(rCredit, ReferralCredit):
+        rCredit.order = o
+        rCredit.save()
+
     if isSuccess:
         if coupon.quantity > 0:
           coupon.quantity -= 1

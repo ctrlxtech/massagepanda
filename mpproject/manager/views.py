@@ -34,29 +34,36 @@ from referral.models import CustomerReferralCode, CustomerReferralHistory
 from services.models import Group, Service
 
 # Create your views here.
+def applyHeaders(res):
+    res['Access-Control-Allow-Origin'] = "*"
+    res['Access-Control-Allow-Methods'] = "GET,POST"
+    res['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
+    return res
+
+def getTherapist(request):
+    try:
+        data = json.loads(request.body)
+        uidb64 = data['uid']
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        UserModel = get_user_model()
+        return UserModel._default_manager.get(pk=uid).therapist
+    except:
+        return None
+
 @csrf_exempt
-def orderlisttest(request):
-    '''
-    data = json.loads(request.body)
-    uidb64 = data['uid']
-    uid = force_text(urlsafe_base64_decode(uidb64))
-    UserModel = get_user_model()
-    therapist = UserModel._default_manager.get(pk=uid).therapist
-    '''
+def getOrderlist(request):
+    therapist = getTherapist(request)
 
-    UserModel = get_user_model()
-    therapist = UserModel._default_manager.get(pk=9).therapist
+    if therapist:
+      orders = Order.objects.filter(ordertherapist__therapist=therapist)
 
-    orders = Order.objects.filter(ordertherapist__therapist=therapist)
+      order_list = buildOrderListProto(orders)
 
-    order_list = buildOrderListProto(orders)
-
-    jsonRes = HttpResponse(order_list.SerializeToString(), content_type="application/octet-stream")
-
-    jsonRes['Access-Control-Allow-Origin'] = "*"
-    jsonRes['Access-Control-Allow-Methods'] = "GET,POST"
-    jsonRes['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
-    return jsonRes
+      jsonRes = HttpResponse(order_list.SerializeToString(), content_type="application/octet-stream")
+    else:
+      jsonRes = HttpResponse("Invalid request")
+      
+    return applyHeaders(jsonRes)
 
 def buildOrderListProto(orders):
     order_list = therapist_pb2.OrderList()
@@ -79,19 +86,24 @@ def buildOrderListProto(orders):
       order.address.zipcode = str(country_and_zipcode[1])
     return order_list
 
+@csrf_exempt
 def getSchedule(request):
-    therapist = Therapist.objects.get(pk=1)
-    schedule = therapist.schedule_set.all()
-    json = JsonResponse(buildAppSchedule(schedule), safe=False)
-    json['Access-Control-Allow-Origin'] = "*"
-    return json
+    therapist = getTherapist(request)
+    if therapist:
+      schedule = therapist.schedule_set.all()
+      schedule_list = buildScheduleProto(schedule)
+      jsonRes = HttpResponse(schedule_list.SerializeToString(), content_type="application/octet-stream")
+    else:
+      jsonRes = HttpResponse("Invalid request")
+ 
+    return applyheaders(jsonRes)
 
-def buildAppSchedule(data):
-    schedule = []
+def buildScheduleProto(data):
+    schedule_list = therapist_pb2.Schedule()
     for item in data:
-        singleSchedule = {}
-        singleSchedule['active'] = item.active
-        singleSchedule['day'] = str(item.get_day_display())
+        slot = schedule_list.slot.add()
+        slot.status = int(item.active)
+        slot.day = str(item.day)
         intervals = item.interval_set.all()
         intvls = []
         for interval in intervals:
@@ -369,6 +381,7 @@ def index(request):
 @user_passes_test(lambda u: u.is_superuser)
 def getContactList(request):
     genderList = request.POST.getlist("gender")
+
     area = request.POST.get("areacode")
     contact_list = []
     for gender in genderList:

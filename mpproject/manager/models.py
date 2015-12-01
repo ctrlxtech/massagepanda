@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
+GENDER_CHOICES = (
+    ('0', 'Male'),
+    ('1', 'Female'),
+)
+
 # Create your models here.
 class Staff(models.Model):
     first_name = models.CharField(max_length = 200)
@@ -10,10 +15,6 @@ class Staff(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(max_length = 16, validators=[phone_regex], unique=True) # validators should be a list
     
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profile_photo = models.ImageField(null=True, blank=True);
 
@@ -22,10 +23,6 @@ class Staff(models.Model):
 
 class Therapist(models.Model):
     user = models.OneToOneField(User)
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
@@ -52,13 +49,13 @@ class Therapist(models.Model):
 
 class Schedule(models.Model):
     DAY_CHOICES = (
-        ('Mon', 'Monday'),
-        ('Tue', 'Tuesday'),
-        ('Wed', 'Wednesday'),
-        ('Thu', 'Thursday'),
-        ('Fri', 'Friday'),
-        ('Sat', 'Saturday'),
-        ('Sun', 'Sunday'),
+        ('0', 'Monday'),
+        ('1', 'Tuesday'),
+        ('2', 'Wednesday'),
+        ('3', 'Thursday'),
+        ('4', 'Friday'),
+        ('5', 'Saturday'),
+        ('6', 'Sunday'),
     )
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
     therapist = models.ForeignKey(Therapist)
@@ -76,10 +73,10 @@ class Interval(models.Model):
 
 class Area(models.Model):
     AREA_CHOICES = (
-        ('SF', 'San Francisco'),
-        ('P', 'Peninsula'),
-        ('E', 'East Bay'),
-        ('S', 'South Bay'),
+        ('0', 'San Francisco'),
+        ('1', 'Peninsula'),
+        ('2', 'East Bay'),
+        ('3', 'South Bay'),
     )
     areacode = models.CharField(max_length=10, choices=AREA_CHOICES)
     staff = models.ForeignKey(Staff, null=True, blank=True)

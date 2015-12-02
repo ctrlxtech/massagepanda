@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+      html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{
+      margin:0;
+      padding:0;
+      border:0;
+      font:inherit;
+      font-size:100%;
+      vertical-align:baseline;
+      }
+      html{
+      line-height:1;
+      }
+      ol,ul{
+      list-style:none;
+      }
+      table{
+      border-collapse:collapse;
+      border-spacing:0;
+      }
+      caption,th,td{
+      text-align:left;
+      font-weight:normal;
+      vertical-align:middle;
+      }
+      q,blockquote{
+      quotes:none;
+      }
+      q:before,q:after,blockquote:before,blockquote:after{
+      content:none;
+      }
+      a img{
+      border:none;
+      }
+      article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{
+      display:block;
+      }
+      body{
+      font-family:"Open Sans",Helvetica,Arial,Verdana,sans-serif;
+      }
+      body{
+      width:100% !important;
+      -webkit-text-size-adjust:100%;
+      -ms-text-size-adjust:100%;
+      }
+      body{
+      margin:0;
+      padding:0;
+      }
+      img{
+      border:0;
+      line-height:100%;
+      outline:none;
+      text-decoration:none;
+      }
+      table td{
+      border-collapse:collapse;
+      }
+      #backgroundTable{
+      margin:0;
+      padding:0;
+      width:100% !important;
+      height:100% !important;
+      }
+    </style>
+  </head>
+  <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; background-color: #FBFBFB;">
+    <center style="text-align: center;">
+      <table id="background" height="100%" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #FBFBFB; margin-bottom: 40px;">
+        <tr>
+          <td id="background-cell" align="center" valign="top" style="color: #666; font-family: inherit; font-size: 16px; line-height: 1.5em; vertical-align: top; text-align: center;">
+            <table id="container" width="700" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; width: 700px;">
+              <tr>
+                <td align="left" valign="top" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top;">
+                  <div id="commerce-header" style="padding: 50px 0 30px; line-height: normal;">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="site-title" style="color: #666; font-family: Helvetica; font-size: 30px; line-height: 1.5em; vertical-align: top;">MassagePanda</td>
+                        <td class="info" style="color: #999; font-family: Helvetica; font-size: 20px; line-height: 1.5em; vertical-align: top; text-align: right;">
+                          Order Confirmation<br><span class="order-number" style="color: #000;">#584462055</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="content" style="border: 1px solid #CED0D2; background-color: #FFFFFF; line-height: normal;">
+                    <h1 id="email-header" style="padding: 50px 0 25px; text-align: center; font-size: 32px; color: #444; font-weight: lighter; -webkit-font-smoothing: antialiased; line-height: 40px;">
+                      Your refund is on the way.
+                    </h1>
+                    <div class="sub-content" style="padding: 0 40px 40px 40px;">
+                      <div class="custom-message header-message" style="font-size: 17px; color: #606060; font-weight: lighter;">
+                        <span style=""><span style=""></span></span>
+                        <div><span style=""><span style=""><br></span></span></div>
+                      </div>
+                      <h3 style="margin-bottom: 15px; padding-top: 25px; padding-bottom: 15px; border-bottom: 1px solid #E3E5E7; font-size: 16px; font-weight: normal; color: #444;">Refund Information</h3>
+                      <p style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; font-weight: lighter;">
+                        Your refund will appear on your account in 3 - 5 Days. </br>
+                        Refund will be applied to:
+                      </p>
+                      {{ stripeCharge.source.brand }} ending in <span class="ccLast4">{{ stripeCharge.source.last4 }}</span><br><span class="fullName">{{ stripeCharge.source.name }}</span>
+                    </div>
+                    <h2 style="padding: 6px 40px; background-color: #F2F4F5; color: #363b3e; border: 1px solid #E7E8EA; border-width: 1px 0 1px 0; font-size: 15px; font-weight: normal;">Order Receipt</h2>
+                    <div class="sub-content" style="padding: 0 40px 40px 40px;">
+                      <table id="orders" height="100%" width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr class="subtotal-spacer">
+                          <td style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; padding-top: 25px;"></td>
+                        </tr>
+                        <tr class="total">
+                          <td style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; padding-top: 25px; border-top: 1px solid #E3E5E7;">Total Refund</td>
+                          <td class="price" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; text-align: right; padding-top: 25px; border-top: 1px solid #E3E5E7;"><strong style="color: #333;">${{ refund_amount|centsToDollars }}</strong></td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="sub-content" style="padding: 0 40px 40px 40px;">
+                    </div>
+                  </div>
+                  <div class="companyInfo" style="text-align: center; margin-top: 20px; font-size: 14px;">
+                    MassagePanda
+                    | 440 N Wolfe Rd.
+                    | Sunnyvale, CA, 94085 US<br><a href="mailto:support@massagepanda.com" style="color: #2990ea; text-decoration: none; border-bottom: 1px #2990ea dotted;">support@massagepanda.com</a>
+                    | 8556872632
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </center>
+  </body>
+</html>

@@ -89,6 +89,7 @@ def buildOrderListProto(orders):
 @csrf_exempt
 def getSchedule(request):
     therapist = getTherapist(request)
+
     if therapist:
       schedule = therapist.schedule_set.all()
       schedule_list = buildScheduleProto(schedule)
@@ -96,21 +97,23 @@ def getSchedule(request):
     else:
       jsonRes = HttpResponse("Invalid request")
  
-    return applyheaders(jsonRes)
+    return applyHeaders(jsonRes)
 
 def buildScheduleProto(data):
     schedule_list = therapist_pb2.Schedule()
     for item in data:
         slot = schedule_list.slot.add()
         slot.status = int(item.active)
-        slot.day = str(item.day)
+        slot.day = int(item.day)
         intervals = item.interval_set.all()
-        intvls = []
-        for interval in intervals:
-            intvls.append({"starttime": str(interval.starttime), "endtime": str(interval.endtime)})
-        singleSchedule['intervals'] = intvls
-        schedule.append(singleSchedule)
-    return schedule
+        for intvl in intervals:
+            interval = slot.interval.add()
+            interval.start_time = timeToSeconds(intvl.starttime)
+            interval.end_time = timeToSeconds(intvl.endtime)
+    return schedule_list
+
+def timeToSeconds(daytime):
+    return daytime.hour * 3600 + daytime.minute * 60 + daytime.second
 
 def datetimeToEpoch(dt):
     epoch = datetime.utcfromtimestamp(0)

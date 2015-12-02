@@ -47,7 +47,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderTherapistInline, FeedbackInline
     ]
 
-    actions = ['mark_charged', 'punish', 'mark_canceled', 'send_feedback_email']
+    actions = ['mark_charged', 'mark_refunded', 'punish', 'mark_canceled', 'send_feedback_email']
 
     def order_id(self, obj):
         return '%s' % (obj.id.int >> 96)
@@ -67,7 +67,17 @@ class OrderAdmin(admin.ModelAdmin):
       count = 0;
       for order in queryset:
         try:
-            stripe.Refund.create(charge=order.stripe_token)
+            if order.status == '5':
+                raise ValueError("Order[%s] has already been refunded" % (order.id.int >> 96))
+
+            ch = stripe.Charge.retrieve(order.stripe_token)
+            refund_amount = max(ch.amount - order.amount, 0)
+            stripe.Refund.create(
+                charge=order.stripe_token,
+                amount=refund_amount)
+
+            sendOrderEmail(order, 'payment/partial_refund_email.html', 'Your refund is on the way! - MassagePanda', {"refund_amount": refund_amount})
+
             order.status = '5'
             order.save()
 
@@ -127,9 +137,7 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 ch = stripe.Charge.retrieve(order.stripe_token)
                 amount_to_charge = order.amount - order.credit_used
-                ch.capture(
-                    amount=amount_to_charge
-                )
+                ch.capture(amount=amount_to_charge)
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda', {"customerCanceled": True})
 

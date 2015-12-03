@@ -14,7 +14,7 @@
 {% block docReady %}
 {% endblock %}
 
-{% block content %}
+{% block outter %}
 <div class="modal fade" id="addressConflictAlert">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -31,7 +31,9 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+{% endblock %}
 
+{% block content %}
 <div id="panda_checkout" class="mp-pageContent container-fluid" data-mpController="checkoutPage">
     <div class="btn-group btn-group-justified mp-checkout-mobileTab mp-largeScreenHide" role="group">
         <div class="btn-group" role="group">

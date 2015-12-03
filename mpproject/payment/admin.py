@@ -128,10 +128,12 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 stripeCustomerId = None
 
-            if order.credit_used >= order.amount:
-                credit_refunded = order.amount - order.credit_used
+            if order.credit_used == order.amount:
+                pass
+            if order.credit_used > order.amount:
+                credit_refunded = order.credit_used - order.amount
                 aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + credit_refunded
-                rCredit = ReferralCredit(customer=customer, adjustment=True, credit=credit_refunded, accumulative_credit=aCredit)
+                rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=credit_refunded, accumulative_credit=aCredit)
                 rCredit.save()
                 stripe.Refund.create(charge=order.stripe_token)
             else:
@@ -151,10 +153,17 @@ class OrderAdmin(admin.ModelAdmin):
 
       self.message_user(request, "%s successfully punished." % count)
    
+    @transaction.atomic
     def mark_canceled(self, request, queryset):
+      stripe.api_key = settings.STRIPE_KEY
       count = 0
       for order in queryset:
         try:
+            if order.credit_used != 0:
+              aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + order.credit_used
+              rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=order.credit_used, accumulative_credit=aCredit)
+              rCredit.save()
+
             stripe.Refund.create(charge=order.stripe_token)
             order.status = '3'
             order.save()

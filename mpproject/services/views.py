@@ -14,10 +14,13 @@ from feedback.models import Feedback
 from payment.models import Order, Coupon, GENDER_PREFERENCES
 from referral.models import CustomerReferralCode, CustomerReferralHistory, ReferralCredit
 from services.models import Service
+from django.contrib import messages
 
 from manager.views import sendSMS
 
 import hashlib
+import requests
+import json
 import re
 import stripe
 import time
@@ -383,6 +386,13 @@ def gender_display(q):
             return choice[1]
     return ''
 
+def subscribeCustomer(request, order, list_id):
+    url = "https://us10.api.mailchimp.com/3.0/lists/" + list_id + "/members"
+    fname_lname = order.recipient.split(' ', 1)
+    payload = {'apikey': settings.MAILCHIMP_KEY, 'status': 'subscribed', 'email_address': order.email, 'merge_fields': {'FNAME': fname_lname[0], 'LNAME':fname_lname[1]}}
+    headers = {'Content-type': 'application/json', 'Authorization': 'apikey fe35e80bca4df4928991af8f0e3092be-us10'}
+    return requests.post(url, data=json.dumps(payload), headers=headers)
+      
 class PlaceOrderView(View):
     def get(self, request):
         return redirect('index')
@@ -488,6 +498,8 @@ def placeOrder(request, data):
     nums = [phone]
     sendSMS(nums, message_body, False)
     sendNewOrderEmailToCustomer(o)
+
+    subscribeCustomer(request, o, "e77933f373")
 
     sendOrderNotificationToManager(o)
 

@@ -40,7 +40,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
     list_display_links = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at')
     search_fields = ['id', ]
-    readonly_fields = ('order_id', 'need_table', 'parking_info', 'stripe_token', 'created_at' )
+    readonly_fields = ('order_id', 'need_table', 'parking_info', 'credit_used', 'stripe_token', 'created_at' )
     ordering = ['-created_at',]
 
     inlines = [

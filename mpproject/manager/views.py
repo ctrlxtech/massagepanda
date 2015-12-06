@@ -112,6 +112,22 @@ def buildScheduleProto(data):
             interval.end_time = timeToSeconds(intvl.endtime)
     return schedule_list
 
+@csrf_exempt
+def updateSchedule(request):
+    therapist = getTherapist(request)
+
+    if therapist:
+      schedule_list = therapist_pb2.Schedule()
+      schedule_list.ParseFromString(request.POST.get("schedule_list"))
+      jsonRes = HttpResponse(schedule_list)
+      for slot in schedule_list.slot:
+        for interval in slot.interval:
+            pass
+    else:
+      jsonRes = HttpResponse("Invalid request")
+ 
+    return applyHeaders(jsonRes)
+
 def timeToSeconds(daytime):
     return daytime.hour * 3600 + daytime.minute * 60 + daytime.second
 

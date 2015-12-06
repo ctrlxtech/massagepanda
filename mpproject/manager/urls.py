@@ -39,5 +39,6 @@ urlpatterns = [
     url(r'^test$', views.test, name='test'),
     url(r'^getOrderlist$', views.getOrderlist, name='getOrderlist'),
     url(r'^getSchedule$', views.getSchedule, name='schedule'),
+    url(r'^updateSchedule$', views.updateSchedule, name='updateSchedule'),
     url(r'^referralTest$', views.referralTest, name='referralTest'),
 ]

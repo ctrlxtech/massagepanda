@@ -67,7 +67,7 @@ class Schedule(models.Model):
 class Interval(models.Model):
     starttime = models.TimeField()
     endtime = models.TimeField()
-    therapist = models.ForeignKey(Schedule)
+    schedule = models.ForeignKey(Schedule)
     def __str__(self):
         return 'starttime:\'%s\',endtime:\'%s\'' %(self.starttime, self.endtime)
 

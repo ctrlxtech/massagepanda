@@ -27,8 +27,8 @@ from django.views.decorators.csrf import csrf_exempt
 import therapist_pb2
 from customers.models import Address, Customer
 from feedback.models import Feedback
-from manager.models import (Area, ForwardNumber, ForwardSMS, InSMS, OutSMS,
-                            SMSTemplate, Staff, Therapist)
+from manager.models import (Area, ForwardNumber, ForwardSMS, InSMS, Interval, OutSMS,
+                            Schedule, SMSTemplate, Staff, Therapist)
 from payment.models import Coupon, Order, OrderTherapist, ServiceCoupon
 from referral.models import CustomerReferralCode, CustomerReferralHistory
 from services.models import Group, Service
@@ -113,6 +113,7 @@ def buildScheduleProto(data):
     return schedule_list
 
 @csrf_exempt
+@transaction.atomic
 def updateSchedule(request):
     therapist = getTherapist(request)
 
@@ -121,8 +122,15 @@ def updateSchedule(request):
       schedule_list.ParseFromString(request.POST.get("schedule_list"))
       jsonRes = HttpResponse(schedule_list)
       for slot in schedule_list.slot:
+        schedule = therapist.schedule_set.filter(day=slot.day)
+        if not schedule:
+            schedule = Schedule(day=slot.day, therapist=therapist, active=False)
+            schedule.save()
+        else:
+            schedule[0].interval_set.all().delete()
         for interval in slot.interval:
-            pass
+            intvl = Interval(schedule=schedule, starttime=interval.start_time, endtime=interval.end_time)
+            intvl.save()
     else:
       jsonRes = HttpResponse("Invalid request")
  

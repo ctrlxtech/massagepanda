@@ -8,7 +8,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
   $(function() {
     $("#datepicker").datepicker({
-      minDate: new Date()
+      minDate: new Date(),
+
+      onSelect: function(dateText, inst) {
+        massageDetailsTimeForList();
+      }
     });
   });
   setupTimeDropdown($("#massageDetails_timeList"));
@@ -91,16 +95,18 @@ var pandaUtil = {
             return dateString;
         }
     }
+    
+var timeArray = ['9:00am', '9:30am', '10:00am', '10:30am', '11:00am', '11:30am', '12:00pm', '12:30pm', '1:00pm', '1:30pm', '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm', '4:30pm', '5:00pm', '5:30pm', '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm', '9:30pm', '10:00pm'];
+
     //private function
 function setupTimeDropdown($timeList) {
     $timeList.empty();
-    var timeArray = ['9:00am', '9:30am', '10:00am', '10:30am', '11:00am', '11:30am', '12:00pm', '12:30pm', '1:00pm', '1:30pm', '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm', '4:30pm', '5:00pm', '5:30pm', '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm', '9:30pm', '10:00pm'];
     for (var i = 0; i < 27; i++) {
         var time = timeArray[i];
         var timeTempString = '<li class="mp-item"><a>' + time + '</a></li><li class="divider"></li>';
         $timeList.append(timeTempString);
     }
-    $timeList.append('<li class="mp-item noServiceAvaliable" style="display:none"><a>No Services</a></li>');
+    $timeList.append('<li class="mp-item noServiceAvaliable" style="display:none"><a>Sorry, we are closed..</a></li>');
     $timeList.on("click", "a", processSelection);
 };
 
@@ -119,18 +125,19 @@ function massageDetailsTimeForList() {
         var today = new Date();
         var todayDateString = pandaUtil.getDateString(today);
         if (todayDateString === date) {
-            var timeArray = ['9:00am', '9:30am', '10:00am', '10:30am', '11:00am', '11:30am', '12:00pm', '12:30pm', '1:00pm', '1:30pm', '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm', '4:30pm', '5:00pm', '5:30pm', '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm', '9:00pm', '9:30pm', '10:00pm'];
-            var currentHours = today.getHours() + 1;
+            var currentHours = today.getHours();
             var currentMins = today.getMinutes();
             currentMins = Math.ceil(currentMins / 30) * 30;
             if (currentMins === 60) {
                 currentMins = '00';
                 currentHours = currentHours + 1;
             }
-            //special case if over 10,then no service
-            if (currentHours > 23) {
+            //special case if over 10pm,then no service
+            if (currentHours >= 22) {
                 $timeList.find('li').not('.noServiceAvaliable').addClass('timeListHide');
                 $timeList.find('li.noServiceAvaliable').show();
+                $('input[type=submit]').prop('disabled', true);
+                $('#timepicker').val("");
                 return;
             }
             var currentSuffix = (currentHours >= 12) ? 'pm' : 'am';
@@ -139,9 +146,9 @@ function massageDetailsTimeForList() {
             if (timeArray.indexOf(currentTimeString) > -1) {
                 var timeStringIndex = timeArray.indexOf(currentTimeString) * 2;
                 $timeList.find('li:lt(' + timeStringIndex + ')').addClass('timeListHide');
-
             }
         } else {
+            $('input[type=submit]').prop('disabled', false);
             $timeList.find('li').removeClass('timeListHide');
             $timeList.find('li.noServiceAvaliable').hide();
         }

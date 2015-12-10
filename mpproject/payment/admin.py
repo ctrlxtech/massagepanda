@@ -164,6 +164,12 @@ class OrderAdmin(admin.ModelAdmin):
               rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=order.credit_used, accumulative_credit=aCredit)
               rCredit.save()
 
+            if order.coupon and order.coupon.quantity >= 0:
+              coupon = order.coupon
+              coupon.quantity += 1
+              coupon.used -= 1
+              coupon.save()
+
             stripe.Refund.create(charge=order.stripe_token)
             order.status = '3'
             order.save()

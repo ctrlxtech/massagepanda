@@ -6,7 +6,7 @@ from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
 class IntervalInline(NestedStackedInline):
     model = Interval
-    fk_name = "therapist"
+    fk_name = "schedule"
     extra = 1
 
 class ScheduleInline(NestedStackedInline):

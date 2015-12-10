@@ -95,7 +95,7 @@ def getSchedule(request):
       schedule_list = buildScheduleProto(schedule)
       jsonRes = HttpResponse(schedule_list.SerializeToString(), content_type="application/octet-stream")
     else:
-      jsonRes = HttpResponse("Invalid request")
+      jsonRes = JsonResponse({'error': "Invalid request"})
  
     return applyHeaders(jsonRes)
 
@@ -115,13 +115,22 @@ def buildScheduleProto(data):
 @csrf_exempt
 @transaction.atomic
 def updateSchedule(request):
+    schedule_list = therapist_pb2.Schedule.FromString(request.body)
+    jsonRes = HttpResponse("Hello world")
+    for slot in schedule_list.slot:
+      jsonRes = HttpResponse("Hello world 1")
+    return applyHeaders(jsonRes)
     therapist = getTherapist(request)
 
     if therapist:
+      jsonRequest = json.loads(request.body)
       schedule_list = therapist_pb2.Schedule()
-      schedule_list.ParseFromString(request.POST.get("schedule_list"))
-      jsonRes = HttpResponse(schedule_list)
+      schedule_list.ParseFromString(jsonRequest["schedule_list"])
+      jsonRes = HttpResponse("Hello world")
       for slot in schedule_list.slot:
+        jsonRes = HttpResponse("Hello world 1")
+        jsonRes = JsonResponse({'status': 'step'})
+        break
         schedule = therapist.schedule_set.filter(day=slot.day)
         if not schedule:
             schedule = Schedule(day=slot.day, therapist=therapist, active=False)
@@ -132,7 +141,7 @@ def updateSchedule(request):
             intvl = Interval(schedule=schedule, starttime=interval.start_time, endtime=interval.end_time)
             intvl.save()
     else:
-      jsonRes = HttpResponse("Invalid request")
+      jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
  
     return applyHeaders(jsonRes)
 

@@ -6,11 +6,21 @@
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content="Massage Panda" />
     <meta property="og:description"   content="Invite your friends" />
-    <meta property="og:image"         content="http://www.your-domain.com/path/image.jpg" />
+    <meta property="og:image"         content="http://{{ request.get_host }}{% static "images/promophoto1.png" %}" />
+	<link rel="stylesheet" href="{% static "./css/refer.css" %}" type="text/css">
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="{% static "./js/refer.js" %}"></script>
+<!--<script type="text/javascript" src="{% static "./js/refer.js" %}"></script>-->
+<script type="text/javascript">
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +39,7 @@
                            <td class="wsite-multicol-col profile-right" style="width:80%; padding:0 15px;">
                               <h2 class="wsite-content-title" style="text-align:center;">GET FREE MASSAGES<br></h2>
                               <div class="wsite-spacer" style="height:11px;"></div>
-                              <div class="paragraph" style="text-align:left;"><font size="5">Send friends a discount for massage using your unique code. After their first massages, you'll get a free massage - worth up to $99.</font></div>
+                              <div class="paragraph" style="text-align:left;"><font size="5">Send friends a discount for massage using your unique code. After their first massages, you'll get a free massage - worth up to $99<sup>*</sup>.</font></div>
                               <div>
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                                  <hr class="styled-hr" style="width:100%;">
@@ -42,9 +52,22 @@
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                               </div>
                               <div class="paragraph" style="text-align:left;">Use these methods to share free massages with your friends.<br></div>
-                              <div class="fb-share-button" data-href="http://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}" data-layout="button">
+                              <!--<div class="fb-share-button" data-href="http://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}" data-layout="button">
                               </div>
-                              <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}" data-count="none" data-dnt="true">Tweet</a>
+                              <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}" data-count="none" data-dnt="true">Tweet</a>-->
+								 
+							  <div style="text-align:left;margin-bottom: 20px;">
+								<!-- Facebook -->
+								<a href="https://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}" title="Share on Facebook" class="btn btn-facebook btn-share" onclick="window.open(this.href, '_blank', 'left=100,top=100,width=580,height=500,toolbar=0,resizable=0,scrollbars=0'); return false;">
+									<i class="fa fa-facebook" style="width:15px"></i> FACEBOOK 
+								</a>							  
+							    <!-- Twitter -->
+								<a href="http://twitter.com/home?status=Sign up now and get $20! http://massagepanda.com{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }} @massage_panda brings you best-in-class on demand massages. Anytime. Anywhere." title="Share on Twitter" class="btn btn-twitter btn-share" onclick="window.open(this.href, '_blank', 'left=100,top=100,width=600,height=350,toolbar=0,resizable=0,scrollbars=0'); return false;">
+									<i class="fa fa-twitter"></i> TWITTER
+								</a>
+								
+							  </div>
+
                               <div style="display: none">
                                  <div class="wsite-image wsite-image-border-none " style="padding-top:0;padding-bottom:5px;margin-left:0;margin-right:0;text-align:left">
                                     <a>
@@ -66,9 +89,16 @@
                                  <div style="height: 0px; overflow: hidden; width: 100%;"></div>
                               </div>
                               <div class="paragraph" style="text-align:left;">This is your invite code. Friends can enter it into their massage bookings for the discount. You can also copy the link and share it with others.</div>
-                              <div class="paragraph" style="text-align:left;"><strong>{{ request.user.customer.customerreferralcode.code }}</strong></div>
+                              <div class="paragraph" style="text-align:left;">
+								<span style="font-size: 25px; font-weight: 400;">{{ request.user.customer.customerreferralcode.code }}</span></br>
+								<a style="color: #bbb;text-decoration: underline;font-size: 14px;" onclick="document.getElementById('referLink').style.display = 'block';" >Get Your Invite Link</a> </br>
+								<span style="display:none;" id="referLink">
+									<span id="referText">http://massagepanda.com{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}</span>
+									<a style="margin-left:10px;" onclick="copyToClipboard('#referText');this.innerHTML = 'Copied';">Copy</a>
+								</span>
+							  </div>
                               <div class="wsite-spacer" style="height:30px;"></div>
-                              <div class="paragraph" style="text-align:left;"><font size="2">Every time a friend signs up with your invite code, they'll get their first massage discount (up to $20). Once they've tried MassagePanda, you'll also receive a massage credit (up to $20), which will be applied to your account automatically.</font></div>
+                              <div class="paragraph" style="text-align:left;"><font size="2">*Every time a friend signs up with your invite code, they'll get their first massage discount (up to $20). Once they've tried MassagePanda, you'll also receive a massage credit (up to $20), which will be applied to your account automatically.</font></div>
                            </td>
                         </tr>
                      </tbody>

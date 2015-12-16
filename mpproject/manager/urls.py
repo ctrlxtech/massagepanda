@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^tregister$', views.tregister_view, name='tregister'),
     url(r'^createTherapist$', views.createTherapist, name='createTherapist'),
     url(r'^test$', views.test, name='test'),
+    url(r'^getRequestlist$', views.getRequestlist, name='getRequestlist'),
     url(r'^getOrderlist$', views.getOrderlist, name='getOrderlist'),
     url(r'^getSchedule$', views.getSchedule, name='schedule'),
     url(r'^updateSchedule$', views.updateSchedule, name='updateSchedule'),

@@ -3,6 +3,7 @@ import json
 import re
 import time
 import urllib2
+import datetime
 from datetime import datetime
 
 import requests
@@ -42,13 +43,31 @@ def applyHeaders(res):
 
 def getTherapist(request):
     try:
-        data = json.loads(request.body)
+      jsonRequest = json.loads(request.body)
+      return getTherapistFromJson(jsonRequest)
+    except:
+      return None
+
+def getTherapistFromJson(data):
+    try:
         uidb64 = data['uid']
         uid = force_text(urlsafe_base64_decode(uidb64))
         UserModel = get_user_model()
         return UserModel._default_manager.get(pk=uid).therapist
     except:
         return None
+
+@csrf_exempt
+def getRequestlist(request):
+    therapist = getTherapist(request)
+    if therapist:
+      orders = Order.objects.filter(ordertherapist__id__isnull=True)
+      order_list = buildOrderListProto(orders)
+      jsonRes = HttpResponse(order_list.SerializeToString(), content_type="application/octet-stream")
+    else:
+      jsonRes = HttpResponse("Invalid request")
+ 
+    return applyHeaders(jsonRes)
 
 @csrf_exempt
 def getOrderlist(request):
@@ -84,6 +103,9 @@ def buildOrderListProto(orders):
       country_and_zipcode = stubs[3].split(' ')
       order.address.country = str(country_and_zipcode[0])
       order.address.zipcode = str(country_and_zipcode[1])
+      recipient = order.recipient.split(' ')
+      order.customer_name = str(recipient[0] + ' ' + recipient[-1][0])
+      order.creation_time = datetimeToEpoch(data.created_at)
     return order_list
 
 @csrf_exempt
@@ -115,31 +137,27 @@ def buildScheduleProto(data):
 @csrf_exempt
 @transaction.atomic
 def updateSchedule(request):
-    schedule_list = therapist_pb2.Schedule.FromString(request.body)
-    jsonRes = HttpResponse("Hello world")
-    for slot in schedule_list.slot:
-      jsonRes = HttpResponse("Hello world 1")
-    return applyHeaders(jsonRes)
-    therapist = getTherapist(request)
+    try:
+      jsonRequest = json.loads(request.body)
+      therapist = getTherapistFromJson(jsonRequest)
+    except:
+      therapist = None
 
     if therapist:
-      jsonRequest = json.loads(request.body)
-      schedule_list = therapist_pb2.Schedule()
-      schedule_list.ParseFromString(jsonRequest["schedule_list"])
-      jsonRes = HttpResponse("Hello world")
-      for slot in schedule_list.slot:
-        jsonRes = HttpResponse("Hello world 1")
-        jsonRes = JsonResponse({'status': 'step'})
-        break
-        schedule = therapist.schedule_set.filter(day=slot.day)
+      schedule_list = jsonRequest["schedule_list"]
+      for slot in schedule_list["slot"]:
+        schedule = therapist.schedule_set.filter(day=slot["day"])
         if not schedule:
-            schedule = Schedule(day=slot.day, therapist=therapist, active=False)
+            schedule = Schedule(day=slot["day"], therapist=therapist, active=False)
             schedule.save()
         else:
             schedule[0].interval_set.all().delete()
-        for interval in slot.interval:
-            intvl = Interval(schedule=schedule, starttime=interval.start_time, endtime=interval.end_time)
+            schedule = schedule[0]
+        for interval in slot["interval"]:
+            intvl = Interval(schedule=schedule, starttime=secondsToTime(interval["start_time"]),
+                             endtime=secondsToTime(interval["end_time"]))
             intvl.save()
+      jsonRes = JsonResponse({'status': 'success'})
     else:
       jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
  
@@ -147,6 +165,14 @@ def updateSchedule(request):
 
 def timeToSeconds(daytime):
     return daytime.hour * 3600 + daytime.minute * 60 + daytime.second
+
+def secondsToTime(seconds):
+    seconds = int(seconds)
+    hours = seconds/3600
+    secondsRemain = seconds%3600
+    minutes = secondsRemain/60
+    secondsRemain = minutes%60
+    return datetime.time(hours, minutes, secondsRemain)
 
 def datetimeToEpoch(dt):
     epoch = datetime.utcfromtimestamp(0)

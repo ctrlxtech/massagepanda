@@ -113,7 +113,7 @@ def verifyCustomer(request, uidb64=None, token=None, token_generator=default_tok
     else:
       context = {'status': 'failure'}
 
-    return redirect('index')
+    return render_to_response('customers/verify.html', context, context_instance=RequestContext(request))
 
 def sendWelcomeEmail(to, first_name):
     subject = "Welcome!"

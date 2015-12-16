@@ -11,10 +11,12 @@
 <script type="text/javascript" src="{% static "./js/payment.js" %}"></script>
 {% endblock %}
 
-{% block content %}
-
+{% block outter %}
 {% include 'customers/confirmationModal.html' %}
 {% include 'customers/newPaymentModal.html' %}
+{% endblock %}
+
+{% block content %}
 
 <input type="hidden" id="stripePublishKey" value="{{ stripePublishKey }}" />
 
@@ -73,8 +75,8 @@
                         <div class="wsite-multicol-table-wrap" style="margin:0 -5px;">
                           <table id="payment-table" class="wsite-multicol-table">
                             <tbody class="wsite-multicol-tbody">
-{% if stripeCustomer %}
-{% for data in stripeCustomer.sources.data %}
+							{% if stripeCustomer %}
+							{% for data in stripeCustomer.sources.data %}
                               <tr class="wsite-multicol-tr">
                                 <td class="wsite-multicol-col" style="width:7%; padding:0 5px;">
                                   <div>
@@ -96,14 +98,16 @@
                                   <div class="paragraph">{{ data.name }}</div>
                                 </td>
                                 <td class="wsite-multicol-col" style="width:10%; padding:0 5px;">
-                                   <input type="hidden" name="card-id" value="{{data.id}}">
-                                   <a class="delete-link" name="deletePaymentBtn">Delete</a>
+								  <div class="paragraph">
+                                    <input type="hidden" name="card-id" value="{{data.id}}">
+                                    <a class="delete-link" name="deletePaymentBtn">Delete</a>
+								  </div>
                                 </td>
                               </tr>
-{% endfor %}
-{% else %}
-no payment found
-{% endif %}
+							{% endfor %}
+							{% else %}
+							no payment found
+							{% endif %}
                             </tbody>
                           </table>
                         </div>

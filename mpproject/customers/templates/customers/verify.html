@@ -1,0 +1,21 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div id="panda_success" class="mp-pageContent jumbotron">
+    <div class="panel panel-success mp-successInfo">
+        <!-- Default panel contents -->
+        {% if status == 'success' %}
+        <div class="panel-heading mp-successTitle">
+            <img class="mp-successIcon" src="{% static "images/success_icon.png" %}"/><span>Your account have been verified, {{ firstName }}</span>
+        </div>
+        {% else %}
+        <div class="panel-body">
+            Something is wrong. :(
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

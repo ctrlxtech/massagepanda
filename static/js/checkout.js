@@ -1,6 +1,18 @@
 $( window ).load(function() {
 
   $('#payment-form').on('submit', function(event) {
+    var isValid = true;
+    $('#payment-form *').filter(':input[required]').each(function(){
+        var value = $(this).val();
+        if (!value) {
+          isValid = false;
+          $('#mp-checkoutAlertDanger').text('Please fill out all the fileds');
+          $('#mp-checkoutAlertDanger').css('display', 'block');
+        }
+    });
+    if (isValid) {
+      $('#mp-checkoutAlertDanger').css('display', 'none');
+    }
     var $form = $(this);
     if ($("#new-payment-div").css('display') == "none") {
         doCheckout($form);
@@ -185,3 +197,32 @@ function hideCoupon(data) {
   $('#wsite-discount-row').hide();
 }
 
+function validate() {
+  var $massageDetailsForm = $('#mp-massageDetails-form');
+  var date = $('#datepicker').val();
+  var time = $('#timepicker').val();
+  var gender = $('#genderPreferred').val();
+  var zipcode = $('#zipcode').val();
+  var $panelAlert = $('#mp-massageDetails-panelAlert');
+  $panelAlert.css('display', 'none');
+  if (!date) {
+      $panelAlert.text('Please select date !');
+      $panelAlert.css('display', 'block');
+      return false;
+  };
+  if (!time) {
+      $panelAlert.text('Please select time !');
+      $panelAlert.css('display', 'block');
+      return false;
+  };
+  if (!gender) {
+      $panelAlert.text('Please select you preferred gender !');
+      $panelAlert.css('display', 'block');
+      return false;
+  };
+  if (!zipcode || (zipcode.length != 5)) {
+      $panelAlert.text('Please provide your correct zipcode!');
+      $panelAlert.css('display', 'block');
+      return false;
+  };
+}

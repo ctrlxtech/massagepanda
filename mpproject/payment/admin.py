@@ -37,10 +37,10 @@ class FeedbackInline(admin.StackedInline):
 
 class OrderAdmin(admin.ModelAdmin):
     list_select_related = ('service', )
-    list_display = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
-    list_display_links = ('order_id', 'get_service', 'recipient', 'service_datetime', 'created_at')
-    search_fields = ['id', ]
-    readonly_fields = ('order_id', 'need_table', 'parking_info', 'credit_used', 'stripe_token', 'created_at' )
+    list_display = ('external_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
+    list_display_links = ('external_id', 'get_service', 'recipient', 'service_datetime', 'created_at')
+    search_fields = ['external_id', ]
+    readonly_fields = ('external_id', 'need_table', 'parking_info', 'credit_used', 'stripe_token', 'created_at' )
     ordering = ['-created_at',]
 
     inlines = [
@@ -48,9 +48,6 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
     actions = ['mark_charged', 'mark_refunded', 'punish', 'mark_canceled', 'send_feedback_email']
-
-    def order_id(self, obj):
-        return '%s' % (obj.id.int >> 96)
 
     def get_service(self, obj):
         return '%s For %.1f' % (obj.service.service_type, obj.service.service_time)

@@ -89,7 +89,8 @@ def buildOrderListProto(orders):
     for data in orders:
       order = order_list.order.add()
 
-      order.id = (data.id.int >> 96)
+      order.id = data.id
+      order.external_id = data.external_id
       order.service_time = datetimeToEpoch(data.service_datetime)
       order.service_duration = int(data.service.service_time * 60)
       order.service_type = str(data.service.service_type)
@@ -140,10 +141,6 @@ def updateSchedule(request):
     try:
       jsonRequest = json.loads(request.body)
       therapist = getTherapistFromJson(jsonRequest)
-    except:
-      therapist = None
-
-    if therapist:
       schedule_list = jsonRequest["schedule_list"]
       for slot in schedule_list["slot"]:
         schedule = therapist.schedule_set.filter(day=slot["day"])
@@ -158,10 +155,25 @@ def updateSchedule(request):
                              endtime=secondsToTime(interval["end_time"]))
             intvl.save()
       jsonRes = JsonResponse({'status': 'success'})
-    else:
+    except:
       jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
  
     return applyHeaders(jsonRes)
+
+@csrf_exempt
+@transaction.atomic
+def processAction(request):
+    try:
+      jsonRequest = json.loads(request.body)
+      therapist = getTherapistFromJson(jsonRequest)
+      order = Order.objects.get(id=jsonRequest["order_id"])
+      action = jsonRequest["action"]
+      jsonRes = JsonResponse({'status': 'success'})
+    except:
+      jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
+ 
+    return applyHeaders(jsonRes)
+
 
 def timeToSeconds(daytime):
     return daytime.hour * 3600 + daytime.minute * 60 + daytime.second

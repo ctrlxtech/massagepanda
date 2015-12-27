@@ -27,6 +27,7 @@ class Coupon(models.Model):
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    external_id = models.CharField(max_length = 20)
     created_at = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must" \
     " be entered in the format: '+999999999'. Up to 15 digits allowed.")
@@ -60,6 +61,10 @@ class Order(models.Model):
         ('6', 'Punished'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='0')
+
+    def save(self, *args, **kwargs):
+        self.external_id = self.id.int >> 96
+        super(Order, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "%s" % (self.id.int >> 96)

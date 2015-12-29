@@ -50,7 +50,10 @@ def createCustomer(data, request=None):
 
     referCode = None
     if request is not None:
+      try:
         referCode = request.session['code']
+      except KeyError:
+        pass
 
     email = data.get('email')
     phone = getPhone(data)

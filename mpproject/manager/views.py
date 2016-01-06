@@ -89,8 +89,8 @@ def buildOrderListProto(orders):
     for data in orders:
       order = order_list.order.add()
 
-      order.id = data.id
-      order.external_id = data.external_id
+      order.id = data.id.hex
+      order.external_id = int(data.external_id)
       order.service_time = datetimeToEpoch(data.service_datetime)
       order.service_duration = int(data.service.service_time * 60)
       order.service_type = str(data.service.service_type)
@@ -168,6 +168,17 @@ def processAction(request):
       therapist = getTherapistFromJson(jsonRequest)
       order = Order.objects.get(id=jsonRequest["order_id"])
       action = jsonRequest["action"]
+      if action == 0: # Accept order
+        ot = OrderTherapist(order=order, therapist=therapist)
+        ot.save()
+        pass
+      elif action == 1: # Check in
+        pass
+      elif action == 2: # Check out
+        pass
+      elif action == 3: # Emergency
+        pass
+      
       jsonRes = JsonResponse({'status': 'success'})
     except:
       jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
@@ -446,7 +457,7 @@ def mrefund(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
-    staff_list = Staff.objects.order_by('first_name')
+    staff_list = Staff.objects.filter(suspended=False).order_by('first_name')
     template_list = SMSTemplate.objects.all()
     area_list = Area.AREA_CHOICES
     context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list}
@@ -459,7 +470,7 @@ def getContactList(request):
     area = request.POST.get("areacode")
     contact_list = []
     for gender in genderList:
-        contact_list += Staff.objects.filter(area__areacode=area, gender=gender)
+        contact_list += Staff.objects.filter(area__areacode=area, gender=gender, suspended=False)
     data = serializers.serialize("json", contact_list)
     return HttpResponse(data)
 

@@ -270,7 +270,6 @@ def redeemRefer(order=None):
         referredCustomer = crh.referred_customer
         referrer = crh.code.customer
 
-        rewardCredit(referredCustomer, crh)
         rewardCredit(referrer, crh)
 
         crh.status = 'S'

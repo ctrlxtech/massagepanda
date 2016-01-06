@@ -62,7 +62,7 @@ function copyToClipboard(element) {
 									<i class="fa fa-facebook" style="width:15px"></i> FACEBOOK 
 								</a>							  
 							    <!-- Twitter -->
-								<a href="http://twitter.com/home?status=Sign up now and get $20! http://massagepanda.com{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }} @massage_panda brings you best-in-class on demand massages. Anytime. Anywhere." title="Share on Twitter" class="btn btn-twitter btn-share" onclick="window.open(this.href, '_blank', 'left=100,top=100,width=600,height=350,toolbar=0,resizable=0,scrollbars=0'); return false;">
+								<a href="http://twitter.com/home?status=Sign up now and get $20! http://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }} @massage_panda brings you best-in-class on demand massages. Anytime. Anywhere." title="Share on Twitter" class="btn btn-twitter btn-share" onclick="window.open(this.href, '_blank', 'left=100,top=100,width=600,height=350,toolbar=0,resizable=0,scrollbars=0'); return false;">
 									<i class="fa fa-twitter"></i> TWITTER
 								</a>
 								
@@ -93,7 +93,7 @@ function copyToClipboard(element) {
 								<span style="font-size: 25px; font-weight: 400;">{{ request.user.customer.customerreferralcode.code }}</span></br>
 								<a style="color: #bbb;text-decoration: underline;font-size: 14px;" onclick="document.getElementById('referLink').style.display = 'block';" >Get Your Invite Link</a> </br>
 								<span style="display:none;" id="referLink">
-									<span id="referText">http://massagepanda.com{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}</span>
+									<span id="referText">http://{{ request.get_host }}{% url 'customerRegister' %}?code={{ request.user.customer.customerreferralcode.code }}</span>
 									<a style="margin-left:10px;" onclick="copyToClipboard('#referText');this.innerHTML = 'Copied';">Copy</a>
 								</span>
 							  </div>

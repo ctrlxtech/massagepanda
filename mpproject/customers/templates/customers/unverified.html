@@ -1,0 +1,18 @@
+{% extends "index/wbase.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div id="panda_success" class="mp-pageContent jumbotron">
+    <div class="panel panel-success mp-successInfo">
+        <div class="panel-heading mp-successTitle">
+            <img class="mp-successIcon" src="{% static "images/success_icon.png" %}"/>
+			<span>Thanks for signing up with MassagePanda</span>
+        </div>
+        <div style="padding:15px;">
+			<p style="font-size: 0.8em;">You're just one step away from your new account. We've sent a confirmation email to the email address you just provided. Click the link to confirm your email address and activate your account.</p>
+		</div>
+    </div>
+</div>
+
+{% endblock %}

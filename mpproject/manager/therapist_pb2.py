@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='therapist.proto',
   package='massagepanda.therapist',
   syntax='proto2',
-  serialized_pb=_b('\n\x0ftherapist.proto\x12\x16massagepanda.therapist\"\xcc\x04\n\tOrderList\x12\x36\n\x05order\x18\x01 \x03(\x0b\x32\'.massagepanda.therapist.OrderList.Order\x1a\x86\x04\n\x05Order\x12\n\n\x02id\x18\x01 \x02(\x03\x12\x14\n\x0cservice_time\x18\x02 \x02(\x03\x12\x18\n\x10service_duration\x18\x03 \x02(\x05\x12\x14\n\x0cservice_type\x18\x04 \x02(\t\x12I\n\x0corder_status\x18\x05 \x02(\x0e\x32\x33.massagepanda.therapist.OrderList.Order.OrderStatus\x12\x0c\n\x04\x65\x61rn\x18\x06 \x02(\x02\x12@\n\x07\x61\x64\x64ress\x18\x07 \x02(\x0b\x32/.massagepanda.therapist.OrderList.Order.Address\x12\x15\n\rcustomer_name\x18\t \x02(\t\x12\x15\n\rcreation_time\x18\x08 \x02(\x03\x12\x13\n\x0b\x65xternal_id\x18\n \x02(\x03\x1a^\n\x07\x41\x64\x64ress\x12\x14\n\x0c\x61\x64\x64ress_line\x18\x01 \x02(\t\x12\x0c\n\x04\x63ity\x18\x02 \x02(\t\x12\r\n\x05state\x18\x03 \x02(\t\x12\x0f\n\x07\x63ountry\x18\x04 \x02(\t\x12\x0f\n\x07zipcode\x18\x05 \x02(\t\"m\n\x0bOrderStatus\x12\x0b\n\x07PENDING\x10\x00\x12\r\n\tCONFIRMED\x10\x01\x12\x0b\n\x07SHIPPED\x10\x02\x12\x0c\n\x08\x43\x41NCELED\x10\x03\x12\x0b\n\x07\x43HARGED\x10\x04\x12\x0c\n\x08REFUNDED\x10\x05\x12\x0c\n\x08PUNISHED\x10\x06\"\xc3\x03\n\x08Schedule\x12\x33\n\x04slot\x18\x01 \x03(\x0b\x32%.massagepanda.therapist.Schedule.Slot\x1a\x81\x03\n\x04Slot\x12\x46\n\x06status\x18\x01 \x02(\x0e\x32,.massagepanda.therapist.Schedule.Slot.Status:\x08INACTIVE\x12\x36\n\x03\x64\x61y\x18\x02 \x02(\x0e\x32).massagepanda.therapist.Schedule.Slot.Day\x12@\n\x08interval\x18\x03 \x03(\x0b\x32..massagepanda.therapist.Schedule.Slot.Interval\x1a\x30\n\x08Interval\x12\x12\n\nstart_time\x18\x01 \x02(\x05\x12\x10\n\x08\x65nd_time\x18\x02 \x02(\x05\"\"\n\x06Status\x12\x0c\n\x08INACTIVE\x10\x00\x12\n\n\x06\x41\x43TIVE\x10\x01\"a\n\x03\x44\x61y\x12\n\n\x06MONDAY\x10\x00\x12\x0b\n\x07TUESDAY\x10\x01\x12\r\n\tWEDNESDAY\x10\x02\x12\x0c\n\x08THURSDAY\x10\x03\x12\n\n\x06\x46RIDAY\x10\x04\x12\x0c\n\x08SATURDAY\x10\x05\x12\n\n\x06SUNDAY\x10\x06\"\xb6\x01\n\rActionRequest\x12\x0f\n\x07user_id\x18\x01 \x02(\t\x12\x10\n\x08order_id\x18\x02 \x02(\x03\x12<\n\x06\x61\x63tion\x18\x03 \x02(\x0e\x32,.massagepanda.therapist.ActionRequest.Action\"D\n\x06\x41\x63tion\x12\x10\n\x0c\x41\x43\x43\x45PT_ORDER\x10\x00\x12\x0b\n\x07\x43HECKIN\x10\x01\x12\x0c\n\x08\x43HECKOUT\x10\x02\x12\r\n\tEMERGENCY\x10\x03')
+  serialized_pb=_b('\n\x0ftherapist.proto\x12\x16massagepanda.therapist\"\xcc\x04\n\tOrderList\x12\x36\n\x05order\x18\x01 \x03(\x0b\x32\'.massagepanda.therapist.OrderList.Order\x1a\x86\x04\n\x05Order\x12\n\n\x02id\x18\x01 \x02(\t\x12\x13\n\x0b\x65xternal_id\x18\n \x02(\x05\x12\x14\n\x0cservice_time\x18\x02 \x02(\x03\x12\x18\n\x10service_duration\x18\x03 \x02(\x05\x12\x14\n\x0cservice_type\x18\x04 \x02(\t\x12I\n\x0corder_status\x18\x05 \x02(\x0e\x32\x33.massagepanda.therapist.OrderList.Order.OrderStatus\x12\x0c\n\x04\x65\x61rn\x18\x06 \x02(\x02\x12@\n\x07\x61\x64\x64ress\x18\x07 \x02(\x0b\x32/.massagepanda.therapist.OrderList.Order.Address\x12\x15\n\rcustomer_name\x18\t \x02(\t\x12\x15\n\rcreation_time\x18\x08 \x02(\x03\x1a^\n\x07\x41\x64\x64ress\x12\x14\n\x0c\x61\x64\x64ress_line\x18\x01 \x02(\t\x12\x0c\n\x04\x63ity\x18\x02 \x02(\t\x12\r\n\x05state\x18\x03 \x02(\t\x12\x0f\n\x07\x63ountry\x18\x04 \x02(\t\x12\x0f\n\x07zipcode\x18\x05 \x02(\t\"m\n\x0bOrderStatus\x12\x0b\n\x07PENDING\x10\x00\x12\r\n\tCONFIRMED\x10\x01\x12\x0b\n\x07SHIPPED\x10\x02\x12\x0c\n\x08\x43\x41NCELED\x10\x03\x12\x0b\n\x07\x43HARGED\x10\x04\x12\x0c\n\x08REFUNDED\x10\x05\x12\x0c\n\x08PUNISHED\x10\x06\"\xc3\x03\n\x08Schedule\x12\x33\n\x04slot\x18\x01 \x03(\x0b\x32%.massagepanda.therapist.Schedule.Slot\x1a\x81\x03\n\x04Slot\x12\x46\n\x06status\x18\x01 \x02(\x0e\x32,.massagepanda.therapist.Schedule.Slot.Status:\x08INACTIVE\x12\x36\n\x03\x64\x61y\x18\x02 \x02(\x0e\x32).massagepanda.therapist.Schedule.Slot.Day\x12@\n\x08interval\x18\x03 \x03(\x0b\x32..massagepanda.therapist.Schedule.Slot.Interval\x1a\x30\n\x08Interval\x12\x12\n\nstart_time\x18\x01 \x02(\x05\x12\x10\n\x08\x65nd_time\x18\x02 \x02(\x05\"\"\n\x06Status\x12\x0c\n\x08INACTIVE\x10\x00\x12\n\n\x06\x41\x43TIVE\x10\x01\"a\n\x03\x44\x61y\x12\n\n\x06MONDAY\x10\x00\x12\x0b\n\x07TUESDAY\x10\x01\x12\r\n\tWEDNESDAY\x10\x02\x12\x0c\n\x08THURSDAY\x10\x03\x12\n\n\x06\x46RIDAY\x10\x04\x12\x0c\n\x08SATURDAY\x10\x05\x12\n\n\x06SUNDAY\x10\x06\"\xb6\x01\n\rActionRequest\x12\x0f\n\x07user_id\x18\x01 \x02(\t\x12\x10\n\x08order_id\x18\x02 \x02(\x03\x12<\n\x06\x61\x63tion\x18\x03 \x02(\x0e\x32,.massagepanda.therapist.ActionRequest.Action\"D\n\x06\x41\x63tion\x12\x10\n\x0c\x41\x43\x43\x45PT_ORDER\x10\x00\x12\x0b\n\x07\x43HECKIN\x10\x01\x12\x0c\n\x08\x43HECKOUT\x10\x02\x12\r\n\tEMERGENCY\x10\x03')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -229,70 +229,70 @@ _ORDERLIST_ORDER = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='id', full_name='massagepanda.therapist.OrderList.Order.id', index=0,
-      number=1, type=3, cpp_type=2, label=2,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='external_id', full_name='massagepanda.therapist.OrderList.Order.external_id', index=1,
+      number=10, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='service_time', full_name='massagepanda.therapist.OrderList.Order.service_time', index=1,
+      name='service_time', full_name='massagepanda.therapist.OrderList.Order.service_time', index=2,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='service_duration', full_name='massagepanda.therapist.OrderList.Order.service_duration', index=2,
+      name='service_duration', full_name='massagepanda.therapist.OrderList.Order.service_duration', index=3,
       number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='service_type', full_name='massagepanda.therapist.OrderList.Order.service_type', index=3,
+      name='service_type', full_name='massagepanda.therapist.OrderList.Order.service_type', index=4,
       number=4, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='order_status', full_name='massagepanda.therapist.OrderList.Order.order_status', index=4,
+      name='order_status', full_name='massagepanda.therapist.OrderList.Order.order_status', index=5,
       number=5, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='earn', full_name='massagepanda.therapist.OrderList.Order.earn', index=5,
+      name='earn', full_name='massagepanda.therapist.OrderList.Order.earn', index=6,
       number=6, type=2, cpp_type=6, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='address', full_name='massagepanda.therapist.OrderList.Order.address', index=6,
+      name='address', full_name='massagepanda.therapist.OrderList.Order.address', index=7,
       number=7, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='customer_name', full_name='massagepanda.therapist.OrderList.Order.customer_name', index=7,
+      name='customer_name', full_name='massagepanda.therapist.OrderList.Order.customer_name', index=8,
       number=9, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='creation_time', full_name='massagepanda.therapist.OrderList.Order.creation_time', index=8,
+      name='creation_time', full_name='massagepanda.therapist.OrderList.Order.creation_time', index=9,
       number=8, type=3, cpp_type=2, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='external_id', full_name='massagepanda.therapist.OrderList.Order.external_id', index=9,
-      number=10, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,

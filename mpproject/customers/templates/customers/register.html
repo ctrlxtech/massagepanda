@@ -1,25 +1,52 @@
 {% extends "index/wbase.html" %}
 {% load staticfiles %}
+
+{% block script %}
+<script type="text/javascript" src="{% static "./js/register.js" %}"></script>
+{% endblock %}
+
 {% block content %}
 
 <div id="panda_register" class="mp-pageContent container-fluid" data-mpController="pandaRegisterPage">
     <div class="signup-card">
-        <h1>Sign-up</h1>
+        <h2 class="mp-helpCenterTitle" style="margin-top:20px;">Sign Up</h2>
         <br>
-        <form class="mp-registerForm" action="{% url 'createCustomerFromForm' %}" method=POST>
-        {{ request.session.code }}
+        <form class="mp-registerForm" role="form" data-toggle="validator" action="{% url 'createCustomerFromForm' %}" method=POST>
+            {% if request.session.code %}
+            <div style="margin-bottom: 10px;">Refer Code: {{ request.session.code }}</div>
+            {% endif %}
             {% csrf_token %}
-            <div id="mp-registerForm-panelAlert" class="alert alert-danger" role="alert" style="display:none"></div>
-            <input type="text" name="email" placeholder="Email" data-serverField="true" required />
+            <div id="mp-registerForm-panelAlert" class="alert alert-danger" role="alert" {% if not error %}style="display:none"{% endif %}>{{ error }}</div>
+            <div class="form-group">
+            <input type="text" name="email" data-error="Your email address is invalid" placeholder="Email" data-serverField="true" required dir="auto" pattern="[a-zA-Z0-9_\.\+-]+@[a-zA-Z0-9-]+\.[a-zA-Z-\.]+" />
+            <div class="help-block with-errors" style="margin:0px"></div>
+            </div>
+			<div class="form-group">
             <input type="text" name="first_name" placeholder="First Name" data-serverField="true" required />
+			<div class="help-block with-errors" style="margin:0px"></div>
+			</div>
+			<div class="form-group">
             <input type="text" name="last_name" placeholder="Last Name" data-serverField="true" required  />
-            <input type="text" name="phone" placeholder="Phone Number" data-serverField="true" />
-            <input type="radio" name="gender" value="0" checked/><label for="male">Male</label>
-            <input type="radio" name="gender" value="1"/><label for="female">Female</label>
-            <input type="password" name="password" placeholder="Password" data-serverField="true" required><input type="password" name="confirmPassword" placeholder="Confirm Password" data-serverField="true" required ><input type="submit" name="registerSubmit" class="signup signup-submit" value="sign-up">
+			<div class="help-block with-errors" style="margin:0px"></div>
+			</div>
+			<div class="form-group">
+            <input type="text" name="phone" placeholder="Phone Number" data-serverField="true" required />
+			<div class="help-block with-errors" style="margin:0px"></div>
+			</div>
+            <input type="radio" name="gender" value="0" style="vertical-align: baseline;" checked/><label for="male"> Male</label>
+            <input type="radio" name="gender" value="1" style="vertical-align: baseline;" /><label for="female"> Female</label>
+            <div class="form-group">
+            <input type="password" data-minlength="4" id="inputPassword" name="password" placeholder="Password" data-serverField="true" required />
+            <div class="help-block with-errors" style="margin:0px"></div>
+            </div>
+            <div class="form-group">
+            <input type="password" name="confirmPassword" data-match="#inputPassword" data-match-error="Passwords don't match" placeholder="Confirm Password" data-serverField="true" required />
+            <div class="help-block with-errors"></div>
+			</div>
+	    <input type="submit" name="registerSubmit" class="signup signup-submit" value="Sign Up" style="margin-top: 10px;height: 44px;" />
         </form>
-        <div class="login-help">
-            <a href="{% url 'customerLogin' %}" class="mp-pageHeader" data-mpPageId="panda_login" data-mpController="pandaLoginPage">Login</a>
+        <div class="login-help" style="color: #888;">
+            Have an account? <a href="{% url 'customerLogin' %}" class="mp-pageHeader" style="color: #4d90fe;" data-mpPageId="panda_login" data-mpController="pandaLoginPage">Log in.</a>
         </div>
     </div>
 	 <div class="mp-loginSuccess mp-pageHeader" data-mpPageId="panda_home" data-pageStateType="replace" style="display:none">

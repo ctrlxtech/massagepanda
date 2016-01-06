@@ -456,7 +456,7 @@ input[type = checkbox] {
 
 .form-group {
     width: 100%;
-    min-width: 300px;
+    /*min-width: 300px;*/
     max-width: 500px;
 }
 
@@ -641,16 +641,15 @@ input[type = checkbox] {
 }
 
 .panel-heading.mp-successTitle {
-  padding-left: 20% ;
+  padding: 20px ;
   line-height: 60px;
-  padding-top: 0px;
   font-size: 32px;
 }
 
 #panda_success .panel .panel-body {
     font-family: "Oxygen", sans-serif;
     color: #626060;
-    font-size: 0.6em;
+    font-size: 0.8em;
 }
 
 .btn-success.disabled {
@@ -853,11 +852,9 @@ overflow: hidden;
 }
 
 #mp-registerForm-panelAlert{
-	  height: 44px;
   font-size: 16px;
   width: 100%;
-  margin-bottom: 10px;
-   border-radius: 3px;
+  border-radius: 3px;
 }
 
 .signup-card input[type=text]:hover, input[type=password]:hover {

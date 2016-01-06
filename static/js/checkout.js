@@ -12,19 +12,18 @@ $( window ).load(function() {
     });
     if (isValid) {
       $('#mp-checkoutAlertDanger').css('display', 'none');
-    }
-    var $form = $(this);
-    if ($("#new-payment-div").css('display') == "none") {
+      var $form = $(this);
+      if ($("#new-payment-div").css('display') == "none") {
         doCheckout($form);
-        return false;
-    } else{
+      } else{
         populateExpYearAndMonth();
         // Disable the submit button to prevent repeated clicks
         $form.find('button').prop('disabled', true);
         Stripe.card.createToken($form, stripeResponseHandler);
         // Prevent the form from submitting with the default action
-        return false;
+      }
     }
+    return false;
   });
 
 var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');

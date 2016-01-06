@@ -22,9 +22,10 @@ import requests
 import stripe
 
 from customers.models import Customer, Address
-from referral.models import CustomerReferralCode
+from referral.models import CustomerReferralHistory, CustomerReferralCode
 from referral.views import referralCodeGenerator
-from services.views import addPaymentForCustomer, getPhone
+from services.views import addPaymentForCustomer, rewardCredit, getPhone
+from manager.views import applyHeaders
 
 # Create your views here.
 @login_required(login_url="/customer/login")
@@ -43,13 +44,27 @@ def createCustomerFromJson(request):
         data = None
     return createCustomer(data)
 
+def returnError(request, message):
+    context = {"error": message}
+    if not request:
+      return applyHeaders(JsonResponse(context))
+    else:
+      return registerView(request, context)
+
 @transaction.atomic
 def createCustomer(data, request=None):
     if data is None:
-      return JsonResponse({"message": "check your inputs"})
+      return returnError(request, "check your inputs")
 
     referCode = None
     if request is not None:
+      try:
+        if request.session['signed']:
+          request.session['signed'] = False
+          return redirect('index')
+      except:
+        pass
+
       try:
         referCode = request.session['code']
       except KeyError:
@@ -79,15 +94,16 @@ def createCustomer(data, request=None):
       if referCode is not None:
           crh = CustomerReferralHistory(referred_customer=customer, code=CustomerReferralCode.objects.get(code=referCode))
           crh.save()
+          rewardCredit(customer, crh)
 
       code = referralCodeGenerator()
       customerReferralCode = CustomerReferralCode(customer=customer, code=code)
       customerReferralCode.save()
+      sendValidationEmail(request, user)
+      request.session['signed'] = True
+      return render_to_response('customers/unverified.html', {}, context_instance=RequestContext(request))
     except IntegrityError as e:
-      return JsonResponse({"message": e.message})
-
-    sendValidationEmail(request, user)
-    return redirect('index')
+      return returnError(request, "Error occurred")
 
 @transaction.atomic
 def verifyCustomer(request, uidb64=None, token=None, token_generator=default_token_generator):
@@ -171,11 +187,7 @@ def userLogin(request, data, fromJson=False):
         request.session['login'] = True
         return HttpResponse("token: " + fbToken + " userID: " + userID)
     if data is None:
-      json = JsonResponse({"error": "check your inputs"}, safe=False)
-      json['Access-Control-Allow-Origin'] = "*"
-      json['Access-Control-Allow-Methods'] = "GET,POST"
-      json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
-      return json
+      return applyHeaders(JsonResponse({"error": "check your inputs"}, safe=False))
 
     username = data.get('username')
     password = data.get('password')
@@ -199,23 +211,19 @@ def userLogin(request, data, fromJson=False):
     else:
         context['error'] = "username and password do not match!"
     if fromJson:
-        json = JsonResponse(context, safe=False)
-        json['Access-Control-Allow-Origin'] = "*"
-        json['Access-Control-Allow-Methods'] = "GET,POST"
-        json['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
-        return json
+        return applyHeaders(JsonResponse(context, safe=False))
     elif 'error' in context:
         return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
     else:
         return redirect('index')
 
-def registerView(request):
+def registerView(request, context={}):
     if request.user.is_authenticated():
         return redirect('index')
 
     if request.GET.get('code'):
         request.session['code'] = request.GET.get('code')
-    return render_to_response('customers/register.html', {}, context_instance=RequestContext(request))
+    return render_to_response('customers/register.html', context, context_instance=RequestContext(request))
 
 def loginView(request):
     if request.user.is_authenticated():
@@ -378,7 +386,8 @@ def paymentPage(request):
         stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
     except:
         pass
-    context = {'stripeCustomer': stripeCustomer, 'stripePublishKey': settings.STRIPE_PUBLISH_KEY}
+    accumulative_credit = '%.2f' % request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
+    context = {'stripeCustomer': stripeCustomer, 'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'accumulative_credit': accumulative_credit}
     return render_to_response('customers/payment.html', context, context_instance=RequestContext(request))
     
 def checkAdmin(request):

@@ -14,9 +14,12 @@ class Staff(models.Model):
     title = models.PositiveIntegerField()
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(max_length = 16, validators=[phone_regex], unique=True) # validators should be a list
-    
+
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     profile_photo = models.ImageField(null=True, blank=True);
+
+    vitality = models.PositiveIntegerField(default=1)
+    suspended = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s %s' %(self.first_name, self.last_name)
@@ -43,6 +46,9 @@ class Therapist(models.Model):
     profile_photo = models.ImageField(null=True, blank=True);
     routing_number = models.IntegerField()
     account_number = models.IntegerField()
+
+    vitality = models.PositiveIntegerField(default=1)
+    suspended = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s %s' %(self.user.first_name, self.user.last_name)

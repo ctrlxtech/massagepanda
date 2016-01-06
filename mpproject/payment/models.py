@@ -21,6 +21,7 @@ class Coupon(models.Model):
     is_flat = models.BooleanField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    is_gilt = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "%s" % (self.code)

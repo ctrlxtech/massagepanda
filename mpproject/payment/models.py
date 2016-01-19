@@ -45,6 +45,7 @@ class Order(models.Model):
     stripe_token = models.CharField(max_length = 100)
     credit_used = models.FloatField(default=0.0)
     amount = models.IntegerField() # total amount to charge
+    labor_adjustment = models.IntegerField(default=0) # adjustment to labor cost
     
     shipping_address = models.CharField(max_length = 500)
     recipient = models.CharField(max_length = 50)

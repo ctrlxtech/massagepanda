@@ -102,6 +102,7 @@ class OrderAdmin(admin.ModelAdmin):
             ch.capture()
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
+            sendFeedbackEmail(request, order.id)
 
             order.status = '4'
             order.stripe_token = ch.id

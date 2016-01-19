@@ -813,7 +813,7 @@ font-size: 200%;
 
 .signup-card {
 padding: 20px;
-width: 300px;
+width: 320px;
 background-color: #F7F7F7;
 margin: 50px auto 10px;
 border-radius: 2px;
@@ -927,7 +927,7 @@ overflow: hidden;
 
 .login-card {
 padding: 20px;
-width: 300px;
+width: 320px;
 background-color: #F7F7F7;
 margin: 50px auto 10px;
 border-radius: 2px;
@@ -983,7 +983,7 @@ overflow: hidden;
 
 .login {
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   font-family: 'Oxygen', sans-serif;
   font-weight: 700;
   height: 36px;
@@ -1042,4 +1042,4 @@ overflow: hidden;
     border: 1px solid #c2c2c2;
 }
 
-#rc-imageselect {transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0;}
+#rc-imageselect {transform:scale(0.92);-webkit-transform:scale(0.92);transform-origin:0 0;-webkit-transform-origin:0 0;}

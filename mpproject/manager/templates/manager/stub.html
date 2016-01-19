@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+<title>SMS</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="{% static "js/stub.js" %}"></script>
+</head>
+
+<body>
+
+<form method="POST" action="{% url 'getWage' %}">
+{% csrf_token %} 
+Start date:
+<input type="date" name="startDate" min="2015-05-01"><br>
+End date:
+<input type="date" name="endDate" min="2015-05-01"><br>
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>

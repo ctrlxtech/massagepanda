@@ -1,10 +1,11 @@
 import base64
+import pytz
+import csv
 import json
 import re
 import time
 import urllib2
 import datetime
-from datetime import datetime
 
 import requests
 import stripe
@@ -90,7 +91,7 @@ def buildOrderListProto(orders):
       order = order_list.order.add()
 
       order.id = data.id.hex
-      order.external_id = int(data.external_id)
+      order.external_id = str(data.external_id)
       order.service_time = datetimeToEpoch(data.service_datetime)
       order.service_duration = int(data.service.service_time * 60)
       order.service_type = str(data.service.service_type)
@@ -104,7 +105,7 @@ def buildOrderListProto(orders):
       country_and_zipcode = stubs[3].split(' ')
       order.address.country = str(country_and_zipcode[0])
       order.address.zipcode = str(country_and_zipcode[1])
-      recipient = order.recipient.split(' ')
+      recipient = data.recipient.split(' ')
       order.customer_name = str(recipient[0] + ' ' + recipient[-1][0])
       order.creation_time = datetimeToEpoch(data.created_at)
     return order_list
@@ -140,24 +141,25 @@ def buildScheduleProto(data):
 def updateSchedule(request):
     try:
       jsonRequest = json.loads(request.body)
-      therapist = getTherapistFromJson(jsonRequest)
-      schedule_list = jsonRequest["schedule_list"]
-      for slot in schedule_list["slot"]:
-        schedule = therapist.schedule_set.filter(day=slot["day"])
-        if not schedule:
-            schedule = Schedule(day=slot["day"], therapist=therapist, active=False)
-            schedule.save()
-        else:
-            schedule[0].interval_set.all().delete()
-            schedule = schedule[0]
-        for interval in slot["interval"]:
-            intvl = Interval(schedule=schedule, starttime=secondsToTime(interval["start_time"]),
-                             endtime=secondsToTime(interval["end_time"]))
-            intvl.save()
-      jsonRes = JsonResponse({'status': 'success'})
     except:
-      jsonRes = JsonResponse({'status': 'failure', 'error': "Invalid request"})
- 
+      jsonRes = JsonResponse({'status': 'error'})
+      return applyHeaders(jsonRes)
+
+    therapist = getTherapistFromJson(jsonRequest)
+    schedule_list = jsonRequest["schedule_list"]
+    for slot in schedule_list["slot"]:
+      schedule = therapist.schedule_set.filter(day=slot["day"])
+      if not schedule:
+        schedule = Schedule(day=slot["day"], therapist=therapist, active=False)
+        schedule.save()
+      else:
+        schedule[0].interval_set.all().delete()
+        schedule = schedule[0]
+      for interval in slot["interval"]:
+        intvl = Interval(schedule=schedule, starttime=secondsToTime(interval["start_time"]),
+                         endtime=secondsToTime(interval["end_time"]))
+        intvl.save()
+    jsonRes = JsonResponse({'status': 'success'})
     return applyHeaders(jsonRes)
 
 @csrf_exempt
@@ -198,7 +200,7 @@ def secondsToTime(seconds):
     return datetime.time(hours, minutes, secondsRemain)
 
 def datetimeToEpoch(dt):
-    epoch = datetime.utcfromtimestamp(0)
+    epoch = datetime.datetime.utcfromtimestamp(0)
     naive = dt.replace(tzinfo=None)
     return int((naive - epoch).total_seconds() * 1000)
 
@@ -506,10 +508,10 @@ def sendSMS(nums, message_body, isForward):
         except:
             pass
         if isForward:
-            f = ForwardSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            f = ForwardSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             f.save()
         else:
-            o = OutSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            o = OutSMS(staff=staff, receiver=n, messageBody=message_body, timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             o.save()
 
         time.sleep(1)
@@ -563,8 +565,8 @@ def applyConfig(request):
     return render(request, 'manager/done.html', context)
 
 def utc_to_local(t):
-    utc = datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
-    UTC_OFFSET_TIMEDELTA = datetime.utcnow() - datetime.now()
+    utc = datetime.datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
+    UTC_OFFSET_TIMEDELTA = datetime.datetime.utcnow() - datetime.datetime.now()
     local_datetime = utc - UTC_OFFSET_TIMEDELTA
     return local_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -751,8 +753,8 @@ def addCoupon(request):
     isFlat = request.POST.get('isFlat')
     startDate = request.POST.get('start_date')
     endDate = request.POST.get('end_date')
-    startDate = datetime.strptime(startDate, '%Y-%m-%d')
-    endDate = datetime.strptime(endDate, '%Y-%m-%d')
+    startDate = datetime.datetime.strptime(startDate, '%Y-%m-%d')
+    endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
     if not isFlat:
         isFlat = False
     discount = request.POST.get('discount')
@@ -767,3 +769,35 @@ def addCoupon(request):
         sc.save()
 
     return HttpResponse("Coupon added")
+
+def toCSV(rows):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+    writer = csv.writer(response)
+    for row in rows:
+      writer.writerow(row)
+    return response
+
+def getWage(request):
+    tz = pytz.timezone('US/Pacific')
+    startDate = datetime.datetime.strptime(request.POST.get("startDate"), "%Y-%m-%d")
+    endDate = datetime.datetime.strptime(request.POST.get("endDate"), "%Y-%m-%d")
+    therapistWage = []
+    for therapist in Therapist.objects.all():
+      wages = []
+      wages.append(therapist.user.first_name)
+      for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).filter(order__status=4).order_by('order__service_datetime'):
+        wages.append(ot.order.service_datetime.astimezone(tz=tz))
+        laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+        if ot.order.coupon and ot.order.coupon.is_gilt:
+          wages.append(True)
+          laborCost -= 5
+        else:
+          wages.append(False)
+        wages.append(laborCost)
+
+      therapistWage.append(wages)
+    return toCSV(therapistWage)
+    return JsonResponse(therapistWage, safe=False)

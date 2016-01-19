@@ -46,15 +46,24 @@ def createCustomerFromJson(request):
 
 def returnError(request, message):
     context = {"error": message}
+    resp = JsonResponse(context)
     if not request:
-      return applyHeaders(JsonResponse(context))
+      return applyHeaders(resp)
     else:
-      return registerView(request, context)
+      return resp
 
 @transaction.atomic
 def createCustomer(data, request=None):
     if data is None:
       return returnError(request, "check your inputs")
+ 
+    payload = {'api_key': settings.NEXMO_KEY, 'api_secret': settings.NEXMO_SECRET, 'request_id': data.get('verifyRequest')} 
+    response = requests.get("https://api.nexmo.com/verify/search/json", params=payload).json()
+    try:
+      if response.get('status') != 'SUCCESS':
+        return returnError(request, "Please validate your phone number")
+    except:
+        return returnError(request, "Please validate your phone number")
 
     referCode = None
     if request is not None:
@@ -99,11 +108,13 @@ def createCustomer(data, request=None):
       code = referralCodeGenerator()
       customerReferralCode = CustomerReferralCode(customer=customer, code=code)
       customerReferralCode.save()
+
       sendValidationEmail(request, user)
+      
       request.session['signed'] = True
       return render_to_response('customers/unverified.html', {}, context_instance=RequestContext(request))
     except IntegrityError as e:
-      return returnError(request, "Error occurred")
+      return returnError(request, "User already exits")
 
 @transaction.atomic
 def verifyCustomer(request, uidb64=None, token=None, token_generator=default_token_generator):
@@ -140,6 +151,22 @@ def sendWelcomeEmail(to, first_name):
     msg = EmailMultiAlternatives(subject, text_content, settings.SERVER_EMAIL, [to])
     msg.send()
     return HttpResponse("Email sent!")
+
+def verifyPhone(request):
+    try:
+      payload = {'api_key': settings.NEXMO_KEY, 'api_secret': settings.NEXMO_SECRET, 'request_id': request.POST.get('verifyRequest'), 'code': request.POST.get('verifyCode')} 
+      response = requests.get("https://api.nexmo.com/verify/check/json", params=payload).json()
+      return JsonResponse(response)
+    except:
+      return JsonResponse({'status': 'failure'})
+
+def getPhoneVerifyCode(request):
+    try:
+      payload = {'api_key': settings.NEXMO_KEY, 'api_secret': settings.NEXMO_SECRET, 'avoid_voice_call': 'true', 'number': request.POST.get('phone'), 'brand': 'MassagePanda'} 
+      response = requests.get("https://api.nexmo.com/verify/json", params=payload).json()
+      return JsonResponse(response)
+    except:
+      return JsonResponse({'status': 'failure'})
 
 def sendValidationEmail(request, user, use_https=False):
     email_template_name='customers/signup_validation_email.html'

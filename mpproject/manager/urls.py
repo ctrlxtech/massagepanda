@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.conf import settings
 from manager import views
 from django.views.generic import TemplateView
 
@@ -27,6 +28,8 @@ urlpatterns = [
     url(r'^assignTherapist$', views.assignTherapist, name='assignTherapist'),
     url(r'^addCoupons$', views.addCoupons_view, name='addCoupons'),
     url(r'^addCoupon$', views.addCoupon, name='addCoupon'),
+    url(r'^stub$',  TemplateView.as_view(template_name='manager/stub.html'), {'prod': not settings.DEBUG}, name='stub'),
+    url(r'^getWage$', views.getWage, name='getWage'),
     
     url(r'^payment', views.payment, name='mpayment'),
     url(r'^charge', views.mcharge, name='mcharge'),

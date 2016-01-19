@@ -22,28 +22,32 @@
             <div class="help-block with-errors" style="margin:0px"></div>
             </div>
 			<div class="form-group">
-            <input type="text" name="first_name" placeholder="First Name" data-serverField="true" required />
+            <input type="text" name="first_name" placeholder="First Name" data-serverField="true" required style="width: 49.5%;float:left;"/>
+			<input type="text" name="last_name" placeholder="Last Name" data-serverField="true" required style="width: 49.5%;float:right;"/>
 			<div class="help-block with-errors" style="margin:0px"></div>
 			</div>
 			<div class="form-group">
-            <input type="text" name="last_name" placeholder="Last Name" data-serverField="true" required  />
-			<div class="help-block with-errors" style="margin:0px"></div>
+            <input type="text" name="phone" placeholder="Phone Number" data-serverField="true" required style="width: 70%;float:left;"/>
+			<a href="" id="send-code" class="btn btn-default" style="width: 29%;float:right;height:43px;line-height: 30px;margin-bottom: 10px;">Send</a>
+                        <input type="hidden" name="verifyRequest" id="verifyRequest"/>
+			<input type="text" name="verifyCode" placeholder="Validation Code" data-serverField="true" required style="width: 70%;float:left;"/>
+			<a href="" id="verify-phone" class="btn btn-default" style="width: 29%;float:right;height:43px;line-height: 30px;">Validate</a>
+                        <img class="" id="validationSuccess" style="width: 44px;margin-left: 5px;padding: 4px;display:none;" src="{% static "images/success_icon.png" %}"/>
+			<div class="help-block with-errors" style="margin:0px;display: inline-block;"></div>
 			</div>
-			<div class="form-group">
-            <input type="text" name="phone" placeholder="Phone Number" data-serverField="true" required />
-			<div class="help-block with-errors" style="margin:0px"></div>
-			</div>
-            <input type="radio" name="gender" value="0" style="vertical-align: baseline;" checked/><label for="male"> Male</label>
-            <input type="radio" name="gender" value="1" style="vertical-align: baseline;" /><label for="female"> Female</label>
+            <!--<input type="radio" name="gender" value="0" style="vertical-align: baseline;" checked/><label for="male"> Male</label>
+            <input type="radio" name="gender" value="1" style="vertical-align: baseline;" /><label for="female"> Female</label>-->
             <div class="form-group">
-            <input type="password" data-minlength="4" id="inputPassword" name="password" placeholder="Password" data-serverField="true" required />
+            <input type="password" data-minlength="6" id="inputPassword" name="password" placeholder="Password" data-serverField="true" required />
+			<input type="password" name="confirmPassword" data-minlength="6" data-match="#inputPassword" data-match-error="Passwords don't match" placeholder="Confirm Password" data-serverField="true" required />
             <div class="help-block with-errors" style="margin:0px"></div>
             </div>
-            <div class="form-group">
-            <input type="password" name="confirmPassword" data-match="#inputPassword" data-match-error="Passwords don't match" placeholder="Confirm Password" data-serverField="true" required />
-            <div class="help-block with-errors"></div>
+            {% if not request.session.code %}
+			<div>
+			<input type="text" name="refercode" placeholder="Refer Code (optional)" data-serverField="true" />
 			</div>
-	    <input type="submit" name="registerSubmit" class="signup signup-submit" value="Sign Up" style="margin-top: 10px;height: 44px;" />
+            {% endif %}
+	    <input type="submit" name="registerSubmit" class="signup signup-submit" value="Creat Account" style="margin-top: 10px;height: 44px;" />
         </form>
         <div class="login-help" style="color: #888;">
             Have an account? <a href="{% url 'customerLogin' %}" class="mp-pageHeader" style="color: #4d90fe;" data-mpPageId="panda_login" data-mpController="pandaLoginPage">Log in.</a>

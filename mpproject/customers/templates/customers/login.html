@@ -16,7 +16,7 @@
 
 <div id="panda_login" class="mp-pageContent container-fluid" data-mpController="pandaLoginPage">
     <div class="login-card">
-        <h1>Log In</h1>
+        <h2 class="mp-helpCenterTitle" style="margin-top:20px;">Sign In</h2>
         <br/>
         <form class="mp-loginForm" action="{% url 'userLoginFromForm' %}" method=POST>
           {% csrf_token %}
@@ -26,12 +26,12 @@
           {% if error %}
           <div id="mp-massageDetails-panelAlert" class="alert alert-danger" role="alert">{{ error }}<span class="alertInfo"></span></div>
           {% endif %}
-          <input type="submit" name="loginSubmit" class="login login-submit" value="Log In" />
+          <input type="submit" name="loginSubmit" class="login login-submit" value="Sign In" style="margin-top: 10px;height: 44px;" />
           <div class="g-recaptcha" id="rc-imageselect" data-sitekey="6LcjVQ8TAAAAAP8i_JWsl14xMYrSMgMod-3HVc2o"></div>
         </form>
         <div class="login-help">
-        	  <a href="{% url 'customerRegister' %}" class="mp-pageHeader" data-mpPageId="panda_register" data-mpController="pandaRegisterPage">Register</a>
-            • <a data-toggle="modal" data-target="#forgotPasswordModal" href="#">Forgot Password</a>
+        	  Don't have an account? <a href="{% url 'customerRegister' %}" class="mp-pageHeader" data-mpPageId="panda_register" data-mpController="pandaRegisterPage" style="color: #2ecc71;">Sign up!</a></br>
+            <a data-toggle="modal" data-target="#forgotPasswordModal" href="#">Forgot Password</a>
         </div>
     </div>
 	 <div class="mp-loginSuccess mp-pageHeader" data-mpPageId="panda_home" data-pageStateType="replace" style="display:none">

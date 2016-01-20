@@ -105,12 +105,12 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 ch.capture()
 
-            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
-            sendFeedbackEmail(request, order.id)
-
             order.status = '4'
             order.stripe_token = ch.id
             order.save()
+
+            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
+            sendFeedbackEmail(request, order.id)
 
             redeemRefer(order)
 

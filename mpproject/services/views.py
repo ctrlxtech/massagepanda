@@ -187,7 +187,7 @@ def isSavedAddressSeleted(request):
 def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
     ch = {'status': 'failure'}
     if amount == 0:
-        amount = 1;
+        amount = 100
     try:
       ch = stripe.Charge.create(
         amount=amount, # amount in cents, again

@@ -186,7 +186,7 @@ def isSavedAddressSeleted(request):
 
 def createUncapturedCharge(amount, stripeToken, stripeCustomerId):
     ch = {'status': 'failure'}
-    if amount == 0:
+    if amount == 0: # create place holder amount
         amount = 100
     try:
       ch = stripe.Charge.create(
@@ -477,6 +477,8 @@ def placeOrder(request, data):
         needTable = False
     parkingInfo = request.POST.get("parkingInfo")
    
+    if amount == 0:
+        amount = 100 # create place holder amount
     o = Order(stripe_token=stripeToken, service_id=serviceId, service_datetime=service_datetime, coupon=coupon,
         preferred_gender=preferredGender, need_table=needTable, parking_info=parkingInfo, customer=customer,
         amount=amount, credit_used=credit_used, shipping_address=address, recipient=sName, billing_name=name, phone=phone, email=email)

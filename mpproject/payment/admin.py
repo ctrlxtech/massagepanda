@@ -99,7 +99,10 @@ class OrderAdmin(admin.ModelAdmin):
                 stripeCustomerId = None
 
             ch = stripe.Charge.retrieve(order.stripe_token)
-            ch.capture()
+            if ch.amount == 100: # Refund place holder amount
+                stripe.Refund.create(charge=order.stripe_token)
+            else:
+                ch.capture()
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
             sendFeedbackEmail(request, order.id)

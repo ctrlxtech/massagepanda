@@ -101,6 +101,7 @@ class OrderAdmin(admin.ModelAdmin):
             ch = stripe.Charge.retrieve(order.stripe_token)
             if ch.amount == 100: # Refund place holder amount
                 stripe.Refund.create(charge=order.stripe_token)
+                order.amount = 0
             else:
                 ch.capture()
 

@@ -740,6 +740,7 @@ def createTherapist(request):
     therapist.save()
     return HttpResponse("Thank you for registering MassagePanda, " + therapist.user.first_name)
 
+@user_passes_test(lambda u: u.is_superuser)
 def addCoupons_view(request):
     serviceGroups = Group.objects.all()
     context = {'service_groups': serviceGroups}
@@ -780,6 +781,25 @@ def toCSV(rows):
       writer.writerow(row)
     return response
 
+@user_passes_test(lambda u: u.is_superuser)
+def stub(request):
+    context = {}
+    return render(request, 'manager/stub.html', context)
+
+def isInSF(order):
+    stubs = order.shipping_address.split(', ')
+    country_and_zipcode = stubs[3].split(' ')
+    zipcode = str(country_and_zipcode[1])
+
+    try:
+      if int(zipcode) in settings.SF_ZIPCODES:
+        return True
+      else:
+        return False
+    except:
+        return False
+
+@user_passes_test(lambda u: u.is_superuser)
 def getWage(request):
     tz = pytz.timezone('US/Pacific')
     startDate = datetime.datetime.strptime(request.POST.get("startDate"), "%Y-%m-%d")
@@ -794,6 +814,9 @@ def getWage(request):
           laborCost = ot.order.labor_adjustment
         else:  
           laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+          if isInSF(ot.order) and ot.order.need_table:
+            laborCost += 10
+
         if ot.order.coupon and ot.order.coupon.is_gilt:
           wages.append(True)
           laborCost -= 5

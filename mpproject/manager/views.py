@@ -788,9 +788,12 @@ def getWage(request):
     for therapist in Therapist.objects.all():
       wages = []
       wages.append(therapist.user.first_name)
-      for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).filter(order__status=4).order_by('order__service_datetime'):
+      for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).order_by('order__service_datetime'):
         wages.append(ot.order.service_datetime.astimezone(tz=tz))
-        laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+        if ot.order.status == 3 or ot.order.status == 6:
+          laborCost = ot.order.labor_adjustment
+        else:  
+          laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
         if ot.order.coupon and ot.order.coupon.is_gilt:
           wages.append(True)
           laborCost -= 5

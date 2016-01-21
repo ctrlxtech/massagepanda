@@ -35,6 +35,26 @@ class FeedbackInline(admin.StackedInline):
     model = Feedback
     readonly_fields = ('code', 'rated', 'rating', 'comment', 'request_count')
 
+def chargeOrder(order):
+    if order.credit_used == order.amount:
+      return None
+    if order.credit_used > order.amount:
+      credit_refunded = order.credit_used - order.amount
+      aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + credit_refunded
+      rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=credit_refunded, accumulative_credit=aCredit)
+      rCredit.save()
+      ch = stripe.Refund.create(charge=order.stripe_token)
+    else:
+      ch = stripe.Charge.retrieve(order.stripe_token)
+      if ch.amount == 100: # Refund place holder amount
+          stripe.Refund.create(charge=order.stripe_token)
+          order.amount = 0
+      else:
+          amount_to_charge = int(order.amount - order.credit_used)
+          ch.capture(amount=amount_to_charge)
+    
+    return ch.id
+
 class OrderAdmin(admin.ModelAdmin):
     list_select_related = ('service', )
     list_display = ('external_id', 'get_service', 'recipient', 'service_datetime', 'created_at', 'status', 'get_feedback')
@@ -98,15 +118,10 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 stripeCustomerId = None
 
-            ch = stripe.Charge.retrieve(order.stripe_token)
-            if ch.amount == 100: # Refund place holder amount
-                stripe.Refund.create(charge=order.stripe_token)
-                order.amount = 0
-            else:
-                ch.capture()
+            stripeId = chargeOrder(order)
 
             order.status = '4'
-            order.stripe_token = ch.id
+            order.stripe_token = stripeId
             order.save()
 
             sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
@@ -130,24 +145,13 @@ class OrderAdmin(admin.ModelAdmin):
             else:
                 stripeCustomerId = None
 
-            if order.credit_used == order.amount:
-                pass
-            if order.credit_used > order.amount:
-                credit_refunded = order.credit_used - order.amount
-                aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + credit_refunded
-                rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=credit_refunded, accumulative_credit=aCredit)
-                rCredit.save()
-                stripe.Refund.create(charge=order.stripe_token)
-            else:
-                ch = stripe.Charge.retrieve(order.stripe_token)
-                amount_to_charge = order.amount - order.credit_used
-                ch.capture(amount=amount_to_charge)
-
-            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda', {"customerCanceled": True})
+            stripeId = chargeOrder(order)
 
             order.status = '6'
-            order.stripe_token = ch.id
+            order.stripe_token = stripeId
             order.save()
+
+            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda', {"customerCanceled": True})
 
             count += 1
         except (stripe.error.StripeError, ValueError) as e:

@@ -62,7 +62,7 @@ def getTherapistFromJson(data):
 def getRequestlist(request):
     therapist = getTherapist(request)
     if therapist:
-      orders = Order.objects.filter(ordertherapist__id__isnull=True)
+      orders = Order.objects.filter(ordertherapist__id__isnull=True).order_by('created_at')
       order_list = buildOrderListProto(orders)
       jsonRes = HttpResponse(order_list.SerializeToString(), content_type="application/octet-stream")
     else:
@@ -75,7 +75,7 @@ def getOrderlist(request):
     therapist = getTherapist(request)
 
     if therapist:
-      orders = Order.objects.filter(ordertherapist__therapist=therapist)
+      orders = Order.objects.filter(ordertherapist__therapist=therapist).order_by('service_datetime')
 
       order_list = buildOrderListProto(orders)
 
@@ -459,9 +459,17 @@ def mrefund(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def index(request):
-    staff_list = Staff.objects.filter(suspended=False).order_by('first_name')
+    staff_list = Staff.objects.filter(suspended=False).exclude(area__areacode=10).order_by('first_name')
     template_list = SMSTemplate.objects.all()
-    area_list = Area.AREA_CHOICES
+    area_list = Area.AREA_CHOICES[:4]
+    context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list}
+    return render(request, 'manager/sms.html', context)
+
+@user_passes_test(lambda u: u.is_superuser)
+def chicago(request):
+    staff_list = Staff.objects.filter(suspended=False, area__areacode=10).order_by('first_name')
+    template_list = SMSTemplate.objects.all()
+    area_list = Area.AREA_CHOICES[4:]
     context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list}
     return render(request, 'manager/sms.html', context)
 

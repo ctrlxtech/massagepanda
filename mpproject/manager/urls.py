@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^$', views.index, name='manager'),
+    url(r'^chicago$', views.chicago, name='chicago'),
     url(r'^send$', views.send, name='sendSMS'),
     url(r'^logs$', views.logs, name='logs'),
     url(r'^logsByNum$', views.logsByNum, name='logsByNum'),

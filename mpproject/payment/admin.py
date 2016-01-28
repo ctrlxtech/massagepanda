@@ -67,7 +67,7 @@ class OrderAdmin(admin.ModelAdmin):
         OrderTherapistInline, FeedbackInline
     ]
 
-    actions = ['mark_charged', 'mark_refunded', 'punish', 'mark_canceled', 'send_feedback_email']
+    actions = ['mark_charged', 'mark_refunded', 'punish', 'mark_canceled', 'send_shipped_email', 'send_feedback_email']
 
     def get_service(self, obj):
         return '%s For %.1f' % (obj.service.service_type, obj.service.service_time)
@@ -124,8 +124,8 @@ class OrderAdmin(admin.ModelAdmin):
             order.stripe_token = stripeId
             order.save()
 
-            sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
-            sendFeedbackEmail(request, order.id)
+            # sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
+            # sendFeedbackEmail(request, order.id)
 
             redeemRefer(order)
 
@@ -187,7 +187,18 @@ class OrderAdmin(admin.ModelAdmin):
             self.message_user(request, "Order(number: %s) can't be marked as canceled." % order.id, level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as canceled." % count)
-    
+
+    def send_shipped_email(self, request, queryset):
+      count = 0
+      for order in queryset:
+        try:
+          sendOrderEmail(order, 'payment/order_shipped_email.html', 'Your order has been shipped! - MassagePanda')
+          count += 1
+        except:
+          self.message_user(request, "Email can't be sent for order[%s]." % order.id, level=messages.ERROR)
+          pass
+      self.message_user(request, "%s email(s) sent." % count)
+  
     def send_feedback_email(self, request, queryset):
       count = 0
       for order in queryset:

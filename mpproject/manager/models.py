@@ -83,6 +83,7 @@ class Area(models.Model):
         ('1', 'Peninsula'),
         ('2', 'East Bay'),
         ('3', 'South Bay'),
+        ('10', 'Chicago'),
     )
     areacode = models.CharField(max_length=10, choices=AREA_CHOICES)
     staff = models.ForeignKey(Staff, null=True, blank=True)

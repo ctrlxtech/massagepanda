@@ -470,7 +470,7 @@ def chicago(request):
     staff_list = Staff.objects.filter(suspended=False, area__areacode=10).order_by('first_name')
     template_list = SMSTemplate.objects.all()
     area_list = Area.AREA_CHOICES[4:]
-    context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list}
+    context = {'staff_list': staff_list, 'template_list': template_list, 'area_list': area_list, 'is_chicago': True}
     return render(request, 'manager/sms.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -535,7 +535,7 @@ def receiveSMS(request):
     if (time_stamp is None or msisdn is None or message_body is None):
         return HttpResponse("***Error request")
     
-    time_stamp = utc_to_local(time_stamp)
+    time_stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     staff = None
     try:
         staff = Staff.objects.get(phone_number=msisdn)
@@ -580,23 +580,11 @@ def utc_to_local(t):
 
 @user_passes_test(lambda u: u.is_superuser)
 def logs(request):
-    '''
-    cursor = connection.cursor()
-    cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
-        " manager_staff.first_name, manager_staff.last_name," \
-        " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number ORDER BY manager_insms.id DESC")
-    inSMS_list = dictfetchall(cursor)
-
-    cursor.execute("select manager_outsms.id, manager_outsms.receiver, manager_outsms.timestamp," \
-        " manager_staff.first_name, manager_staff.last_name," \
-        " manager_outsms.messageBody from manager_outsms left join manager_staff" \
-        " on manager_outsms.receiver = manager_staff.phone_number ORDER BY manager_outsms.id DESC")
-
-    outSMS_list = dictfetchall(cursor)
-    context = {'inSMS_list': inSMS_list, 'outSMS_list': outSMS_list}
-    '''
     return render(request, 'manager/logs.html')
+
+@user_passes_test(lambda u: u.is_superuser)
+def allLogs(request):
+    return render(request, 'manager/allLogs.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def forwardLogs(request):
@@ -623,7 +611,7 @@ def getOldInLogs(request):
     cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number where timestamp <= %s and timestamp > %s ORDER BY manager_insms.id DESC", (oldTimestamp, newTimestamp))
+        " on manager_insms.sender = manager_staff.phone_number where timestamp <= %s and timestamp > %s ORDER BY manager_insms.timestamp DESC", (oldTimestamp, newTimestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -635,7 +623,7 @@ def getNewInLogs(request):
     cursor.execute("select manager_insms.id, manager_insms.sender, manager_insms.timestamp," \
         " manager_staff.first_name, manager_staff.last_name," \
         " manager_insms.messageBody from manager_insms left join manager_staff" \
-        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > %s and timestamp > %s ORDER BY manager_insms.id DESC", (index, timestamp))
+        " on manager_insms.sender = manager_staff.phone_number where manager_insms.id > %s and timestamp > %s ORDER BY manager_insms.timestamp DESC", (index, timestamp))
     data = dictfetchall(cursor)
     return JsonResponse(data, safe=False)
 
@@ -789,14 +777,14 @@ def toCSV(rows):
       writer.writerow(row)
     return response
 
-@user_passes_test(lambda u: u.is_superuser)
-def stub(request):
+@login_required(login_url="/customer/login")
+def paystub(request):
     context = {}
     return render(request, 'manager/stub.html', context)
 
 def isInSF(order):
     stubs = order.shipping_address.split(', ')
-    country_and_zipcode = stubs[3].split(' ')
+    country_and_zipcode = stubs[-1].split(' ')
     zipcode = str(country_and_zipcode[1])
 
     try:
@@ -807,31 +795,50 @@ def isInSF(order):
     except:
         return False
 
-@user_passes_test(lambda u: u.is_superuser)
-def getWage(request):
+def getTherapistWage(therapist, startDate, endDate):
     tz = pytz.timezone('US/Pacific')
+    wages = []
+    wages.append(therapist.user.first_name)
+    for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).order_by('order__service_datetime'):
+      wages.append(ot.order.service_datetime.astimezone(tz=tz).strftime('%b-%d-%y %H:%M:%S'))
+      if ot.order.status == 3 or ot.order.status == 6:
+        laborCost = ot.order.labor_adjustment
+      else:  
+        laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+        if isInSF(ot.order) and ot.order.need_table:
+          laborCost += 10
+
+      if ot.order.coupon and ot.order.coupon.is_gilt:
+        wages.append(True)
+        laborCost -= 5
+      else:
+        wages.append(False)
+      wages.append(laborCost)
+    return wages
+
+def wageListToJson(wages):
+    result = wages[0]
+    result += "<br>"
+    result += "Service time, is gilt city, you earn<br>"
+    count = 0;
+    for wage in wages[1:]:
+        result += str(wage)
+        if count == 2:
+            result += "<br>"
+            count = 0
+        else:
+            result += ", "
+            count += 1
+    return result
+
+@login_required(login_url="/customer/login")
+def getWage(request):
     startDate = datetime.datetime.strptime(request.POST.get("startDate"), "%Y-%m-%d")
     endDate = datetime.datetime.strptime(request.POST.get("endDate"), "%Y-%m-%d")
-    therapistWage = []
-    for therapist in Therapist.objects.all():
-      wages = []
-      wages.append(therapist.user.first_name)
-      for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).order_by('order__service_datetime'):
-        wages.append(ot.order.service_datetime.astimezone(tz=tz))
-        if ot.order.status == 3 or ot.order.status == 6:
-          laborCost = ot.order.labor_adjustment
-        else:  
-          laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
-          if isInSF(ot.order) and ot.order.need_table:
-            laborCost += 10
-
-        if ot.order.coupon and ot.order.coupon.is_gilt:
-          wages.append(True)
-          laborCost -= 5
-        else:
-          wages.append(False)
-        wages.append(laborCost)
-
-      therapistWage.append(wages)
-    return toCSV(therapistWage)
-    return JsonResponse(therapistWage, safe=False)
+    if request.user.is_superuser:
+      therapistWage = []
+      for therapist in Therapist.objects.all():
+        therapistWage.append(getTherapistWage(therapist, startDate, endDate))
+      return toCSV(therapistWage)
+    else:
+      return HttpResponse(wageListToJson(getTherapistWage(request.user.therapist, startDate, endDate)))

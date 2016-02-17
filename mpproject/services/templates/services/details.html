@@ -7,6 +7,10 @@
 
 {% endblock %}
 
+{% block outter %}
+{% include 'services/loginModal.html' %}
+{% endblock %}
+
 {% block content %}
 {% if service %}
 <!-- massageDetails page-->
@@ -35,9 +39,9 @@
             <!-- take advantage of div filter to force precision -->
             {% if service.service_sale %}
             <div id="wsite-com-product-price" class="wsite-com-product-price-container">
-              <span class="wsite-com-product-price-currency-prefix">$</span><!--
-              --><span class="wsite-com-product-price-amount">{{ service.service_fee|div:1 }}</span><!--
-              --><span class="wsite-com-product-price-currency-suffix"></span>
+              <span class="wsite-com-product-price-currency-prefix">$</span>
+              <span class="wsite-com-product-price-amount">{{ service.service_fee|div:1 }}</span>
+              <span class="wsite-com-product-price-currency-suffix"></span>
             </div>
             <div id="wsite-com-product-price-range" class="wsite-com-product-price-container">
               <span class="wsite-com-product-price-amount">${{ service.service_sale|div:1 }}</span>

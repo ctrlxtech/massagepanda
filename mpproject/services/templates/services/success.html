@@ -2,6 +2,8 @@
 {% load staticfiles %}
 
 {% block script %}
+
+{% if prod %}
 <!-- Facebook Conversion Code for mp__fb_conversion -->
 <script>(function() {
   var _fbq = window._fbq || (window._fbq = []);
@@ -74,6 +76,8 @@ var google_remarketing_only = false;
   growsumo.createSignup();
 })();
 </script>
+{% endif %}
+
 {% endblock %}
 
 {% block content %}

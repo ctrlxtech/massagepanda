@@ -11,8 +11,13 @@
 </head>
 
 <body>
-<a href="{% url 'logs' %}">logs</a>
-<a href="{% url 'configurations' %}">configurations</a>
+<a href="{% url 'logs' %}">logs</a> | 
+<a href="{% url 'configurations' %}">configurations</a> |
+{% if is_chicago %}
+<a href="{% url 'manager' %}">bay area</a>
+{% else %}
+<a href="{% url 'chicago' %}">chicago</a>
+{% endif %}
 <hr>
 
 <div>

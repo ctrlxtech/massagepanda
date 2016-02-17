@@ -1,9 +1,21 @@
 var curInIndex = 0; 
 var curOutIndex = 0;
+var tabTemplate = "<li><a href='#{href}' class='#{class}'>#{label}</a></li>";
+
+function addSMSTabs(results, isOutSMS, needUpdateIndex) {
+    for (i = 0; i < results.length; i++) {
+        if (isOutSMS) {
+          addTab(results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "rightLi");
+        } else {
+          addTab(results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "leftLi");
+        }
+    }
+    postAddSMS(results, needUpdateIndex, isOutSMS);
+}
 
 function addSMS(results, isOutSMS, needUpdateIndex) {
     var mList = document.getElementById('SMSList');
-    
+
     var index = 0;
     var children = mList.children;
     for (i = 0; i < results.length; i++) {
@@ -12,12 +24,15 @@ function addSMS(results, isOutSMS, needUpdateIndex) {
         }
         var position = children[index];
         if (isOutSMS) {
-            addToList(mList, position, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "rightLi");
+          addToList(mList, position, results[i].receiver, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "rightLi");
         } else {
-            addToList(mList, position, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "leftLi");
+          addToList(mList, position, results[i].sender, results[i].first_name, results[i].last_name, results[i].timestamp, results[i].messageBody, "leftLi");
         }
     }
+    postAddSMS(results, needUpdateIndex, isOutSMS);
+}
 
+function postAddSMS(results, needUpdateIndex, isOutSMS) {
     var csrfToken = $.cookie('csrftoken');
     // init editable
     $('[name="replyMessage"]').editable({
@@ -110,20 +125,54 @@ function buildPopupAnchor(text) {
     return a;
 }
 
+function addTab(phone_number, first_name, last_name, timestamp, message_body, class_name) {
+  var tabs = $( "#tabs" ).tabs();
+  var label;
+  if (first_name) {
+      label = first_name + " " + last_name;
+  } else {
+      label = phone_number;
+  }
+
+  var id = "tabs-" + phone_number;
+
+  if (!$('#' + id).length) { // For new tab
+    var newList = document.createElement('ul');
+    newList.id = id;
+    var newDiv = document.createElement('div');
+    newDiv.appendChild(newList);
+    li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{class\}/g, class_name).replace( /#\{label\}/g, label ) ),
+    tabs.find( ".ui-tabs-nav" ).append( li );
+    tabs.append(newDiv);
+  }
+ 
+  var smsList = document.getElementById(id);
+
+  var index = 0;
+  var children = smsList.children;
+  while (index < children.length && (!children[index].querySelector('input[name="timestamp"]') || children[index].querySelector('input[name="timestamp"]').value > timestamp)) {
+      index++;
+  }
+  var position = children[index];
+
+  addToList(smsList, position, phone_number, first_name, last_name, timestamp, message_body, class_name);
+
+  tabs.tabs( "refresh" );
+}
+
+function filterInList(element) {
+    var value = $(element).val();
+    $("#SMSList > li").each(function () {
+        if ($(this).text().indexOf(value) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
 $(window).load(function(){
     $('#searchInList').keyup(function() {
         filterInList(this);
     });
-
-    function filterInList(element) {
-        var value = $(element).val();
-        $("#SMSList > li").each(function () {
-            if ($(this).text().indexOf(value) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
 });
-

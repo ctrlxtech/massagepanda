@@ -237,11 +237,16 @@ def userLogin(request, data, fromJson=False):
             context['error'] = "user is inactive!"
     else:
         context['error'] = "username and password do not match!"
+    
     if fromJson:
-        return applyHeaders(JsonResponse(context, safe=False))
+      return applyHeaders(JsonResponse(context, safe=False))
     elif 'error' in context:
-        return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
+      return render_to_response('customers/login.html', context, context_instance=RequestContext(request))
     else:
+      nextUrl = request.POST.get('next')
+      if nextUrl:
+        return redirect(nextUrl)
+      else:
         return redirect('index')
 
 def registerView(request, context={}):
@@ -413,7 +418,10 @@ def paymentPage(request):
         stripeCustomer = stripe.Customer.retrieve(request.user.customer.stripe_customer_id)
     except:
         pass
-    accumulative_credit = '%.2f' % request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
+    try:
+      accumulative_credit = '%.2f' % request.user.customer.referralcredit_set.all().latest('id').accumulative_credit
+    except:
+      accumulative_credit = '0.00'
     context = {'stripeCustomer': stripeCustomer, 'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'accumulative_credit': accumulative_credit}
     return render_to_response('customers/payment.html', context, context_instance=RequestContext(request))
     

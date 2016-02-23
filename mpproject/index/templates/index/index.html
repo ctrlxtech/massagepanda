@@ -27,24 +27,24 @@
                   <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
-                        <a href="{% url 'swedishOneHourDetail' %}">
+                        <a href="https://{{ request.get_host }}{% url 'swedishOneHourDetail' %}">
                         <img src="{% static "images/massage_illus_1.jpg" %}" alt="Picture" style="width:377;max-width:100%">
                         </a>
                         <div style="display:block;font-size:90%"></div>
                       </div>
                     </div>
-                    <div class="paragraph" style="text-align:center;"><a href="{% url 'swedishOneHourDetail' %}" class="banner-text" title="Swedish Massage">In-Home Swedish Massage for 1 Hour</a></div>
+                    <div class="paragraph" style="text-align:center;"><a href="https://{{ request.get_host }}{% url 'swedishOneHourDetail' %}" class="banner-text" title="Swedish Massage">In-Home Swedish Massage for 1 Hour</a></div>
                   </td>
                   <td class="wsite-multicol-col" style="width:50%; padding:0 15px;">
                     <div>
                       <div class="wsite-image wsite-image-border-none " style="padding-top:15px;padding-bottom:10px;margin-left:0;margin-right:0;text-align:center">
-                        <a href="{% url 'deepTissueOneHourDetail' %}">
+                        <a href="https://{{ request.get_host }}{% url 'deepTissueOneHourDetail' %}">
                         <img src="{% static "images/massage_illus_2.jpg" %}" alt="Picture" style="width:377;max-width:100%">
                         </a>
                         <div style="display:block;font-size:90%"></div>
                       </div>
                     </div>
-                    <div class="paragraph" style="text-align:center;"><a href="{% url 'deepTissueOneHourDetail' %}" class="banner-text" title="Deep Tissue Massage">In-Home Deep Tissue Massage for 1 Hour</a></div>
+                    <div class="paragraph" style="text-align:center;"><a href="https://{{ request.get_host }}{% url 'deepTissueOneHourDetail' %}" class="banner-text" title="Deep Tissue Massage">In-Home Deep Tissue Massage for 1 Hour</a></div>
                   </td>
                 </tr>
               </tbody>
@@ -54,7 +54,7 @@
       </div>
       <div style="text-align:center;">
         <div style="height: 20px; overflow: hidden;"></div>
-        <a class="wsite-button wsite-button-small wsite-button-normal" href="{% url 'services' %}">
+        <a class="wsite-button wsite-button-small wsite-button-normal" href="https://{{ request.get_host }}{% url 'services' %}">
         <span class="wsite-button-inner">See More Options</span>
         </a>
         <div style="height: 20px; overflow: hidden;"></div>
@@ -143,7 +143,7 @@
       <div class="wsite-spacer" style="height:24px;"></div>
       <div style="text-align:center;">
         <div style="height: 10px; overflow: hidden;"></div>
-        <a class="wsite-button wsite-button-small wsite-button-normal" href="{% url 'locationCoverage' %}">
+        <a class="wsite-button wsite-button-small wsite-button-normal" href="http://site.massagepanda.com/service-coverage.html">
         <span class="wsite-button-inner">See All Locations</span>
         </a>
         <div style="height: 10px; overflow: hidden;"></div>
@@ -347,7 +347,7 @@
 	  <div class="wsite-spacer" style="height:40px;"></div>
 	  <div style="text-align:center;">
         <div style="height: 10px; overflow: hidden;"></div>
-        <a class="wsite-button wsite-button-large wsite-button-normal" href="{% url 'services' %}">
+        <a class="wsite-button wsite-button-large wsite-button-normal" href="https://{{ request.get_host }}{% url 'services' %}">
         <span class="wsite-button-inner">Get Massage Now</span>
         </a>
         <div style="height: 10px; overflow: hidden;"></div>

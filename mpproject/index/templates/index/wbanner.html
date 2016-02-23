@@ -46,7 +46,7 @@
 			  <option value="2" id="oneHalfHours">1.5 Hours</option>
 			</select>
 		  </span>
-		  <a id="searchService" href="{% url 'services' %}" class="wsite-button wsite-button-small wsite-button-normal" value="Book" style="height: 44px;">
+		  <a id="searchService" href="https://{{ request.get_host }}{% url 'services' %}" class="wsite-button wsite-button-small wsite-button-normal" value="Book" style="height: 44px;">
 		  <span class="wsite-button-inner" style="float: none;">Search</span>
 		  </a> 
 	  </div>

@@ -33,11 +33,18 @@ $( window ).load(function() {
     return false;
   });
 
+/*
 var shippingInfo = $('#panda_checkout').find('.mp-shippingInfo');
 shippingInfo.popover();
 
 var returnPolicy = $('#panda_checkout').find('.mp-returnPolicy');
 returnPolicy.popover();
+*/
+
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover();   
+});
+
 $('.mp-toOrder').click(function(){
     $('.mp-checkout-mobileTab').find('button.mp-toShipping').removeClass('active');
     $('.mp-checkout-mobileTab').find('button.mp-toOrder').addClass('active');

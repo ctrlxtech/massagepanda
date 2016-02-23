@@ -7,7 +7,7 @@
         <div class="landing-banner-mid">
           <div class="landing-banner-inner">
             <h2><span class="wsite-text wsite-headline">
-              <span class="banner-title"><strong>Massage, At Your Door</strong></span><br><span class="banner-text">Anywhere. Anytime. With the best therapists.&nbsp;<br><br></span><span><br><br></span>
+              <span class="banner-title"><strong>Massage, At Your Door</strong></span><br><span class="banner-text">Anywhere. Anytime. From the best therapists.<br><br></span><span><br><br></span>
               </span>
             </h2>
           </div>
@@ -24,6 +24,13 @@
     <form id="serviceSearch" action="{% url 'services' %}" method="get">
 	</form>
 	<div style="width: 100%; min-width: 320px;">
+		<span class="select select-city mp-smallScreenHide" style="display:inline-block;position: relative;vertical-align: top;margin-right: -4px;">
+		  <select name="city" id="city" style="">
+			<option value="1">San Francisco&nbsp;&nbsp;</option>
+			<option value="2">Bay Area</option>
+			<option value="3">Chicago</option>
+		  </select>
+		</span>
 		  <span class="select select-type" style="display:inline-block; position: relative;vertical-align: top;margin-right: -4px;">
 			<select name="type" id="type" style="">
 			  <option value="1">Swedish Massage</option>

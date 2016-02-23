@@ -799,18 +799,24 @@ def getTherapistWage(therapist, startDate, endDate):
     tz = pytz.timezone('US/Pacific')
     wages = []
     wages.append(therapist.user.first_name)
+    b2b = False
     for ot in therapist.ordertherapist_set.filter(order__service_datetime__range=(startDate, endDate)).order_by('order__service_datetime'):
       wages.append(ot.order.service_datetime.astimezone(tz=tz).strftime('%b-%d-%y %H:%M:%S'))
       if ot.order.status == 3 or ot.order.status == 6:
         laborCost = ot.order.labor_adjustment
       else:  
         laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+        if re.match("couple", ot.order.service.service_type, re.I) and ot.order.ordertherapist_set.count() == 1:
+          laborCost *= 2
+          b2b = True
         if isInSF(ot.order) and ot.order.need_table:
           laborCost += 10
 
       if ot.order.coupon and ot.order.coupon.is_gilt:
         wages.append(True)
         laborCost -= 5
+        if b2b:
+          laborCost -= 5
       else:
         wages.append(False)
       wages.append(laborCost)

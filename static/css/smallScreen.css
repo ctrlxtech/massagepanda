@@ -30,8 +30,12 @@
     width: 100% !important; 
 }
 
+#banner, #bannertall {
+    height: 420px !important;
+}
+
 #banner-wrap {
-    margin-top: -30px; 
+    margin-top: 0px; 
 }
 
 #banner-wrap .container{
@@ -61,6 +65,7 @@
 #banner-wrap .banner-mask {
     margin-top: -148px !important;
 }
+
 
 #banner-mask .select-type {
     width: 63% !important;

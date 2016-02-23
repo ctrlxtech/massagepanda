@@ -82,6 +82,8 @@ def taxAdditional(data):
     zipcode = data.get('zipcode')
     if isInSF(zipcode):
       additional += 10
+    if re.match("couple", Service.objects.get(pk=data.get("serviceId")).service_type, re.I):
+      additional *= 2
     tax = additional * settings.TAX
     return additional + tax, tax
 
@@ -130,8 +132,8 @@ def checkout(request):
 
     state_list = Address.STATE_CHOICES
     context.update({'stripePublishKey': settings.STRIPE_PUBLISH_KEY, 'state_list': state_list, 'service': service, 'serviceDate': serviceDate,
-        'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo,
-        'zipcode': zipcode, 'tax': '%.2f' % tax, 'subtotal': '%.2f' % (total - tax), 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
+        'serviceTime': serviceTime, 'gender': genderPreferred, 'needTable': needTable, 'parkingInfo': parkingInfo, 'zipcode': zipcode,
+        'additional': '%.2f' % additional, 'tax': '%.2f' % tax, 'subtotal': '%.2f' % (total - tax), 'total': '%.2f' % total, 'stripeCustomer': stripeCustomer})
     return render_to_response('services/checkout.html', context, context_instance=RequestContext(request))
 
 def stringToDatetime(data):

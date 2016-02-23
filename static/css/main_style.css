@@ -5,16 +5,16 @@
  body { font-family: 'Oxygen', sans-serif; font-size: 17px; line-height: 26px; color: #535353; background: #fff; font-weight:300; -webkit-font-smoothing: antialiased; height: 100%; }
  .container { margin: 0 auto; width: 960px; }
  #mc_embed_signup {background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif;}
- #mc_embed_signup form{text-align:center; }
+ #mc_embed_signup form{text-align:center !important;}
  #mc_embed_signup div{display:inline;}
  #mc_embed_signup input{display:inline !important;}
- #mc_embed_signup input.button{width:20%;}
+ #mc_embed_signup input.button{width:20% !important;}
  #mc_embed_signup input.email {
   display: block;
   padding: 8px 0;
-  margin: 0 2% 10px 0;
+  margin: 0 2% 10px 0 !important;
   text-indent: 5px;
-  width: 40%;
+  width: 40% !important;
   min-width: 130px;
  } 
  #mc_embed_signup .button {
@@ -139,7 +139,7 @@
  #banner { box-shadow: inset 0px 3px 0px 2px rgba(2,3,3,0.06); }
  .tall-header-page .wsite-header { background: none; }
  .tall-header-page .wsite-background { background: url(../images/homePage-backgroundOne.jpg) no-repeat center center; background-size: cover; }
- #bannertall { margin: 0 auto; height: 440px; text-align: center; }
+ #bannertall { margin: 0 auto; height: 544px; text-align: center; }
  #bannertall h2 { color: #ececec; font-size: 33px; line-height: 40px; padding: 48px 0px 47px; width: 672px; font-family: 'Lustria', serif; letter-spacing: 3px; }
  .short-header-page .wsite-header { background: none; }
  .short-header-page .wsite-background { height: 231px; background: url(../images/homePage-backgroundOne.jpg) no-repeat center center; background-size: cover; }
@@ -167,7 +167,7 @@
  .splash-page #content-section { text-align: center; padding: 50px 75px; }
  #content-section h2 { color: #fff; font-size: 38px; line-height: 40px; font-family: 'Lustria', serif; padding: 0px 0px 51px; background: url(theme/splash-heading-bg-v1.png?1436952285) no-repeat bottom center; text-align: center !important; }
  #content-section .paragraph { color: #8e8e8e; font-size: 20px; line-height: 28px; padding: 38px 0 50px; font-weight: 300; font-family: 'Oxygen', sans-serif; text-align: center !important; }
- #main-wrap .container { min-height:400px; padding-top: 50px; }
+ #main-wrap .container { min-height:400px; padding-top: 56px; }
  #main-wrap .container h2 { margin-bottom: 6px; }
  #main-wrap .container div.paragraph {}
  #main-wrap .container p {}
@@ -282,7 +282,7 @@ body.wsite-background {background-attachment: fixed !important;}.wsite-backgroun
   font-family: "Raleway" !important;
   font-size: 33px !important;
   font-weight: 300 !important;
-  color: #e05c5c !important;
+  color: #da6161 !important;
   line-height: 40px !important;
 }
 

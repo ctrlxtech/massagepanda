@@ -11,7 +11,8 @@ window.addEventListener("DOMContentLoaded", function () {
 
   var searchService = document.getElementById("searchService");
   searchService.addEventListener("click", function () {
-    this.href = "https://" + {{ request.get_host }} + "/store/"
+    var host = window.location.host ;
+    this.href = "https://" + host + "/store/";
     updateHref(this);
   });
 });

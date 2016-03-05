@@ -6,6 +6,7 @@ import re
 import time
 import urllib2
 import datetime
+import random
 
 import requests
 import stripe
@@ -737,27 +738,59 @@ def createTherapist(request):
     return HttpResponse("Thank you for registering MassagePanda, " + therapist.user.first_name)
 
 @user_passes_test(lambda u: u.is_superuser)
+def generateCoupons_view(request):
+    serviceGroups = Group.objects.all()
+    context = {'service_groups': serviceGroups}
+    return render(request, 'manager/generateCoupons.html', context)
+
+@transaction.atomic
+@user_passes_test(lambda u: u.is_superuser)
+def generateCoupon(request):
+    data = request.POST.copy()
+    SYMBOLS = list('0123456789ABCDEFGHJKLMNPQRTUVWXY')
+    parts = []
+    for i in range(int(request.POST.get('number'))):
+      part = ''
+      for i in range(8):
+        part += random.choice(SYMBOLS)
+      parts.append(part)
+      data['couponCode'] = part
+      data['is_groupon'] = True
+      addOneCoupon(data)
+    return HttpResponse("added coupons: " + str(parts))
+
+@user_passes_test(lambda u: u.is_superuser)
 def addCoupons_view(request):
     serviceGroups = Group.objects.all()
     context = {'service_groups': serviceGroups}
     return render(request, 'manager/addCoupons.html', context)
 
 @transaction.atomic
+@user_passes_test(lambda u: u.is_superuser)
 def addCoupon(request):
-    couponCode = request.POST.get('couponCode')
-    groupId = request.POST.get('serviceGroup')
+    addOneCoupon(request.POST)
+    return HttpResponse("Coupon added")
+
+def addOneCoupon(data):
+    couponCode = data.get('couponCode')
+    groupId = data.get('serviceGroup')
     group = Group.objects.get(pk=groupId)
-    isFlat = request.POST.get('isFlat')
-    startDate = request.POST.get('start_date')
-    endDate = request.POST.get('end_date')
+    isFlat = data.get('isFlat')
+    startDate = data.get('start_date')
+    endDate = data.get('end_date')
     startDate = datetime.datetime.strptime(startDate, '%Y-%m-%d')
     endDate = datetime.datetime.strptime(endDate, '%Y-%m-%d')
     if not isFlat:
         isFlat = False
-    discount = request.POST.get('discount')
-    quantity = request.POST.get('quantity')
+    try:
+      isGroupon = data.get('is_groupon')
+    except:
+      isGroupon = False
 
-    coupon = Coupon(code=couponCode, discount=discount, quantity=quantity, used=0, start_date=startDate, end_date=endDate, is_flat=isFlat)
+    discount = data.get('discount')
+    quantity = data.get('quantity')
+
+    coupon = Coupon(code=couponCode, discount=discount, quantity=quantity, used=0, start_date=startDate, end_date=endDate, is_flat=isFlat, is_groupon=isGroupon)
     coupon.save()
 
     sgs = group.servicegroup_set.all()
@@ -765,7 +798,7 @@ def addCoupon(request):
         sc = ServiceCoupon(service=sg.service, coupon=coupon)
         sc.save()
 
-    return HttpResponse("Coupon added")
+    return
 
 def toCSV(rows):
     # Create the HttpResponse object with the appropriate CSV header.
@@ -819,6 +852,14 @@ def getTherapistWage(therapist, startDate, endDate):
           laborCost -= 5
       else:
         wages.append(False)
+
+      if ot.order.coupon and (ot.order.coupon.is_gilt or ot.order.coupon.is_groupon):
+        pass
+      else:
+        tips = ot.order.service.service_fee * (1 - 1 / (1 + tip_percent))
+        if not b2b:
+          tips /= 2
+        laborCost += tips
       wages.append(laborCost)
     return wages
 

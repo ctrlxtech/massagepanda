@@ -1,0 +1,19 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('payment', '0013_order_labor_adjustment'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='coupon',
+            name='is_groupon',
+            field=models.BooleanField(default=False),
+        ),
+    ]

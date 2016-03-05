@@ -22,6 +22,7 @@ class Coupon(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     is_gilt = models.BooleanField(default=False)
+    is_groupon = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "%s" % (self.code)

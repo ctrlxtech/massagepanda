@@ -1,4 +1,4 @@
-Sitemap: http://www.massagepanda.com/sitemap.xml
+Sitemap: http://site.massagepanda.com/sitemap.xml
 
 User-agent: NerdyBot
 Disallow: /

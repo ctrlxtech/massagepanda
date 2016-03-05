@@ -28,8 +28,10 @@ urlpatterns = [
     url(r'^sendMyEmail$', views.sendMyEmail, name='sendMyEmail'),
     url(r'^sendFeedbackEmails$', views.sendFeedbackEmails, name='sendFeedbackEmails'),
     url(r'^assignTherapist$', views.assignTherapist, name='assignTherapist'),
+    url(r'^generateCoupons$', views.generateCoupons_view, name='generateCoupons'),
+    url(r'^generateCouponsStub$', views.generateCoupon, name='generateCoupon'),
     url(r'^addCoupons$', views.addCoupons_view, name='addCoupons'),
-    url(r'^addCoupon$', views.addCoupon, name='addCoupon'),
+    url(r'^addCouponsStub$', views.addCoupon, name='addCoupon'),
     url(r'^paystub$', views.paystub, name='stub'),
     url(r'^getWage$', views.getWage, name='getWage'),
     

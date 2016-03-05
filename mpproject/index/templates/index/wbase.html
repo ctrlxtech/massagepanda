@@ -73,7 +73,7 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "url": "https://www.massagepanda.com",
-      "logo": "https://www.massagepanda.com/uploads/4/4/9/9/44993235/1431646225.png",
+      "logo": "https://site.massagepanda.com/uploads/4/4/9/9/44993235/1431646225.png",
      "contactPoint" : [
          { "@type" : "ContactPoint",
            "telephone" : "+1 (855) 68-PANDA",
@@ -104,7 +104,9 @@ window.onload = function(){
    if(oldonload){oldonload()}};
 }());
 </script>
+<!--
 <script src="https://load.sumome.com/" data-sumo-site-id="e097517efa317b1124d737f1e337c745b5c4aadbf0bab43b7ded7c942c10be5f" async="async"></script>
+-->
 <script src="https://cdn.optimizely.com/js/2403080326.js"></script>
 <!--GrowSumo Tracking Code -->
 <script type='text/javascript'>(function(){var gs=document.createElement('script');gs.src='https://growsumo-snippets.s3.amazonaws.com/growsumo-latest.min.js';gs.type='text/javascript';gs.async ='true';gs.onload=gs.onreadystatechange=function(){var rs=this.readyState;if(rs&&rs!='complete'&&rs!='loaded')return;try{growsumo._initialize('pk_56f0c7a1bb6c40c9ac172b4ab307c40e');}catch(e){}};var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(gs,s);})();
@@ -120,17 +122,21 @@ window.onload = function(){
   ga('send', 'pageview');
 
 </script>
-<script type="text/javascript">
-  (function() {
-    window._pa = window._pa || {};
-    // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
-    // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
-    // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
-    var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-    pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/555db22f7e8800cb100000b5.js";
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-  })();
-</script>
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '888042774616434');
+fbq('track', "PageView");</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=888042774616434&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
 
 {% else %}
 

@@ -351,7 +351,7 @@ def markDownPrice(data):
 def applyCoupon(request):
     newPrice, markDown, coupon, isSuccess = markDownPrice(request.POST)
     if isSuccess:
-        context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': coupon.code}
+        context = {'status': 'success', 'newPrice': '%.2f' % newPrice, 'markDown': '%.2f' % markDown, 'couponCode': coupon.code, 'isGroupon': coupon.is_groupon or coupon.is_gilt}
     else:
         context = {'status': 'failure', 'error': 'Invalid coupon'}
     return JsonResponse(context)

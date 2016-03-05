@@ -395,6 +395,20 @@ def div(value, arg):
     return ''
 
 @register.filter
+def mul(value, arg):
+    '''
+    Multiplies the value; argument is the multiplier.
+    Returns empty string on any error.
+    '''
+    try:
+        value = float(value)
+        arg = float(arg)
+        if arg:
+            return '{0:.02f}'.format(value * arg)
+    except: pass
+    return ''
+
+@register.filter
 def addCardImageSrc(value, arg):
     try:
         arg = str(arg)

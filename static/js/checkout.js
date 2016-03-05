@@ -144,6 +144,10 @@ $('#apply-coupon').click(function(){
           $('#mp-coupon-panelAlert').hide()
           $('#wsite-com-checkout-payment-total-price').find('.wsite-price').text(data.newPrice)
           $('input:hidden[name="couponCode"]').val(data.couponCode)
+          if (data.isGroupon) {
+              $('#tips_tip').hide();
+          }
+          console.log(data.isGroupon)
           showCoupon(data);
         } else {
           $('#mp-coupon-panelAlert').text(data.error)
@@ -208,4 +212,5 @@ function hideCoupon(data) {
   $('#wsite-applied-coupon').hide();
   $('#mp-coupon-input').show();
   $('#wsite-discount-row').hide();
+  $('#tips_tip').show();
 }

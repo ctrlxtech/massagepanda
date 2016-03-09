@@ -404,7 +404,7 @@ def mul(value, arg):
         value = float(value)
         arg = float(arg)
         if arg:
-            return '{0:.02f}'.format(value * arg)
+            return '{0:5d}'.format(int(value * arg))
     except: pass
     return ''
 

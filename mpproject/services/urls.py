@@ -3,6 +3,7 @@ from django.conf import settings
 from services import views
 from services.views import DetailsView, PlaceOrderView
 from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 from services.models import Service
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^In-Home_Sports_Massage_for_1_Hour$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Sports Massage", service_time=1), 'prod': not settings.DEBUG})),
     url(r'^In-Home_Sports_Massage_for_1.5_Hours$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Sports Massage", service_time=1.5), 'prod': not settings.DEBUG})),
     url(r'^In-Home_Shiatsu_Massage_for_1_Hour$', DetailsView.as_view(context={'service': Service.objects.get(service_type="Shiatsu Massage", service_time=1), 'prod': not settings.DEBUG})),
+    url(r'^(?P<path>.*)', RedirectView.as_view(url='/store/')),
 ]

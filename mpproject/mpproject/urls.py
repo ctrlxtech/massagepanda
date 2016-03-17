@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 from manager import views
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^customer/', include('customers.urls')),
     url(r'^referral/', include('referral.urls')),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='index/robots.txt', content_type='text/plain')),
+    url(r'^(?P<path>.*)', RedirectView.as_view(url='https://site.massagepanda.com/%(path)s')),
 ]

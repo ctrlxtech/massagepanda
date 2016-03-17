@@ -856,7 +856,7 @@ def getTherapistWage(therapist, startDate, endDate):
       if ot.order.coupon and (ot.order.coupon.is_gilt or ot.order.coupon.is_groupon):
         pass
       else:
-        tips = ot.order.service.service_fee * (1 - 1 / (1 + tip_percent))
+        tips = ot.order.service.service_fee * (1 - 1 / (1 + ot.order.service.tip_percent))
         if not b2b:
           tips /= 2
         laborCost += tips

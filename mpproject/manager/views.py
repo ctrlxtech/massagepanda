@@ -837,13 +837,15 @@ def getTherapistWage(therapist, startDate, endDate):
       wages.append(ot.order.service_datetime.astimezone(tz=tz).strftime('%b-%d-%y %H:%M:%S'))
       if ot.order.status == 3 or ot.order.status == 6:
         laborCost = ot.order.labor_adjustment
-      else:  
-        laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
-        if re.match("couple", ot.order.service.service_type, re.I) and ot.order.ordertherapist_set.count() == 1:
-          laborCost *= 2
-          b2b = True
-        if isInSF(ot.order) and ot.order.need_table:
-          laborCost += 10
+        wages.append(laborCost)
+        continue
+
+      laborCost = ot.order.service.labor_cost + ot.order.labor_adjustment
+      if re.match("couple", ot.order.service.service_type, re.I) and ot.order.ordertherapist_set.count() == 1:
+        laborCost *= 2
+        b2b = True
+      if isInSF(ot.order) and ot.order.need_table:
+        laborCost += 10
 
       if ot.order.coupon and ot.order.coupon.is_gilt:
         wages.append(True)
@@ -856,11 +858,15 @@ def getTherapistWage(therapist, startDate, endDate):
       if ot.order.coupon and (ot.order.coupon.is_gilt or ot.order.coupon.is_groupon):
         pass
       else:
-        tips = ot.order.service.service_fee * (1 - 1 / (1 + ot.order.service.tip_percent))
-        if not b2b:
+        if ot.order.service.service_sale and ot.order.service.service_sale > 0:
+            base = ot.order.service.service_sale
+        else:
+            base = ot.order.service.service_fee
+        tips = base * (1 - 1 / (1 + ot.order.service.tip_percent))
+        if re.match("couple", ot.order.service.service_type, re.I) and not b2b:
           tips /= 2
         laborCost += tips
-      wages.append(laborCost)
+      wages.append("%.2f" % laborCost)
     return wages
 
 def wageListToJson(wages):

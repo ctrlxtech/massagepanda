@@ -16,13 +16,13 @@ class Service(models.Model):
     popularity = models.IntegerField()
     
     def __unicode__(self):
-        if self.service_sale:
+        if self.service_sale and self.service_sale > 0:
           return u'%s %s - $%s' % (self.service_type, self.service_time, self.service_sale)
         else:
           return u'%s %s - $%s' % (self.service_type, self.service_time, self.service_fee)
 
     def link(self):
-        if self.service_time > 1:
+        if self.service_time > 0:
           return "In-Home_%s_for_%s_Hours" % (self.service_type.replace(' ', '_'), self.service_time)
         else:
           return "In-Home_%s_for_%d_Hour" % (self.service_type.replace(' ', '_'), self.service_time)

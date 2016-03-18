@@ -46,7 +46,7 @@
                       </div>
                     </a>
                     <div class="wsite-com-product-price single-sale-price">
-                    {% if service.service_sale %}
+                    {% if service.service_sale and service.service_sale > 0 %}
                       <div class="wsite-com-price wsite-com-category-product-price ">
                         ${{ service.service_fee|div:1 }}
                       </div>

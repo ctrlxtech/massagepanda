@@ -238,7 +238,7 @@
                                                                 </td>
 								<td class="item-price">
 									$<span class="wsite-price">
-                                                                        {% if service.service_sale %}
+                                                                        {% if service.service_sale and service.service_sale > 0 %}
                                                                         {{ service.service_sale|div:1 }}
                                                                         {% else %}
                                                                         {{ service.service_fee|div:1 }}

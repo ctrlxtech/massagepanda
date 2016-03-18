@@ -37,7 +37,7 @@
         <div id="wsite-com-product-price-area" class="wsite-com-product-show-price-range-on-sale">
           <div class="wsite-com-product-price-container">
             <!-- take advantage of div filter to force precision -->
-            {% if service.service_sale %}
+            {% if service.service_sale and service.service_sale > 0 %}
             <div id="wsite-com-product-price" class="wsite-com-product-price-container">
               <span class="wsite-com-product-price-currency-prefix">$</span>
               <span class="wsite-com-product-price-amount">{{ service.service_fee|div:1 }}</span>

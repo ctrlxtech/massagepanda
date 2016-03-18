@@ -65,7 +65,7 @@ class DetailsView(View):
       return render_to_response('services/details.html', self.context, context_instance=RequestContext(request))
 
 def taxService(service):
-    if service.service_sale:
+    if service.service_sale and service.service_sale > 0:
       total = service.service_sale
     else:
       total = service.service_fee
@@ -169,7 +169,7 @@ def sendNewOrderEmailToCustomer(order):
     stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'
-    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'stripeCharge': stripeCharge}))
+    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'isTipsIncluded': not (order.coupon.is_groupon or order.coupon.is_gilt) and order.service.tip_percent > 0, 'stripeCharge': stripeCharge}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

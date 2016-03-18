@@ -124,7 +124,7 @@
                         <tr class="total">
                           <td style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; padding-top: 25px; border-top: 1px solid #E3E5E7;">Total</td>
                           <td class="price" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; text-align: right; padding-top: 25px; border-top: 1px solid #E3E5E7;"><strong style="color: #333;">${{ order.amount|centsToDollars }}</strong></td>
-                          {% if order.service.tip_percent > 0 %}<td class="price" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; text-align: right; padding-top: 25px; border-top: 1px solid #E3E5E7;"><strong style="color: #333;">Tips included({{ order.service.tip_percent|mul:100 }}%)</strong></td>{% endif %}
+                          {% if isTipsIncluded %}<td class="price" style="color: #666; font-family: &quot;ProximaNova&quot;, &quot;Open Sans&quot;, Helvetica, Arial, Verdana, sans-serif; font-size: 16px; line-height: 1.5em; vertical-align: top; text-align: right; padding-top: 25px; border-top: 1px solid #E3E5E7;"><strong style="color: #333;">Tips included({{ order.service.tip_percent|mul:100 }}%)</strong></td>{% endif %}
                         </tr>
                       </table>
                     </div>

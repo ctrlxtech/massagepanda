@@ -768,8 +768,21 @@ def addCoupons_view(request):
 @transaction.atomic
 @user_passes_test(lambda u: u.is_superuser)
 def addCoupon(request):
-    addOneCoupon(request.POST)
-    return HttpResponse("Coupon added")
+    count = 0
+    try:
+      couponFile = request.FILES['coupon_codes']
+      data = []
+      for row in csv.reader(couponFile.read().splitlines()):
+        for value in row:
+            if value:
+              data = request.POST.copy()
+              data['couponCode'] = value
+              addOneCoupon(data)
+              count += 1
+    except:
+      addOneCoupon(request.POST)
+      count = 1
+    return HttpResponse(str(count) + " coupon(s) added")
 
 def addOneCoupon(data):
     couponCode = data.get('couponCode')
@@ -787,6 +800,10 @@ def addOneCoupon(data):
     except:
       isGroupon = False
 
+    if data.get("isGilt") or isGroupon:
+        isGroupon = True
+    else:
+        isGroupon = False
     discount = data.get('discount')
     quantity = data.get('quantity')
 

@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 {% if service_groups %}
-      <form action="{% url 'addCoupon' %}" method="post">
+      <form action="{% url 'addCoupon' %}" method="post" enctype="multipart/form-data" >
       {% csrf_token %}
         <select name="serviceGroup">
         {% for group in service_groups %}
@@ -13,7 +13,9 @@
         <input type="number" placeholder="quantity" name="quantity">
         Start date: <input type="date" name="start_date">
         End date: <input type="date" name="end_date">
-        <input type="checkbox" name="isFlat">Flat<br>
+        <input type="checkbox" name="isFlat">Flat
+        <input type="checkbox" name="isGilt">Gilt
+        <input type="file" class="form-control" name="coupon_codes" accept="media_type"><br>
         <input type="submit" />
       </form>
 {% else %}

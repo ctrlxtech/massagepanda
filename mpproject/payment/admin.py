@@ -164,7 +164,6 @@ class OrderAdmin(admin.ModelAdmin):
       stripe.api_key = settings.STRIPE_KEY
       count = 0
       for order in queryset:
-        try:
             if order.credit_used != 0:
               aCredit = order.customer.referralcredit_set.all().latest('id').accumulative_credit + order.credit_used
               rCredit = ReferralCredit(customer=order.customer, adjustment=True, credit=order.credit_used, accumulative_credit=aCredit)
@@ -183,8 +182,6 @@ class OrderAdmin(admin.ModelAdmin):
             sendOrderEmail(order, 'payment/order_canceled_email.html', 'Your order has been canceled! - MassagePanda')
 
             count += 1
-        except:
-            self.message_user(request, "Order(number: %s) can't be marked as canceled." % order.id, level=messages.ERROR)
 
       self.message_user(request, "%s successfully marked as canceled." % count)
 

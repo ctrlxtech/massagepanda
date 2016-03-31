@@ -22,7 +22,7 @@ class Service(models.Model):
           return u'%s %s - $%s' % (self.service_type, self.service_time, self.service_fee)
 
     def link(self):
-        if self.service_time > 0:
+        if self.service_time > 1:
           return "In-Home_%s_for_%s_Hours" % (self.service_type.replace(' ', '_'), self.service_time)
         else:
           return "In-Home_%s_for_%d_Hour" % (self.service_type.replace(' ', '_'), self.service_time)

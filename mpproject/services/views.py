@@ -169,7 +169,11 @@ def sendNewOrderEmailToCustomer(order):
     stripeCharge = stripe.Charge.retrieve(order.stripe_token)
     subject, from_email, to = 'Thank you for your order! - MassagePanda', settings.SERVER_EMAIL, order.email
     text_content = 'This is an email containing your order.'
-    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'isTipsIncluded': not (order.coupon.is_groupon or order.coupon.is_gilt) and order.service.tip_percent > 0, 'stripeCharge': stripeCharge}))
+    isTipsIncluded = True
+    if order.coupon:
+        if (order.coupon.is_groupon or order.coupon.is_gilt) and order.service.tip_percent > 0:
+            isTipsIncluded = False
+    html_content = get_template('payment/order_confirmation_email.html').render(Context({'order': order, 'isTipsIncluded': isTipsIncluded, 'stripeCharge': stripeCharge}))
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()

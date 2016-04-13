@@ -161,9 +161,9 @@ DEFAULT_FROM_EMAIL = "support@massagepanda.com"
 
 SERVER_EMAIL = "MassagePanda<do-not-reply@massagepanda.com>"
 
-EMAIL_HOST = "smtp.mandrillapp.com"
+EMAIL_HOST = "smtp.mailgun.org"
 
-EMAIL_HOST_USER = "support@massagepanda.com"
+EMAIL_HOST_USER = "postmaster@mail.massagepanda.com"
 
 EMAIL_PORT = 587
 # Static files (CSS, JavaScript, Images)

@@ -48,7 +48,11 @@
         </div>
     </div>
     <div class="mp-paymentForm">
+    <!--
         <form id="payment-form" class="form-inline" action="{% url 'placeOrderFromPost' %}" method=POST>
+    -->
+        <form id="payment-form" class="form-inline" >
+        <div id="mp-registerForm-panelAlert" class="alert alert-danger" role="alert" >Sorry, we are currenly closed.</div>
             {% csrf_token %}
             <input type="hidden" id="stripePublishKey" value="{{ stripePublishKey }}" />
             <input type="hidden" name="referCode" data-serverField="true"/>
@@ -208,7 +212,8 @@
 							</div>
 						</div>
 						<div id="mp-completeOrder" class="mp-checkout mp-checkoutShort">
-                            <button type="submit" class="btn btn-success">Complete Order</button>
+        <div id="mp-registerForm-panelAlert" class="alert alert-danger" role="alert" >Sorry, we are currenly closed.</div>
+                            <button type="submit" class="btn btn-success" disabled>Complete Order</button>
 						</div>
 					</div>
 				</div>

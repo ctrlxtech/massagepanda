@@ -1,6 +1,7 @@
 $( window ).load(function() {
 
   $('#payment-form').on('submit', function(event) {
+    /*
     var isValid = true;
     $('#payment-form *').filter(':input[required]').each(function(){
         var value = $(this).val();
@@ -30,6 +31,7 @@ $( window ).load(function() {
         // Prevent the form from submitting with the default action
       }
     }
+    */
     return false;
   });
 
